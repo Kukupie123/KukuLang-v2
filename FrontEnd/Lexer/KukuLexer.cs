@@ -148,19 +148,19 @@ namespace FrontEnd.Lexer
                 bool same = i == f;
                 return new Token(same ? TokenType.Integer : TokenType.Float, same ? i : f);
             }
-
-            // Check for identifiers
-            if (!char.IsDigit(input[0]))
-            {
-                return new Token(TokenType.Identifier, input);
-            }
-
+            
             // Check against a predefined token map
             if (TokenMap.IsValueAGenericToken(input))
             {
                 return new Token(TokenMap.GetTypeByValue(input), input);
             }
 
+            // Check for identifiers
+            if (!char.IsDigit(input[0]))
+            {
+                return new Token(TokenType.Identifier, input);
+            }
+            
             // Default case: Unknown token type
             throw new Exception($"Unknown Input {input}");
         }
