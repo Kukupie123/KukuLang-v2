@@ -16,5 +16,10 @@ public enum TokenType
     Math,
     Null,
     Parenthesis,
-    EOF
+    EOF,
+    AsLongAsLoop,
+    UntilLoop,
+    Conditional,
+    Define,
+    Set
 }
