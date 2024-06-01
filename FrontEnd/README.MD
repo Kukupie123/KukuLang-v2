@@ -1,3 +1,7 @@
+# Structures
+Structures are a container that has a list of properties
+# Tasks
+Tasks are a container that executes all the instructions inside them. They can be called.
 # Syntax
 
 ## Define
@@ -9,9 +13,9 @@ These definitions are stored in the scope that they were defined.
 Define Human with age (number), nickName (text, initialized to "Nameless").
 ``````
 We define Properties (Eg :- age, nickName) and optionally set it's initial value (Eg :- we set nickName to "Nameless")
-
-### Functions
 ```
+### Tasks
+
 Define Add with num1 (number), num2 (number, initialized to 0), returning float {
     return num1 + num2.
 }
@@ -31,8 +35,8 @@ Set "num" to 12.
 Set "num" to 12 as a float.
 
 ### Setting structure variables
-Set kuku to new Human.
-Set kuku to new Human with nickName "Kuku", age 24.
+Set kuku to Human.
+Set kuku to Human with nickName "Kuku", age 24.
 
 ### Setting variables within structure variables
 Set nickName of kuku to "kuku".
