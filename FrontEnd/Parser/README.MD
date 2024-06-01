@@ -1,3 +1,5 @@
+# Brain Storming
+Lets take the following syntax as example.
 ```
 ~Defining a struct~
 Define Human with age (number), nickName (text, initialized to "Nameless").
@@ -14,9 +16,24 @@ Set "num" to 12 as float. ~as float is optional to enforce a type~
 Set "num" to 12.4. ~Reassigning~
 
 Set "Kuchuk" to Human.
+~We can also do~
+~Set "Kuchuk" to Human with age as 24.~
 
 Set nickName of kuku to "Kuku".
 
+~Demonstration of compoistion~
+Define Keyboard with type(text).
+Define Computer with keyboardVar(Keyboard, initialized to Keyboard with "QWERTY" as type).
+
+Set "comp" to Computer.
+
+Set type of keyboardVar of comp to "ZXCV".
+
+set keyboardRef to keyboardVar of comp.
+
+~Imagine we defined a function called startTyping which returns nothing~
+execute startTyping with keyboard as keyboardRef.
+execute Square with num1 as 21 and set "ress" to output.
 ```
 
 ###### Define Human with age (number), nickName (text, initialized to "Nameless").
@@ -102,11 +119,77 @@ Since the "value" variable is always an expression let's create a new class to e
 ```
 
 class CustomTypeInstance:  {
-    private CustomType _customType;
+    private string _customType;
     private Dictionary<string, Expression> parameters;
+    //We can also pass property values as we instantiate it.
+    //I just didn't show it
 }
 ```
 ```
 CustomTypeInstance obj = new CustomTypeInstance("Human",{age:IntegerLiteral(24), nickName: StringLiteral("Nameless")});
 var instruction = new SetDirectInstruction("kuchuk","Human",obj)
+```
+###### Set nickName of kuku to "KukuNickName".
+Set to is a bit more complex set instruction. Unlike typical set this is used to update properties of structures
+
+```
+class SetOfInstruction{
+    string propertyName;
+    string variableName;
+    string value;
+}
+```
+```
+var setOfIntruction = new SetOfInstruction("nickName","kuku","KukuNickName");
+```
+
+###### Define Computer with keyboardVar(Keyboard, initialized to Keyboard with "QWERTY" as type).
+
+```
+var computerStruct = new CustomType("Computer",{"keyboardVar":"Keyboard"})
+```
+*Next, we store it in structures dictionary*
+
+###### Set "comp" to Computer.
+
+```
+var computerInstance = new CustomTypeInstance("Computer",{
+    keyboardVar : new CustomTypeInstance("Keyboard", {
+        type:"QWERTY"
+    })
+});
+//We defined the initial value of "type" in keyboard so this is how it's going to be.
+var setInstruction = new SetInstruction("comp","Computer",)
+```
+
+###### Set type of keyboardVar of comp to "ZXCV".
+We can define the composition as a linked list
+```
+var setOfInstruction = new SetOfInstruction("type","comp->keyboard","ZXCV");
+```
+##### set keyboardRef to keyboardVar of comp.
+This is how we can get properties of structures.
+We can ignore type. Let that be done in semantics analysis.
+```
+var setInstruction = new SetDirectInstruction("keyboardRef","unknownType","comp->keyboardVar")
+```
+Designing PrattParsing for this might be tricky. We will see
+
+###### Execute startTyping with keyboardRef as keyboard.
+
+```
+class FunctionCallInstruction{
+    string functionName;
+    Dictionary<string,string> params; //parameterName, parameter value
+    //Types checks will be handled in semantic anaysis
+}
+```
+```
+var functionINstruction = new FunctionCallInstruction("startTyping",{"keyboard":"keyboardRef"});
+```
+###### Execute Square with num1 as 21 and set "ress" to output.
+This one is an assignment statement. For value the function will be executed in runtime.
+```
+var functionINstruction = new FunctionCallInstruction("Square",{"num":"12"});
+var setDirect = new SetDirectInstruction("ress","unknown", functionINstruction)
 ```
