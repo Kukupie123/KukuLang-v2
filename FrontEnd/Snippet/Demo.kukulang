@@ -1,0 +1,2 @@
+define variable a of_type number;
+set a to 12;

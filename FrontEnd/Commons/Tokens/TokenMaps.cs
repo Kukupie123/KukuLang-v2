@@ -31,23 +31,20 @@ public class TokenMap
 
     private static readonly Dictionary<string, TokenType> Map = new()
     {
+        { "define", TokenType.Keyword },
+        { "variable", TokenType.Keyword },
+        { "function", TokenType.Keyword },
+        { "of_type", TokenType.Keyword },
         { "set", TokenType.Keyword },
+        { "to", TokenType.Keyword },
         { "if", TokenType.Keyword },
         { "then", TokenType.Keyword },
         { "else", TokenType.Keyword },
         { "repeat", TokenType.Keyword },
         { "until", TokenType.Keyword },
         { "as_long_as", TokenType.Keyword },
-        { "define", TokenType.Keyword },
-        { "function", TokenType.Keyword },
-        { "called", TokenType.Keyword },
-        { "with", TokenType.Keyword },
-        { "parameters", TokenType.Keyword },
-        { "as", TokenType.Keyword },
 
         { "nothing", TokenType.Null },
-
-        { "to", TokenType.Keyword },
 
         { "is", TokenType.Comparator },
         { "is_not", TokenType.Comparator },
