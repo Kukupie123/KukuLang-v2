@@ -1,18 +1,3 @@
-```
-define structure Human {
-    ~Variables declaration~
-    define name of_type text;
-    ~Variable declaration with assignment~
-    define age of_type number as -1;
-}
-
-define localAge of_type number;
-set localAge to 24;
-define kuchuk of_type Human;
-set kuchuk to Human;
-set name of kuchuk to "Kuku";
-set age of kuchuk to localAge;
-```
 # Syntax
 ## Define
 Defining stores them in the Scope.
