@@ -59,8 +59,8 @@ public class TokenMap
         { "is_less_than", TokenType.Comparator },
         { "is_less_or_equal_to", TokenType.Comparator },
 
-        { "and", TokenType.Logical },
-        { "or", TokenType.Logical },
+        { "and", TokenType.And },
+        { "or", TokenType.Or },
 
         { "{", TokenType.CurlyBracesOpening },
         { "[", TokenType.SquareBracketsOpening },
@@ -69,8 +69,8 @@ public class TokenMap
         { "]", TokenType.SquareBracketsClosing},
         { ")", TokenType.RoundBracketsClosing },
 
-        { "-", TokenType.Subtract },
-        { "+", TokenType.Plus },
+        { "-", TokenType.Minus },
+        { "+", TokenType.Add },
         { "/", TokenType.Divide },
         { "*", TokenType.Multiply },
         { "%", TokenType.Mod },

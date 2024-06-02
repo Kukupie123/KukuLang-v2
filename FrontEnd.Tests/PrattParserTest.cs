@@ -15,12 +15,13 @@ public class PrattParserTest
     {
         List<Token> tokens = [
             new (TokenType.Integer,12,0),
-            new (TokenType.Plus,1,0),
+            new (TokenType.Add,1,0),
             new (TokenType.Integer,1,0),
             new (TokenType.FullStop,".",0),
         ];
 
         var parser = new PrattParser(tokens, 0);
-        parser.Parse(0);
+        var final = parser.Parse();
+        Console.WriteLine(final);
     }
 }

@@ -8,7 +8,7 @@ public enum TokenType
     Identifier,
     FullStop,
     Comparator,
-    Logical,
+    And,
     Mod,
     EOF,
     Define,
@@ -28,8 +28,9 @@ public enum TokenType
     Accessor,
     To,
     Output,
-    Subtract,
-    Plus,
+    Minus,
+    Add,
     Divide,
-    Multiply
+    Multiply,
+    Or
 }
