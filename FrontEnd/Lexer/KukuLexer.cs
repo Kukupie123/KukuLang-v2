@@ -153,7 +153,7 @@ public class KukuLexer
         else if (input[0] == '"' && input[input.Length - 1] == '"')
         {
             //Remove the starting and ending "
-            return new Token(TokenType.String, input[1..^1], _inputStartPos);
+            return new Token(TokenType.Text, input[1..^1], _inputStartPos);
         }
         //Add it as identifier
         return new Token(TokenType.Identifier, input, _inputStartPos);

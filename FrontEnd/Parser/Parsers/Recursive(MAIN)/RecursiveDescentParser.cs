@@ -2,10 +2,10 @@
 
 namespace FrontEnd;
 
-public class RecursiveDescentParser(List<Token> tokens, int startingPosition = 0) : ParserBase(tokens, startingPosition)
+public class RecursiveDescentParser(List<Token> tokens, int startingPosition = 0) : ParserBase<Scope, dynamic>(tokens, startingPosition)
 {
-    public override Scope Parse()
+    public override Scope Parse(dynamic arg)
     {
-        throw new NotImplementedException();
+        return null;
     }
 }

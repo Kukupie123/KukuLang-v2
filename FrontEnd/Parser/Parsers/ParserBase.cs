@@ -2,13 +2,13 @@
 
 namespace FrontEnd;
 
-public abstract class ParserBase(List<Token> tokens, int startingPosition = 0)
+public abstract class ParserBase<T, F>(List<Token> tokens, int startingPosition = 0)
 {
-    private int _Pos = startingPosition;
-    private readonly List<Token> _Tokens = tokens;
+    protected int _Pos = startingPosition;
+    protected readonly List<Token> _Tokens = tokens;
 
-    private Token CurrentToken => _Tokens[_Pos];
-    private void Advance() => _Pos++;
+    protected Token CurrentToken => _Tokens[_Pos];
+    protected void Advance() => _Pos++;
 
-    public abstract Scope Parse();
+    public abstract T Parse(F arg);
 }
