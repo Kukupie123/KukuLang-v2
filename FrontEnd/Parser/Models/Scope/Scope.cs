@@ -2,7 +2,8 @@
 
 public class Scope
 {
-    //custom types
-    //custom tasks
-    //statements
+    Dictionary<string, CustomType> CustomTypes = new(); //TypeName, CustomType
+    Dictionary<string, CustomTask> CustomTasks = new(); //TaskName, CustomTask
+
+    List<Stmt> Statements = [];
 }

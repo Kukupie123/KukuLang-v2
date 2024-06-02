@@ -9,7 +9,6 @@
 
     <ItemGroup>
       <Folder Include="Parser\Enums\" />
-      <Folder Include="Parser\Parsers\" />
       <Folder Include="Parser\Services\" />
     </ItemGroup>
 
