@@ -1,3 +1,68 @@
+# KukuSpeak Technical doc
+A programming language with natural English syntax, making it very easy to understand and write for non-programmers.
+```
+~This is a comment~
+~Complete Code Snippet Demo~
+
+~Creating Custom Types~
+Define Keyword with layoutType(text), buttonCount(int, initialized to 100);
+Define Computer with typer(Keyboard), name(text);
+
+~Creating Custom Functions~
+Define ChangeKeyboardLayout returning nothing with comp(Computer), newLayoutType(text){
+    set layoutType of typer of comp to newLayoutType.
+}
+Define GetButtonCount returning int with comp(Computer){
+    return buttonCount of typer of comp.
+}
+
+~Performing Task~
+(ChangeKeyboardLayout with comp as asus, newLayoutType as "QWERTY").
+
+~Variables~
+set hp to Computer.
+set name of hp to "HP".
+
+set asus to Computer with name as "ASUS.
+
+~Set to Task's output~
+set bc to (GetButtonCount with comp as hp)'s output.
+
+~Instance access~
+asus's typer.
+
+~Nested instance~
+set kb to hp's typer.
+set bc to hp's typer's buttonCount.
+
+```
+# Models
+## CustomType
+```
+Model :-
+class CustomType {
+    string typeName;
+    map<string,string> variableNameAndType;
+}
+```
+## Custom Task
+```
+Model :-
+class CustomTask{
+    string taskName;
+    map<string,string> parameterNameAndType;
+    List<Statements> instructions;
+}
+```
+```
+Define Foo returning nothing{
+    ~body~
+}
+Define Square returning float with Number(float) {
+    return float*float;
+}
+```
+
 # Brain Storming
 Lets take the following syntax as example.
 ```
