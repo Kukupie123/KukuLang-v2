@@ -5,14 +5,17 @@ public class Token
     public TokenType Type;
     public dynamic Value;
 
-    public Token(TokenType type, dynamic value)
+    public int Position;
+
+    public Token(TokenType type, dynamic value, int position)
     {
         Type = type;
         Value = value;
+        Position = position;
     }
 
     public override string ToString()
     {
-        return $"Token({Type} : {Value})";
+        return $"Token:{Position}:{Type} : {Value}";
     }
 }

@@ -31,12 +31,17 @@ public class TokenMap
 
     private static readonly Dictionary<string, TokenType> Map = new()
     {
-        { "define", TokenType.Define },
+        { "Define", TokenType.Define },
+        { "with", TokenType.With },
+        { "returning", TokenType.Returning },
+        { "as", TokenType.As },
+        { "'", TokenType.AccessorPRIVATE }, // For use in lexer.
+        { "'s", TokenType.Accessor },
         { "variable", TokenType.Keyword },
         { "function", TokenType.Keyword },
         { "of_type", TokenType.Keyword },
         { "new", TokenType.Keyword },
-        { "set", TokenType.Set },
+        { "Set", TokenType.Set },
         { "to", TokenType.Keyword },
         { "if", TokenType.Conditional },
         { "then", TokenType.Keyword },
@@ -44,8 +49,6 @@ public class TokenMap
         { "repeat", TokenType.Keyword },
         { "until", TokenType.UntilLoop },
         { "as_long_as", TokenType.AsLongAsLoop },
-
-        { "nothing", TokenType.Null },
 
         { "is", TokenType.Comparator },
         { "is_not", TokenType.Comparator },
@@ -57,18 +60,17 @@ public class TokenMap
         { "and", TokenType.Logical },
         { "or", TokenType.Logical },
 
-        { "{", TokenType.Parenthesis },
-        { "[", TokenType.Parenthesis },
-        { "(", TokenType.Parenthesis },
-        { "}", TokenType.Parenthesis },
-        { "]", TokenType.Parenthesis },
-        { ")", TokenType.Parenthesis },
+        { "{", TokenType.CurlyBracesOpening },
+        { "[", TokenType.SquareBracketsOpening },
+        { "(", TokenType.RoundBracketsOpening },
+        { "}", TokenType.CurlyBracesClosing },
+        { "]", TokenType.SquareBracketsClosing},
+        { ")", TokenType.RoundBracketsClosing },
 
-        { " ", TokenType.Terminator },
-        { ",", TokenType.Terminator },
-        { ";", TokenType.Terminator },
-        { "\n", TokenType.Terminator }, //newline
-        { "\r", TokenType.Terminator }, //newline
+        { ",", TokenType.Comma },
+        { ".", TokenType.Terminator },
+
+        { "nothing", TokenType.Nothing },
 
         { "-", TokenType.Math },
         { "+", TokenType.Math },

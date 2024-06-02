@@ -7,7 +7,6 @@ public enum TokenType
     String,
     Char,
     Comment,
-    Bool,
     Keyword,
     Identifier,
     Terminator,
@@ -21,5 +20,18 @@ public enum TokenType
     UntilLoop,
     Conditional,
     Define,
-    Set
+    Set,
+    AccessorPRIVATE,
+    With,
+    RoundBracketsOpening,
+    RoundBracketsClosing,
+    CurlyBracesClosing,
+    CurlyBracesOpening,
+    SquareBracketsClosing,
+    SquareBracketsOpening,
+    Comma,
+    Nothing,
+    Returning,
+    As,
+    Accessor
 }

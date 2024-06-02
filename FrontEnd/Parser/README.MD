@@ -1,8 +1,8 @@
-# KukuSpeak Technical doc
-A programming language with natural English syntax, making it very easy to understand and write for non-programmers.
+# KukuSpeak Parser doc
+## NOTE TO SELF : Stop Treating Parser like an interpreter. Let it only parse instructions, structures, functions and place them properly in Tree format.
 ```
 ~This is a comment~
-~Complete Code Snippet Demo~
+~Code Snippet Demo~
 
 ~Creating Custom Types~
 Define Keyword with layoutType(text), buttonCount(int, initialized to 100);
@@ -21,7 +21,7 @@ Define GetButtonCount returning int with comp(Computer){
 
 ~Variables~
 set hp to Computer.
-set name of hp to "HP".
+set hp's name to "HP".
 
 set asus to Computer with name as "ASUS.
 
@@ -34,6 +34,15 @@ asus's typer.
 ~Nested instance~
 set kb to hp's typer.
 set bc to hp's typer's buttonCount.
+
+~Conditionals~
+if a is b then {
+
+}
+~Loops~
+as long as a is b repeat {
+    
+}
 
 ```
 # Models
@@ -62,6 +71,29 @@ Define Square returning float with Number(float) {
     return float*float;
 }
 ```
+# Statements
+## Set Scope Variable Statement
+```
+Set a to 12.
+Set a to Computer.
+```
+
+```
+class SetScopeVariableStatement{
+    string variableName;
+    Expression variableValue;
+}
+```
+```
+set b to a's typer.
+```
+Statements have no return type
+1. Create/update scope instance Stmt
+2. Update nested instance
+# Expressions
+Expressions have return type
+1. Binary Expressions (+,-,*,/,<=,>=,==,!=,&&,||)
+2. instance expressions (CustomType)
 
 # Brain Storming
 Lets take the following syntax as example.

@@ -8,7 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Parser\PrattParser\" />
+      <Folder Include="Parser\Enums\" />
+      <Folder Include="Parser\Parsers\" />
+      <Folder Include="Parser\Services\" />
     </ItemGroup>
 
 </Project>

@@ -1,10 +1,7 @@
-define structure Human {
-    define variable name of type text;
-    define variable age of type number
-}
-
-define variable name of type text;
-define variable age of type number;
-define variable kuchuk of type Human;
-set kuchuk to new Human;
-set kuchuks name to name
+Define Human with age(number), name(text).
+Define Foo returning nothing with ~Funky comment~ num1(number).
+Set a to 12.
+Set b to "Kuku".
+Set c to Human.
+Set d to Human with age as a, name as b.
+set c's age to 24.
