@@ -69,10 +69,10 @@ public class TokenMap
         { "]", TokenType.SquareBracketsClosing},
         { ")", TokenType.RoundBracketsClosing },
 
-        { "-", TokenType.Math },
-        { "+", TokenType.Math },
-        { "/", TokenType.Math },
-        { "*", TokenType.Math },
-        { "%", TokenType.Math },
+        { "-", TokenType.Subtract },
+        { "+", TokenType.Plus },
+        { "/", TokenType.Divide },
+        { "*", TokenType.Multiply },
+        { "%", TokenType.Mod },
     };
 }

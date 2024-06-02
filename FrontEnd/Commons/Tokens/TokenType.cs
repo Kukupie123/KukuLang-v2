@@ -12,7 +12,7 @@ public enum TokenType
     FullStop,
     Comparator,
     Logical,
-    Math,
+    Mod,
     Null,
     Parenthesis,
     EOF,
@@ -35,5 +35,9 @@ public enum TokenType
     As,
     Accessor,
     To,
-    Output
+    Output,
+    Subtract,
+    Plus,
+    Divide,
+    Multiply
 }

@@ -16,3 +16,5 @@ Set d to (Square with num1 as 21)'s output.
 Set f to d's age.
 ~We can also change access~
 Set f to computer's mouse's button's name.
+
+Set a to (12+1)5(2).
