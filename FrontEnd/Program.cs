@@ -1,4 +1,5 @@
-﻿using FrontEnd.Lexer;
+﻿using System.Diagnostics;
+using FrontEnd.Lexer;
 
 namespace FrontEnd;
 
@@ -11,6 +12,7 @@ class Program
         Console.WriteLine(source);
         KukuLexer lexer = new KukuLexer(source);
         var tokens = lexer.Tokenize();
-        tokens.ForEach(token => Console.WriteLine(token));
+        var prattParser = new PrattParser(tokens);
+        Console.WriteLine(prattParser.Parse().ToString());
     }
 }
