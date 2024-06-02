@@ -9,7 +9,7 @@ public enum TokenType
     Comment,
     Keyword,
     Identifier,
-    Terminator,
+    FullStop,
     Comparator,
     Logical,
     Math,
@@ -33,5 +33,7 @@ public enum TokenType
     Nothing,
     Returning,
     As,
-    Accessor
+    Accessor,
+    To,
+    Output
 }

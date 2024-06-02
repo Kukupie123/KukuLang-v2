@@ -53,12 +53,18 @@ public class KukuLexer
             return string.IsNullOrWhiteSpace(character) || TokenMap.IsValueAGenericToken(character);
         }
 
+        if (_inputEndPos == 436)
+        {
+            Console.Write("");
+        }
         string startChar = _kukuLangSourceCode[_inputEndPos].ToString();
 
         //If we start off with a white space we need to move to the next valid character
         while (string.IsNullOrWhiteSpace(startChar))
         {
             _inputStartPos++;
+            if (_inputStartPos >= _kukuLangSourceCode.Length)
+                return;
             startChar = _kukuLangSourceCode[_inputStartPos].ToString();
         }
 
@@ -74,7 +80,7 @@ public class KukuLexer
                     if (endChar == "~")
                     {
                         //If ~ is the last element of the source code then we can't set _inputStartPos to i+1 as it will exceed the range.
-                        //Updating _inputStartPos instead of _inputEndPos as we are meant to ignore comments.
+                        //Updating _inputStartPos instead of _inputEndPos as we are meant to ignore comments and start updatingEndPos after the comment.
                         _inputStartPos = i + 1 < _kukuLangSourceCode.Length ? i + 1 : i;
                         //We do not return unlike the rest of the if branch as we are meant to ignore comments and process what's next.
                         UpdateEndPos();
@@ -126,6 +132,10 @@ public class KukuLexer
     private Token GenerateToken()
     {
         var input = Input();
+        if (string.IsNullOrEmpty(input))
+        {
+            throw new Exception($"Input is empty with range {_inputStartPos}-{_inputEndPos}");
+        }
         //Check if its in token map
         if (TokenMap.IsValueAGenericToken(input))
         {
@@ -156,6 +166,10 @@ public class KukuLexer
         while (_inputStartPos < _kukuLangSourceCode.Length)
         {
             UpdateEndPos();
+
+            //Without this check the program will throw exception when you have comment as your last line becasue the UpdateEndPos() function moves the start pointer AFTER the comment but there is nothing after the comment causing it to crash at GenerateToken() function.
+            if (_inputStartPos >= _kukuLangSourceCode.Length) break;
+
             tokens.Add(GenerateToken());
             MoveInputPositionForward();
         }

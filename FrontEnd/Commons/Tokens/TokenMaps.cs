@@ -31,24 +31,26 @@ public class TokenMap
 
     private static readonly Dictionary<string, TokenType> Map = new()
     {
-        { "Define", TokenType.Define },
-        { "with", TokenType.With },
-        { "returning", TokenType.Returning },
-        { "as", TokenType.As },
-        { "'", TokenType.AccessorPRIVATE }, // For use in lexer.
-        { "'s", TokenType.Accessor },
-        { "variable", TokenType.Keyword },
-        { "function", TokenType.Keyword },
-        { "of_type", TokenType.Keyword },
-        { "new", TokenType.Keyword },
-        { "Set", TokenType.Set },
-        { "to", TokenType.Keyword },
-        { "if", TokenType.Conditional },
-        { "then", TokenType.Keyword },
-        { "else", TokenType.Keyword },
-        { "repeat", TokenType.Keyword },
-        { "until", TokenType.UntilLoop },
-        { "as_long_as", TokenType.AsLongAsLoop },
+        { "Define", TokenType.Define},
+
+        { "with", TokenType.With},
+
+        { ",", TokenType.Comma},
+
+        { ".", TokenType.FullStop},
+
+        { "returning", TokenType.Returning},
+
+        {"nothing", TokenType.Nothing},
+
+        { "Set", TokenType.Set},
+
+        {"to", TokenType.To},
+
+        { "output",TokenType.Output},
+
+        {"'", TokenType.AccessorPRIVATE},
+        {"'s", TokenType.Accessor},
 
         { "is", TokenType.Comparator },
         { "is_not", TokenType.Comparator },
@@ -66,11 +68,6 @@ public class TokenMap
         { "}", TokenType.CurlyBracesClosing },
         { "]", TokenType.SquareBracketsClosing},
         { ")", TokenType.RoundBracketsClosing },
-
-        { ",", TokenType.Comma },
-        { ".", TokenType.Terminator },
-
-        { "nothing", TokenType.Nothing },
 
         { "-", TokenType.Math },
         { "+", TokenType.Math },
