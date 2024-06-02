@@ -53,10 +53,6 @@ public class KukuLexer
             return string.IsNullOrWhiteSpace(character) || TokenMap.IsValueAGenericToken(character);
         }
 
-        if (_inputEndPos == 436)
-        {
-            Console.Write("");
-        }
         string startChar = _kukuLangSourceCode[_inputEndPos].ToString();
 
         //If we start off with a white space we need to move to the next valid character
