@@ -100,25 +100,22 @@ class TokenEvaluatorService
         TokenValidatorService.validateToken(TokenType.Set, parser.CurrentToken);
         //advance to a or kuku
         parser.Advance();
-        var variableNameToken = parser.ConsumeCurrentToken();
-        //Check if next token is "'s"(Accessor)
-        //currentToken = to or 's
-        if (parser.CurrentToken.Type == TokenType.To)
+        var variableNameToken = parser.CurrentToken;
+        var prattParser = new PrattParser(parser._Tokens, parser._Pos);
+        var variableExp = prattParser.Parse() as VariableExp;
+        if (variableExp == null)
         {
-            //12
-            parser.Advance();
-            var prattParser = new PrattParser(parser._Tokens, parser._Pos);
-            var value = prattParser.Parse();
-            parser._Pos = prattParser._Pos; //Update the main parser's _pos
-            SetToStmt setToStmt = new SetToStmt(variableNameToken.Value, value);
-            scope.Statements.Add(setToStmt);
-            parser.Advance(); //Consume the "."
-            return;
+            throw new Exception($"Failed to parse variable name token {variableNameToken.Value}");
         }
-        else if (parser.CurrentToken.Type == TokenType.Accessor)
-        {
-            //'s
-        }
+        parser._Pos = prattParser._Pos; //Update the main parser's _pos
+        prattParser = new PrattParser(parser._Tokens, parser._Pos);
+        var value = prattParser.Parse();
+        parser._Pos = prattParser._Pos; //Update the main parser's _pos
+        SetToStmt setToStmt = new SetToStmt(variableExp, value);
+        scope.Statements.Add(setToStmt);
+        parser.Advance(); //Consume the "."
+        return;
+
 
     }
 }

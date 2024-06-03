@@ -2,10 +2,10 @@
 {
     public class SetToStmt : Stmt
     {
-        public string VariableName { get; }
+        public VariableExp VariableName { get; }
         public ExpressionStmt VariableValue { get; }
 
-        public SetToStmt(string variableName, ExpressionStmt valueExp)
+        public SetToStmt(VariableExp variableName, ExpressionStmt valueExp)
             : base("Set To")
         {
             VariableName = variableName;

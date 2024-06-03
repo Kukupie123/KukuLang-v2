@@ -57,6 +57,14 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
     public override ExpressionStmt Parse(int precedence = 1)
     {
         var left = ProcessPrimaryExpAndAdvance();
+
+        /*
+        Eg :- Set Kuku to 12.
+        Kuku is wrapped as VariableExpression and the next token is "to" so we need to exit
+        */
+        if (left is VariableExp && CurrentToken.Type == TokenType.To)
+            return left;
+
         /*
         In the Parse method, we initially parse the left-hand side of the expression using ProcessPrimaryExpAndAdvance.
         We then check if the current token's precedence is higher than the specified precedence level.
@@ -108,6 +116,26 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
                     { "Value", token.Value }
                 }
             );
+        }
+        if (token.Type == TokenType.Identifier)
+        {
+            //It has to be an accessor Eg :- Set Kuku's AllNames's nickName to "Kuku".
+            //This is basically  kuku.AllNames.nickName = "kuku";
+            if (CurrentToken.Type == TokenType.Accessor)
+            {
+                ConsumeCurrentToken(); //Consume accessor "'s".
+                if (CurrentToken.Type == TokenType.Identifier)
+                {
+                    return new VariableExp(token.Value, ProcessPrimaryExpAndAdvance() as VariableExp);
+                }
+                throw new Exception($"Expected identifier token but got {CurrentToken}");
+            }
+            if (CurrentToken.Type == TokenType.To)
+            {
+                ConsumeCurrentToken(); //Consume "to".
+                return new VariableExp(token.Value, null);
+            }
+            throw new Exception($"Expected either an 's or to token but got {CurrentToken}");
         }
         if (token.Type is TokenType.RoundBracketsOpening)
         {

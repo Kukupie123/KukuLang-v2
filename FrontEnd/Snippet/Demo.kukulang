@@ -1,7 +1,1 @@
-Define Human with age(int), name(text).
-Define Keyboard with type(text).
-Define Computer with key(Keyboard).
-Define TurnOn returning nothing with comp(Computer).
-Define Foo returning text.
-Set a to (12+1)*2.
-Set a to (12+1)*2.
+Set Kuku to (12+2) / 2 * (5+1) * 2.
