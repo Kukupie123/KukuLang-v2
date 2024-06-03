@@ -13,7 +13,8 @@ public class RecursiveDescentParser(List<Token> tokens, int startingPosition = 0
         while (CurrentToken.Type != TokenType.EOF)
         {
             //Handle Custom Type declaration
-            TokenEvaluatorService.EvaluateDefineToken(this, _rootScope);
+            TokenEvaluatorService.EvaluateToken(this, _rootScope);
+            //Handle Set Statements
         }
         return _rootScope;
     }

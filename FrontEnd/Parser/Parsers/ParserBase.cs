@@ -4,8 +4,8 @@ namespace FrontEnd;
 
 public abstract class ParserBase<ParserReturnType, ParserArgument>(List<Token> tokens, int startingPosition = 0)
 {
-    protected int _Pos = startingPosition;
-    protected readonly List<Token> _Tokens = tokens;
+    public int _Pos = startingPosition;
+    public readonly List<Token> _Tokens = tokens;
 
     public Token CurrentToken => _Tokens[_Pos];
 

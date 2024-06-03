@@ -4,12 +4,23 @@ namespace FrontEnd;
 
 class TokenEvaluatorService
 {
-    public static void EvaluateDefineToken(dynamic ParserBase, ASTScope scope)
+    public static void EvaluateToken(dynamic ParserBase, ASTScope scope)
+    {
+        var parser = ParserBase as RecursiveDescentParser;
+        switch (parser.CurrentToken.Type)
+        {
+            case TokenType.Define:
+                EvaluateDefineToken(parser, scope);
+                break;
+            case TokenType.Set:
+                EvaluateSetToken(parser, scope);
+                break;
+        }
+    }
+    private static void EvaluateDefineToken(RecursiveDescentParser ParserBase, ASTScope scope)
     {
 
         var parser = ParserBase as RecursiveDescentParser;
-        var currentToken = parser.CurrentToken;
-
         switch (parser.CurrentToken.Type)
         {
             case TokenType.Define:
@@ -78,5 +89,36 @@ class TokenEvaluatorService
             parser.Advance(); //If we are out of the loop we are at '.' token. So we need to skip over it and move to the next statement.
             return args;
         }
+    }
+    private static void EvaluateSetToken(RecursiveDescentParser ParserBase, ASTScope scope)
+    {
+        //Example :- Set a to 12.
+        //Example :- Set kuku's name to "Kuku".
+
+        //Set
+        var parser = ParserBase as RecursiveDescentParser;
+        TokenValidatorService.validateToken(TokenType.Set, parser.CurrentToken);
+        //advance to a or kuku
+        parser.Advance();
+        var variableNameToken = parser.ConsumeCurrentToken();
+        //Check if next token is "'s"(Accessor)
+        //currentToken = to or 's
+        if (parser.CurrentToken.Type == TokenType.To)
+        {
+            //12
+            parser.Advance();
+            var prattParser = new PrattParser(parser._Tokens, parser._Pos);
+            var value = prattParser.Parse();
+            parser._Pos = prattParser._Pos; //Update the main parser's _pos
+            SetToStmt setToStmt = new SetToStmt(variableNameToken.Value, value);
+            scope.Statements.Add(setToStmt);
+            parser.Advance(); //Consume the "."
+            return;
+        }
+        else if (parser.CurrentToken.Type == TokenType.Accessor)
+        {
+            //'s
+        }
+
     }
 }

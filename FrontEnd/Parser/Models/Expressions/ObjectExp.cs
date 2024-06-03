@@ -7,15 +7,10 @@ public class ObjectExp(string type, Dictionary<string, dynamic> objectVariables)
     /// Integer, Float, String types will store it's value in "Value" key.
     Dictionary<string, dynamic> ObjectVariables = objectVariables;
 
+
     public override string ToString()
     {
-        return $"{base.ToString()}\n" +
-               $"Type: {Type}\n" +
-               $"Object Variables:\n{FormatObjectVariables()}";
-    }
-
-    private string FormatObjectVariables()
-    {
-        return string.Join("\n", ObjectVariables.Select(kv => $"  {kv.Key}: {kv.Value}"));
+        var formattedObjectVariables = string.Join(", ", ObjectVariables.Select(kv => $"{kv.Key}: {kv.Value}"));
+        return $"{Type}->Object Variables: {{ {formattedObjectVariables} }}";
     }
 }
