@@ -17,9 +17,9 @@ public class PrattParserTest
     {
         List<Token> tokens = [
             new (TokenType.RoundBracketsOpening,12,0),
-            new (TokenType.Integer,12,0),
+            new (TokenType.IntegerLiteral,12,0),
             new (TokenType.Add,1,0),
-            new (TokenType.Integer,1,0),
+            new (TokenType.IntegerLiteral,1,0),
             new (TokenType.RoundBracketsClosing,12,0),
             new (TokenType.FullStop,".",0),
         ];
@@ -34,12 +34,12 @@ public class PrattParserTest
         List<Token> tokens = new List<Token>
         {
             new Token(TokenType.RoundBracketsOpening, "(", 0),
-            new Token(TokenType.Integer, 12, 0),
+            new Token(TokenType.IntegerLiteral, 12, 0),
             new Token(TokenType.Add, "+", 0),
-            new Token(TokenType.Integer, 1, 0),
+            new Token(TokenType.IntegerLiteral, 1, 0),
             new Token(TokenType.RoundBracketsClosing, ")", 0),
             new Token(TokenType.Multiply, "*", 0),
-            new Token(TokenType.Integer, 5, 0)
+            new Token(TokenType.IntegerLiteral, 5, 0)
         };
 
 

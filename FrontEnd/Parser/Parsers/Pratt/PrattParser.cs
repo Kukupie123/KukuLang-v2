@@ -100,7 +100,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
     {
         var token = ConsumeCurrentToken();
 
-        if (token.Type is TokenType.Float or TokenType.Integer or TokenType.Text)
+        if (token.Type is TokenType.FloatLiteral or TokenType.IntegerLiteral or TokenType.TextLiteral)
         {
             return new ObjectExp(token.Type.ToString(),
             new()

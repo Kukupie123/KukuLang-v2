@@ -12,8 +12,8 @@ class Program
         Console.WriteLine(source);
         KukuLexer lexer = new KukuLexer(source);
         var tokens = lexer.Tokenize();
-        //tokens.ForEach(t => Console.WriteLine(t));
-        var prattParser = new PrattParser(tokens);
-        Console.WriteLine(prattParser.Parse().ToString());
+        var parser = new RecursiveDescentParser(tokens);
+        var ast = parser.Parse();
+        Console.WriteLine(ast);
     }
 }

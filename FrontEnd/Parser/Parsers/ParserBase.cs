@@ -2,14 +2,14 @@
 
 namespace FrontEnd;
 
-public abstract class ParserBase<T, F>(List<Token> tokens, int startingPosition = 0)
+public abstract class ParserBase<ParserReturnType, ParserArgument>(List<Token> tokens, int startingPosition = 0)
 {
     protected int _Pos = startingPosition;
     protected readonly List<Token> _Tokens = tokens;
 
-    protected Token CurrentToken => _Tokens[_Pos];
+    public Token CurrentToken => _Tokens[_Pos];
 
-    protected Token ConsumeCurrentToken()
+    public Token ConsumeCurrentToken()
     {
         Token current = CurrentToken;
         _Pos++;
@@ -20,7 +20,7 @@ public abstract class ParserBase<T, F>(List<Token> tokens, int startingPosition 
         return current;
     }
 
-    protected void Advance() => _Pos++;
+    public void Advance() => _Pos++;
 
-    public abstract T Parse(F arg);
+    public abstract ParserReturnType Parse(ParserArgument arg);
 }

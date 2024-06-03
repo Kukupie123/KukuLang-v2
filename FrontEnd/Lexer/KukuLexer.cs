@@ -142,14 +142,14 @@ public class KukuLexer
         {
             int i = (int)f;
             if (i == f)
-                return new Token(TokenType.Integer, i, _inputStartPos);
-            return new Token(TokenType.Float, f, _inputStartPos);
+                return new Token(TokenType.IntegerLiteral, i, _inputStartPos);
+            return new Token(TokenType.FloatLiteral, f, _inputStartPos);
         }
         //Check if its a string
         else if (input[0] == '"' && input[input.Length - 1] == '"')
         {
             //Remove the starting and ending "
-            return new Token(TokenType.Text, input[1..^1], _inputStartPos);
+            return new Token(TokenType.TextLiteral, input[1..^1], _inputStartPos);
         }
         //Add it as identifier
         return new Token(TokenType.Identifier, input, _inputStartPos);

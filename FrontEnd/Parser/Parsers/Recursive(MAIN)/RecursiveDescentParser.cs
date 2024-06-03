@@ -2,10 +2,23 @@
 
 namespace FrontEnd;
 
-public class RecursiveDescentParser(List<Token> tokens, int startingPosition = 0) : ParserBase<Scope, dynamic>(tokens, startingPosition)
+public class RecursiveDescentParser(List<Token> tokens, int startingPosition = 0) : ParserBase<ASTScope, dynamic>(tokens, startingPosition)
 {
-    public override Scope Parse(dynamic arg)
+    private ASTScope _rootScope = new ASTScope();
+
+    //Parameter not used so we set it as null to keep ParserBase happy.
+    public override ASTScope Parse(dynamic? arg = null)
     {
-        return null;
+
+        while (CurrentToken.Type != TokenType.EOF)
+        {
+            //Handle Custom Type declaration
+            TokenEvaluatorService.EvaluateDefineToken(this, _rootScope);
+        }
+        return _rootScope;
     }
+
+
+
+
 }

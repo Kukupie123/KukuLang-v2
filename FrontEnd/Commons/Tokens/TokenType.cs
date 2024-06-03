@@ -2,9 +2,9 @@
 
 public enum TokenType
 {
-    Float,
-    Integer,
-    Text,
+    FloatLiteral,
+    IntegerLiteral,
+    TextLiteral,
     Identifier,
     FullStop,
     Comparator,
