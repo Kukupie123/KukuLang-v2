@@ -54,17 +54,37 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
     - Since "*" has higher precedence than "+", it recursively parses "b * c".
     - It then combines "a" with the result of "b * c" using the "+" operator.
     */
-    public override ExpressionStmt Parse(int precedence = 0)
+    public override ExpressionStmt Parse(int precedence = 1)
     {
         var left = ProcessPrimaryExpAndAdvance();
+        /*
+        In the Parse method, we initially parse the left-hand side of the expression using ProcessPrimaryExpAndAdvance.
+        We then check if the current token's precedence is higher than the specified precedence level.
 
-        //If we hit a full stop that is the end of the expression
-        if (CurrentToken.Type == TokenType.FullStop)
+            Explanation with an example:
+                Suppose we have the expression "5 * 5 / 5" with the default precedence level being 1.
+                When we are parsing the '*' operator with a precedence level of 3 in the Parse method,
+                the next infix operator is '/', which also has a precedence level of 3.
+                However, the condition (precedence < GetPrecedence(CurrentToken.Type)) is never true since they are the same (3 == 3).
+                If we used an "if" statement here, it would ignore parsing the right-hand side of the expression ("/ 5").
+                This is because the "if" statement, after obtaining the newLeft (result of '5 * 5'), would simply exit and return,
+                not considering the next token ('/') or further parsing.
+
+                Using a "while" loop instead ensures that we continue parsing the entire expression correctly.
+                The loop keeps iterating until we reach a token with lower or equal precedence than the specified level,
+                allowing us to handle all parts of the expression with the correct precedence order.
+
+            In summary, using a "while" loop is crucial to ensure that we properly parse the entire expression
+            and handle operators with different precedence levels in the correct order.
+        */
+        while (precedence < GetPrecedence(CurrentToken.Type))
         {
-            return left;
-        }
-        if (precedence < GetPrecedence(CurrentToken.Type))
-        {
+            //If we hit a full stop that is the end of the expression
+            if (CurrentToken.Type == TokenType.FullStop)
+            {
+                return left;
+            }
+
             // Intentionally doing it in two lines to make it easy for viewers to understand.
             var newLeft = ProcessInfixAndAdvance(left);
             left = newLeft;
@@ -78,8 +98,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
     */
     ExpressionStmt ProcessPrimaryExpAndAdvance()
     {
-        var token = CurrentToken;
-        Advance();
+        var token = ConsumeCurrentToken();
 
         if (token.Type is TokenType.Float or TokenType.Integer or TokenType.Text)
         {
@@ -108,7 +127,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
             This ensures that the sub-expression within the brackets is fully parsed before continuing with the rest of the expression.
             */
             var blockExpression = Parse(GetPrecedence(token.Type));
-            Advance(); // Consume the closing bracket that matches this opening bracket.
+            ConsumeCurrentToken(); // Consume the closing bracket that matches this opening bracket.
             return blockExpression;
         }
 
@@ -121,8 +140,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
     */
     private ExpressionStmt ProcessInfixAndAdvance(ExpressionStmt leftExpression)
     {
-        var token = CurrentToken;
-        Advance();
+        var token = ConsumeCurrentToken();
         switch (token.Type)
         {
             case TokenType.Add:
