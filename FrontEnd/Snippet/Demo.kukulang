@@ -1,1 +1,5 @@
 Define Human with age(int), name(text).
+Define Keyboard with type(text).
+Define Computer with key(Keyboard).
+Define TurnOn returning nothing with comp(Computer).
+Define Foo returning text.

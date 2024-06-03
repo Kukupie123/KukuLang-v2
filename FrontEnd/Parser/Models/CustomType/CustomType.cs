@@ -13,11 +13,8 @@
 
         public override string ToString()
         {
-            // Create a string that represents the variable-type pairs in a readable format.
-            string varTypePairs = string.Join(", ", VarNameVarTypePair.Select(kv => $"{kv.Key}({kv.Value})"));
-
-            // Construct and return the string representation.
-            return $"{TypeName} with {varTypePairs}.";
+            var varString = string.Join(", ", VarNameVarTypePair.Select(v => $"{v.Key}: {v.Value}"));
+            return $"Type Name: {TypeName}, Variables: {varString}";
         }
     }
 }
