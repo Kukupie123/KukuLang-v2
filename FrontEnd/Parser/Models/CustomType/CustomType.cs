@@ -11,9 +11,9 @@
             VarNameVarTypePair = varNameVarTypePair;
         }
 
-        public override string ToString()
+        public override string ToString(int indentLevel = 0)
         {
-            var varString = string.Join(", ", VarNameVarTypePair.Select(v => $"{v.Key}: {v.Value}"));
+            var varString = string.Join(", ", VarNameVarTypePair.Select(v => $"{IndentHelper.Indent($"{v.Key}: {v.Value}", indentLevel)}"));
             return $@"
         Type Name: {TypeName},
         Variables: {varString}

@@ -2,21 +2,17 @@
 {
     public class ASTScope
     {
-        public Dictionary<string, CustomType> CustomTypes { get; } = new(); // TypeName, CustomType
-        public Dictionary<string, CustomTask> CustomTasks { get; } = new(); // TaskName, CustomTask
+        public Dictionary<string, CustomType> CustomTypes { get; } = new();
+        public Dictionary<string, CustomTask> CustomTasks { get; } = new();
         public List<Stmt> Statements { get; } = new();
 
-        // ToString function to provide a string representation of the ASTScope instance
-        public override string ToString()
+        public string ToString(int indentLevel = 0)
         {
-            var customTypesStr = string.Join("\n", CustomTypes.Select(kvp => $"  {kvp.Key}: {kvp.Value}"));
-            var customTasksStr = string.Join("\n", CustomTasks.Select(kvp => $"  {kvp.Key}: {kvp.Value}"));
-            var statementsStr = string.Join("\n", Statements.Select(stmt => $"  {{\n{stmt.ToString()}\n  }}"));
+            var customTypesStr = string.Join("\n", CustomTypes.Select(kvp => kvp.Value.ToString(indentLevel + 2)));
+            var customTasksStr = string.Join("\n", CustomTasks.Select(kvp => kvp.Value.ToString(indentLevel + 2)));
+            var statementsStr = string.Join("\n", Statements.Select(stmt => stmt.ToString(indentLevel + 2)));
 
-            return $"ASTScope:\n" +
-                   $"CustomTypes:\n{customTypesStr}\n" +
-                   $"CustomTasks:\n{customTasksStr}\n" +
-                   $"Statements:\n{statementsStr}\n";
+            return $"ASTScope:\n{customTypesStr}\n{customTasksStr}\n{statementsStr}";
         }
     }
 }

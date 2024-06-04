@@ -14,6 +14,6 @@ class Program
         var tokens = lexer.Tokenize();
         var parser = new RecursiveDescentParser(tokens);
         var ast = parser.Parse();
-        Console.WriteLine(ast);
+        Console.WriteLine(ast.ToString(0));
     }
 }
