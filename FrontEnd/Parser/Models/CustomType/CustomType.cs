@@ -14,7 +14,10 @@
         public override string ToString()
         {
             var varString = string.Join(", ", VarNameVarTypePair.Select(v => $"{v.Key}: {v.Value}"));
-            return $"Type Name: {TypeName}, Variables: {varString}";
+            return $@"
+        Type Name: {TypeName},
+        Variables: {varString}
+    ";
         }
     }
 }

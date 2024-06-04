@@ -32,23 +32,28 @@ class TokenEvaluatorService
                     //Example :- "Define Square returning nothing with num(int)."
                     parser.Advance(); //Advance to "nothing".
                     var returnTypeToken = parser.ConsumeCurrentToken(); //Store "nothing" and Advance to "with" or ".".
-                    //Check if it has params. If not we stop here.
-                    if (parser.CurrentToken.Type != TokenType.With)
-                    {
-                        TokenValidatorService.validateToken(TokenType.FullStop, parser.CurrentToken);
-                        var task = new CustomTask(taskNameToken.Value, returnTypeToken.Value, new Dictionary<string, string>());
-                        scope.CustomTasks.Add(taskNameToken.Value, task);
-                        parser.Advance(); //Move to the next Statement.
-                        return;
-                    }
                     TokenValidatorService.validateToken([TokenType.Identifier, TokenType.Nothing], returnTypeToken);
-                    TokenValidatorService.validateToken(TokenType.With, parser.CurrentToken);
-                    parser.Advance(); //Advance to the first param such as "num"
-                    Dictionary<string, string>? paramTypeVariables = StoreArgs();
-                    //StoreArgs will process upto a terminator.
-                    CustomTask customTask = new CustomTask(taskNameToken.Value, returnTypeToken.Value, paramTypeVariables);
-                    //Add this to the scope
+
+                    //Check if it has params. If not we move to body directly
+                    Dictionary<string, string>? paramTypeVariables = null;
+                    if (parser.CurrentToken.Type == TokenType.With)
+                    {
+                        parser.Advance(); //Advance to the first param
+                        paramTypeVariables = StoreArgs();
+                        //Once out we should be at '{'
+                    }
+                    //Enter the task block now and store it's instructions
+                    TokenValidatorService.validateToken(TokenType.CurlyBracesOpening, parser.CurrentToken);
+                    parser.Advance(); //Consume the '{'
+                    var taskScope = new ASTScope(); //Task body
+                    while (parser.CurrentToken.Type != TokenType.CurlyBracesClosing)
+                    {
+                        TokenEvaluatorService.EvaluateToken(parser, taskScope);
+                    }
+                    CustomTask customTask = new CustomTask(taskNameToken.Value, returnTypeToken.Value,
+                    paramTypeVariables, taskScope);
                     scope.CustomTasks.Add(taskNameToken.Value, customTask);
+                    parser.Advance(); //Consume the '}'
                     return;
                 }
                 else if (parser.CurrentToken.Type == TokenType.With)
@@ -58,9 +63,12 @@ class TokenEvaluatorService
                     TokenValidatorService.validateToken(TokenType.Identifier, parser.CurrentToken);
                     Dictionary<string, string>? typeVariables = StoreArgs();
                     if (typeVariables.Count <= 0) throw new NoParameterOrPropertyException(parser.CurrentToken);
+                    TokenValidatorService.validateToken(TokenType.FullStop, parser.CurrentToken);
                     CustomType customType = new CustomType(taskNameToken.Value, typeVariables);
                     //Add this to the scope
                     scope.CustomTypes.Add(taskNameToken.Value, customType);
+                    TokenValidatorService.validateToken(TokenType.FullStop, parser.CurrentToken);
+                    parser.Advance();
                     return;
                 }
                 throw new UnexpectedTokenException([new Token(TokenType.With, "with", -1), new Token(TokenType.Returning, "returning", -1)], parser.CurrentToken);
@@ -70,7 +78,7 @@ class TokenEvaluatorService
         Dictionary<string, string> StoreArgs()
         {
             Dictionary<string, string> args = new();
-            while (parser.CurrentToken.Type != TokenType.FullStop)
+            while (parser.CurrentToken.Type != TokenType.FullStop && parser.CurrentToken.Type != TokenType.CurlyBracesOpening)
             {
                 //For Params that come after 1st it is going to have "," so we need to advance().
                 if (parser.CurrentToken.Type == TokenType.Comma)
@@ -86,7 +94,6 @@ class TokenEvaluatorService
                 parser.Advance(); //Advance to closing ")".
                 parser.Advance(); //Advance to closing "," or ".".
             }
-            parser.Advance(); //If we are out of the loop we are at '.' token. So we need to skip over it and move to the next statement.
             return args;
         }
     }
@@ -101,14 +108,16 @@ class TokenEvaluatorService
         //advance to a or kuku
         parser.Advance();
         var variableNameToken = parser.CurrentToken;
-        var prattParser = new PrattParser(parser._Tokens, parser._Pos);
+        var prattParser = new PrattParser(parser.Tokens, parser._Pos);
         var variableExp = prattParser.Parse() as VariableExp;
+        parser._Pos = prattParser._Pos; //Update the main parser's _pos
+        TokenValidatorService.validateToken(TokenType.To, parser.CurrentToken);
         if (variableExp == null)
         {
             throw new Exception($"Failed to parse variable name token {variableNameToken.Value}");
         }
-        parser._Pos = prattParser._Pos; //Update the main parser's _pos
-        prattParser = new PrattParser(parser._Tokens, parser._Pos);
+        parser.Advance(); // Advance to the start of the value expression.
+        prattParser = new PrattParser(parser.Tokens, parser._Pos);
         var value = prattParser.Parse();
         parser._Pos = prattParser._Pos; //Update the main parser's _pos
         SetToStmt setToStmt = new SetToStmt(variableExp, value);

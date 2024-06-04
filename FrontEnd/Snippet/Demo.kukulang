@@ -1,1 +1,7 @@
-Set Kuku to (12+2) / 2 * (5+1) * 2.
+Define Human with age(int), name(text).
+Define Foo returning a with age(int){
+    Set a to 12.
+    Set b to Kuku.
+}
+
+Set a to c.

@@ -117,22 +117,33 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
                 }
             );
         }
+        if (token.Type == TokenType.Accessor)
+        {
+            /*
+            If we are at 's then the next token has to be an identifier
+            Eg :- Set kuku's name to "kuku".
+            We are at 's and the next identifier is "name"
+            */
+            if (CurrentToken.Type != TokenType.Identifier)
+                throw new Exception($"Expected identifier token after 's but got {CurrentToken}");
+            return ProcessPrimaryExpAndAdvance();
+        }
         if (token.Type == TokenType.Identifier)
         {
-            //It has to be an accessor Eg :- Set Kuku's AllNames's nickName to "Kuku".
-            //This is basically  kuku.AllNames.nickName = "kuku";
+            //Eg:-Set a to 12.
+            //Eg:-Set Kuku's name to "kuku".
+            /*
+            Token = a/kuku
+            CurrentToken = to/'s
+            */
+
             if (CurrentToken.Type == TokenType.Accessor)
             {
-                ConsumeCurrentToken(); //Consume accessor "'s".
-                if (CurrentToken.Type == TokenType.Identifier)
-                {
-                    return new VariableExp(token.Value, ProcessPrimaryExpAndAdvance() as VariableExp);
-                }
-                throw new Exception($"Expected identifier token but got {CurrentToken}");
+                return new VariableExp(token.Value, ProcessPrimaryExpAndAdvance() as VariableExp);
+
             }
-            if (CurrentToken.Type == TokenType.To)
+            if (CurrentToken.Type is TokenType.To or TokenType.FullStop)
             {
-                ConsumeCurrentToken(); //Consume "to".
                 return new VariableExp(token.Value, null);
             }
             throw new Exception($"Expected either an 's or to token but got {CurrentToken}");

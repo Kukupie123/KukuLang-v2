@@ -6,7 +6,7 @@ public static class TokenValidatorService
 {
     public static void validateToken(TokenType tokenType, Token token)
     {
-        if (tokenType != token.Type) throw new UnexpectedTokenException(token.Type, token);
+        if (tokenType != token.Type) throw new UnexpectedTokenException(tokenType, token);
     }
     public static void validateToken(TokenType tokenType, dynamic tokenVal, Token token)
     {
