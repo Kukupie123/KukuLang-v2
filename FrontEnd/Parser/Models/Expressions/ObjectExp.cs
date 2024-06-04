@@ -5,21 +5,33 @@
     /// </summary>
     public class ObjectExp : ExpressionStmt
     {
-        public string Type { get; }
+        public string ObjType { get; }
         public Dictionary<string, dynamic> ObjectVariables { get; }
 
         public ObjectExp(string type, Dictionary<string, dynamic> objectVariables)
             : base(type)
         {
-            Type = type;
+            ObjType = type;
             ObjectVariables = objectVariables;
         }
 
         public override string ToString(int indentLevel = 0)
         {
-            var formattedObjectVariables = string.Join(", ", ObjectVariables.Select(kv => $"{IndentHelper.Indent($"{kv.Key}: {kv.Value}", indentLevel + 2)}"));
-            var indent = IndentHelper.Indent("", indentLevel);
-            return $"{indent}{Type}->Object Variables: {{ {formattedObjectVariables} }}";
+            string type = IndentHelper.Indent(ObjType + "\n", 0); // Why does indent being 0 work wtf?
+            string variablesStr = IndentHelper.Indent("Variables : \n", indentLevel + 2);
+
+            foreach (var k in ObjectVariables)
+            {
+                variablesStr += IndentHelper.Indent($"{k.Key} : {k.Value}", indentLevel + 4);
+            }
+
+            // Improve variable handling:
+            variablesStr = IndentHelper.Indent("Properties:\n", indentLevel) +
+                           string.Join("\n", ObjectVariables.Select(p => IndentHelper.Indent(p.ToString(), indentLevel + 2)));
+
+
+            return IndentHelper.Indent(type + variablesStr, indentLevel);
         }
+
     }
 }

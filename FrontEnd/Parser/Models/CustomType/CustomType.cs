@@ -1,4 +1,6 @@
-﻿namespace FrontEnd
+﻿using Microsoft.VisualBasic;
+
+namespace FrontEnd
 {
     public class CustomType : Stmt
     {
@@ -13,11 +15,14 @@
 
         public override string ToString(int indentLevel = 0)
         {
-            var varString = string.Join(", ", VarNameVarTypePair.Select(v => $"{IndentHelper.Indent($"{v.Key}: {v.Value}", indentLevel)}"));
-            return $@"
-        Type Name: {TypeName},
-        Variables: {varString}
-    ";
+            string typeNamstr = $"{IndentHelper.Indent(TypeName, indentLevel)}\n";
+            string paramsStr = $"{IndentHelper.Indent("Params: ", indentLevel + 2)}\n";
+            foreach (var kvp in VarNameVarTypePair)
+            {
+                paramsStr = paramsStr + $"{IndentHelper.Indent($"{kvp.Key} : {kvp.Value}", indentLevel + 4)}\n";
+            }
+            var finalString = typeNamstr + paramsStr;
+            return finalString + "\n";
         }
     }
 }

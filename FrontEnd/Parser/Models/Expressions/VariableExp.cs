@@ -11,11 +11,11 @@
             CurrentVariable = currentVariable;
             NextNode = nextNode;
         }
-
         public override string ToString(int indentLevel = 0)
         {
-            // Directly return the CurrentVariable without considering NextNode
-            return IndentHelper.Indent(CurrentVariable, indentLevel);
+            if (NextNode != null)
+                return IndentHelper.Indent($"{CurrentVariable}.{NextNode.ToString()}", indentLevel);
+            return IndentHelper.Indent($"{CurrentVariable}", indentLevel);
         }
     }
 }

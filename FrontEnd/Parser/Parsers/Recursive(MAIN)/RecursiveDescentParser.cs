@@ -4,7 +4,7 @@ namespace FrontEnd;
 
 public class RecursiveDescentParser(List<Token> tokens, int startingPosition = 0) : ParserBase<ASTScope, dynamic>(tokens, startingPosition)
 {
-    private ASTScope currentScope = new ASTScope();
+    private ASTScope currentScope = new ASTScope("RootScope");
 
     //Parameter not used so we set it as null to keep ParserBase happy.
     public override ASTScope Parse(dynamic? arg = null)

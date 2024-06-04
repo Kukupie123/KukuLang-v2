@@ -45,7 +45,7 @@ class TokenEvaluatorService
                     //Enter the task block now and store it's instructions
                     TokenValidatorService.validateToken(TokenType.CurlyBracesOpening, parser.CurrentToken);
                     parser.Advance(); //Consume the '{'
-                    var taskScope = new ASTScope(); //Task body
+                    var taskScope = new ASTScope($"{scope.ScopeName}->{taskNameToken.Value}"); //Task body
                     while (parser.CurrentToken.Type != TokenType.CurlyBracesClosing)
                     {
                         TokenEvaluatorService.EvaluateToken(parser, taskScope);
