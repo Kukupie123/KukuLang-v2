@@ -1,4 +1,4 @@
-﻿namespace FrontEnd;
+﻿namespace FrontEnd.Parser.Services;
 
 public static class IndentHelper
 {

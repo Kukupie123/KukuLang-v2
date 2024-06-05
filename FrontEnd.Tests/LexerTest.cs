@@ -53,4 +53,13 @@ public class LexerTest
         lexer.Tokenize().ForEach(token => Console.WriteLine(token));
 
     }
+
+    [TestMethod]
+    public void Tokenize6()
+    {
+        string source = "If a is b then {}";
+        var lexer = new KukuLexer(source);
+        lexer.Tokenize().ForEach(token => Console.WriteLine(token));
+
+    }
 }

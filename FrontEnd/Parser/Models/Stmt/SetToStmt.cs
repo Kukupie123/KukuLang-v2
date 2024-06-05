@@ -1,16 +1,11 @@
-﻿namespace FrontEnd
-{
-    public class SetToStmt : Stmt
-    {
-        public VariableExp VariableName { get; }
-        public ExpressionStmt VariableValue { get; }
+﻿using FrontEnd.Parser.Models.Expressions;
 
-        public SetToStmt(VariableExp variableName, ExpressionStmt valueExp)
-            : base("Set To")
-        {
-            VariableName = variableName;
-            VariableValue = valueExp;
-        }
+namespace FrontEnd.Parser.Models.Stmt
+{
+    public class SetToStmt(VariableExp variableName, ExpressionStmt valueExp) : Stmt("Set To")
+    {
+        public VariableExp VariableName { get; } = variableName;
+        public ExpressionStmt VariableValue { get; } = valueExp;
 
         public override string ToString(int indentLevel = 0)
         {

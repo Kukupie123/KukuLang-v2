@@ -1,17 +1,14 @@
-﻿namespace FrontEnd
-{
-    public abstract class ExpressionStmt
-    {
-        protected string Type;
+﻿using FrontEnd.Parser.Services;
 
-        public ExpressionStmt(string type)
-        {
-            Type = type;
-        }
+namespace FrontEnd.Parser.Models.Expressions
+{
+    public abstract class ExpressionStmt(string type)
+    {
+        protected string Type = type;
 
         public virtual string ToString(int indentLevel = 0)
         {
-            return IndentHelper.Indent($"Type : {Type}", indentLevel);
+            return IndentHelper.Indent($"{Type}", indentLevel);
         }
     }
 }

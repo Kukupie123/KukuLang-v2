@@ -1,13 +1,10 @@
-﻿namespace FrontEnd
-{
-    public abstract class Stmt
-    {
-        protected string Type;
+﻿using FrontEnd.Parser.Services;
 
-        public Stmt(string type)
-        {
-            Type = type;
-        }
+namespace FrontEnd.Parser.Models.Stmt
+{
+    public abstract class Stmt(string type)
+    {
+        protected string Type = type;
 
         public virtual string ToString(int indentLevel = 0)
         {

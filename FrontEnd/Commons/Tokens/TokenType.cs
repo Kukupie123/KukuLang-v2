@@ -32,5 +32,7 @@ public enum TokenType
     Add,
     Divide,
     Multiply,
-    Or
+    Or,
+    If,
+    Then,
 }

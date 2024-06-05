@@ -1,12 +1,12 @@
-﻿using System.Diagnostics;
-using System.IO.Compression;
+﻿
 using FrontEnd.Commons.Tokens;
+using FrontEnd.Parser.Models.Expressions;
 
-namespace FrontEnd;
+namespace FrontEnd.Parser.Parsers.Pratt;
 
 public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserBase<ExpressionStmt, int>(tokens, startingPosition)
 {
-    private static readonly Dictionary<string, int> Precedence = new Dictionary<string, int>
+    private static readonly Dictionary<string, int> Precedence = new()
     {
         {"Lowest", 1},
         {"Comparison", 2},
@@ -16,7 +16,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
         {"BooleanAnd", 6}
     };
 
-    private int GetPrecedence(TokenType tokenType)
+    private static int GetPrecedence(TokenType tokenType)
     {
         switch (tokenType)
         {
@@ -57,13 +57,6 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
     public override ExpressionStmt Parse(int precedence = 1)
     {
         var left = ProcessPrimaryExpAndAdvance();
-
-        /*
-        Eg :- Set Kuku to 12.
-        Kuku is wrapped as VariableExpression and the next token is "to" so we need to exit
-        */
-        if (left is VariableExp && CurrentToken.Type == TokenType.To)
-            return left;
 
         /*
         In the Parse method, we initially parse the left-hand side of the expression using ProcessPrimaryExpAndAdvance.
@@ -142,11 +135,8 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
                 return new VariableExp(token.Value, ProcessPrimaryExpAndAdvance() as VariableExp);
 
             }
-            if (CurrentToken.Type is TokenType.To or TokenType.FullStop)
-            {
-                return new VariableExp(token.Value, null);
-            }
-            throw new Exception($"Expected either an 's or to token but got {CurrentToken}");
+            return new VariableExp(token.Value, null);
+
         }
         if (token.Type is TokenType.RoundBracketsOpening)
         {
@@ -187,6 +177,8 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
             case TokenType.Multiply:
             case TokenType.Divide:
             case TokenType.Mod:
+            case TokenType.Comparator:
+
                 /*
                 Call Parse with the current token's precedence level to parse the right-hand side of the expression.
                 This is necessary to correctly handle operators with different precedence levels.
@@ -200,7 +192,8 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
 
                 The Parse call here is crucial to maintaining the proper precedence rules within the expression.
                 */
-                return new BinaryExp(leftExpression, token.Type.ToString(), Parse(GetPrecedence(token.Type)));
+                return new BinaryExp(leftExpression, token.Value.ToString(), Parse(GetPrecedence(token.Type)));
+
         }
         throw new Exception($"Can't process infix token {token}");
     }

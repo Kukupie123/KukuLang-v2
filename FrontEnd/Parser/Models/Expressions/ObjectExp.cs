@@ -1,19 +1,14 @@
-﻿namespace FrontEnd
+﻿using FrontEnd.Parser.Services;
+
+namespace FrontEnd.Parser.Models.Expressions
 {
     /// <summary>
     /// Represents an object such as integer, float, string, custom type.
     /// </summary>
-    public class ObjectExp : ExpressionStmt
+    public class ObjectExp(string type, Dictionary<string, dynamic> objectVariables) : ExpressionStmt(type)
     {
-        public string ObjType { get; }
-        public Dictionary<string, dynamic> ObjectVariables { get; }
-
-        public ObjectExp(string type, Dictionary<string, dynamic> objectVariables)
-            : base(type)
-        {
-            ObjType = type;
-            ObjectVariables = objectVariables;
-        }
+        public string ObjType { get; } = type;
+        public Dictionary<string, dynamic> ObjectVariables { get; } = objectVariables;
 
         public override string ToString(int indentLevel = 0)
         {

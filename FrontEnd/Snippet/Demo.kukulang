@@ -1,9 +1,6 @@
-Define Human with age(int), name(text).
-Define Foo returning a with age(int){
-    Set kuku to Human.
-    Set kuku's name to "Kuchuk Borom".
-    Set kuku's age to 24.
+If a is b then {
+	Set b to 12.
+	If b is zen then {
+	Set c to asd.
+	}
 }
-Define GGEZ with name(text).
-
-Set a to 123.

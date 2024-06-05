@@ -35,6 +35,10 @@ public class TokenMap
 
         { "with", TokenType.With},
 
+        { "If", TokenType.If},
+
+        { "then", TokenType.Then},
+
         { ",", TokenType.Comma},
 
         { ".", TokenType.FullStop},
@@ -55,9 +59,9 @@ public class TokenMap
         { "is", TokenType.Comparator },
         { "is_not", TokenType.Comparator },
         { "is_greater_than", TokenType.Comparator },
-        { "is_greater_or_equal_to", TokenType.Comparator },
+        { "is_greater_or_is", TokenType.Comparator },
         { "is_less_than", TokenType.Comparator },
-        { "is_less_or_equal_to", TokenType.Comparator },
+        { "is_less_or_is", TokenType.Comparator },
 
         { "and", TokenType.And },
         { "or", TokenType.Or },

@@ -1,6 +1,6 @@
 ﻿using FrontEnd.Commons.Tokens;
 
-namespace FrontEnd;
+namespace FrontEnd.Parser.Parsers;
 
 public abstract class ParserBase<ParserReturnType, ParserArgument>(List<Token> tokens, int startingPosition = 0)
 {

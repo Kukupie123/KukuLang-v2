@@ -1,21 +1,15 @@
-﻿namespace FrontEnd
+﻿using FrontEnd.Parser.Models.Scope;
+using FrontEnd.Parser.Services;
+
+namespace FrontEnd.Parser.Models.CustomTask
 {
-    public class CustomTask : Stmt
+    public class CustomTask(string taskName, string taskReturnType, Dictionary<string, string> paramNameParamTypePair, ASTScope taskScope) : Stmt.Stmt(taskName)
     {
-        public string TaskName { get; }
-        public string TaskReturnType { get; }
-        public Dictionary<string, string> ParamNameParamTypePair { get; }
+        public string TaskName { get; } = taskName;
+        public string TaskReturnType { get; } = taskReturnType;
+        public Dictionary<string, string> ParamNameParamTypePair { get; } = paramNameParamTypePair;
 
-        public ASTScope TaskScope;
-
-        public CustomTask(string taskName, string taskReturnType, Dictionary<string, string> paramNameParamTypePair, ASTScope taskScope)
-            : base(taskName)
-        {
-            TaskName = taskName;
-            TaskReturnType = taskReturnType;
-            ParamNameParamTypePair = paramNameParamTypePair;
-            TaskScope = taskScope;
-        }
+        public ASTScope TaskScope = taskScope;
 
         public override string ToString(int indentLevel = 0)
         {
