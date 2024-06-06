@@ -16,7 +16,7 @@ namespace FrontEnd.Parser.Models.Stmt
             string conditionStr = Condition.ToString(indentLevel + 2);
             string scopeStr = Scope.ToString(indentLevel + 4);
 
-            return $"{indent}If\n{conditionIndent}{conditionStr}\n{conditionIndent}then\n{scopeStr}";
+            return $"{indent}if\n{conditionIndent}{conditionStr}\n{conditionIndent}then\n{scopeStr}";
         }
     }
 }

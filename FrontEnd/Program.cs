@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using FrontEnd.Lexer;
+﻿using FrontEnd.Lexer;
 
 namespace FrontEnd;
 

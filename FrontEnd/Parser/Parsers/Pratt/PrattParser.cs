@@ -81,15 +81,8 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
         */
         while (precedence < GetPrecedence(CurrentToken.Type))
         {
-            //If we hit a full stop that is the end of the expression
-            if (CurrentToken.Type == TokenType.FullStop)
-            {
-                return left;
-            }
-
             // Intentionally doing it in two lines to make it easy for viewers to understand.
-            var newLeft = ProcessInfixAndAdvance(left);
-            left = newLeft;
+            left = ProcessInfixAndAdvance(left);
         }
         return left;
     }
@@ -155,6 +148,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
                         return new FuncCallExp(token.Value, funcParams);
 
                     }
+                    Advance(); //Advance to .
                     return new FuncCallExp(token.Value, null);
                 }
 
@@ -193,7 +187,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
     */
     private ExpressionStmt ProcessInfixAndAdvance(ExpressionStmt leftExpression)
     {
-        var token = ConsumeCurrentToken();
+        var token = CurrentToken;
         switch (token.Type)
         {
             case TokenType.Add:
@@ -202,7 +196,8 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
             case TokenType.Divide:
             case TokenType.Mod:
             case TokenType.Comparator:
-
+            case TokenType.And:
+            case TokenType.Or:
                 /*
                 Call Parse with the current token's precedence level to parse the right-hand side of the expression.
                 This is necessary to correctly handle operators with different precedence levels.
@@ -214,10 +209,12 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
                 - Therefore, Parse is called with the precedence of the "*" operator to ensure "b * c" is parsed first.
                 - This way, the parser correctly combines "a" with the result of "b * c" using the "+" operator, ensuring the correct order of operations.
                 */
+                Advance(); //Consume the infix
                 return new BinaryExp(leftExpression, token.Value.ToString(), Parse(GetPrecedence(token.Type)));
-
+            case TokenType.FullStop:
+                //If we meet a fullstop we terminate.
+                return leftExpression;
         }
         throw new Exception($"Can't process infix token {token}");
     }
-
 }

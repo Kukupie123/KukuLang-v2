@@ -37,4 +37,5 @@ public enum TokenType
     AsLongAs,
     And,
     Repeat,
+    Until,
 }

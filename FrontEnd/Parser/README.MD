@@ -5,6 +5,8 @@ Define Human with age(number), name(text).
 Define Foo returning nothing with ~Funky comment~ num1(number).
 Define Square returning integer with num1(number).
 
+Set a to Square's output with num1(12). ~function call~
+
 Set a to 12.
 Set b to "Kuku".
 

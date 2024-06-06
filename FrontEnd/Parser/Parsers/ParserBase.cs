@@ -2,7 +2,11 @@
 using System.Diagnostics;
 
 namespace FrontEnd.Parser.Parsers;
-
+/**
+ * <summary>
+ * Ground rule is that Parsers should not consume the terminator. It should be done by TokenEvaluatorService
+ * </summary>
+ */
 public abstract class ParserBase<ParserReturnType, ParserArgument>(List<Token> tokens, int startingPosition = 0)
 {
     public int _Pos = startingPosition;
@@ -21,7 +25,11 @@ public abstract class ParserBase<ParserReturnType, ParserArgument>(List<Token> t
         return current;
     }
 
-    public void Advance(int offset = 1) => _Pos += offset;
+    public void Advance(int offset = 1)
+    {
+        Debug.WriteLine($"[{this.GetType()}]Advancing to {Tokens[_Pos + offset]}");
+        _Pos += offset;
+    }
 
     public Token Peek(int offset = 1)
     {

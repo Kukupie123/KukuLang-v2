@@ -1,20 +1,43 @@
-﻿
-
+﻿using FrontEnd.Parser.Services;
 
 namespace FrontEnd.Parser.Models.Expressions
 {
     /// <summary>
     /// Represents a function call
     /// </summary>
-    public class FuncCallExp : ExpressionStmt
+    public class FuncCallExp(string functionName, Dictionary<string, string>? paramAndValPair) : ExpressionStmt("Function Call Exp")
     {
-        public FuncCallExp(string functionName, Dictionary<string, string>? paramAndValPair) : base("Function Call Exp")
+        public Dictionary<string, string>? ParamAndValPair { get; set; } = paramAndValPair;
+        public string FunctionName { get; set; } = functionName;
+
+        public override string ToString(int indentLevel = 0)
         {
-            ParamAndValPair = paramAndValPair;
-            FunctionName = functionName;
+            var result = $"{base.ToString(indentLevel)}\n" +
+                         $"{IndentHelper.Indent($"Function Name: {FunctionName}", indentLevel + 2)}\n";
+
+            result += FormatParameters(indentLevel + 2);
+
+            return result;
         }
 
-        public Dictionary<string, string>? ParamAndValPair { get; set; } //Parameters of the function
-        public string FunctionName;
+        private string FormatParameters(int indentLevel)
+        {
+            if (ParamAndValPair == null || ParamAndValPair.Count == 0)
+            {
+                return IndentHelper.Indent("Parameters: None", indentLevel) + "\n";
+            }
+
+            var result = IndentHelper.Indent("Parameters:", indentLevel) + "\n";
+            foreach (var param in ParamAndValPair)
+            {
+                result += FormatParameter(param, indentLevel + 2);
+            }
+            return result;
+        }
+
+        private static string FormatParameter(KeyValuePair<string, string> param, int indentLevel)
+        {
+            return IndentHelper.Indent($"{param.Key}: {param.Value}", indentLevel) + "\n";
+        }
     }
 }

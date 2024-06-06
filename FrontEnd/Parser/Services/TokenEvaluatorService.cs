@@ -10,7 +10,11 @@ using FrontEnd.Parser.Parsers.Pratt;
 using System.Data;
 
 namespace FrontEnd.Parser.Services;
-
+/** <summary>
+ * Evaluates token instructions.
+ * The Ground rule is that each instruction statement MUST consume the terminator or scope completely.
+ * </summary>
+ */
 class TokenEvaluatorService
 {
     public static void EvaluateToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> ParserBase, ASTScope scope)
@@ -25,6 +29,7 @@ class TokenEvaluatorService
                 EvaluateSetToken(ParserBase, scope);
                 break;
             case TokenType.If:
+            case TokenType.Until:
                 EvaluateIfToken(ParserBase, scope);
                 break;
             default:
@@ -139,6 +144,10 @@ class TokenEvaluatorService
     /** <summary>
      * Gathers all the properties until . or {
      * Doesn't consume the . or {
+     * Returns a map of argument and value for the given token.
+     * The initial token needs to be the FIRST identifier
+     * Eg :- ...... age(int), name(text).
+     * The initial needs to be age
      * </summary>
      */
     public static Dictionary<string, string> StoreArgs<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> Parser)

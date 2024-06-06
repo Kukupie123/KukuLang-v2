@@ -1,21 +1,13 @@
-﻿using System.Text.RegularExpressions;
-using System.Diagnostics.CodeAnalysis;
+﻿using FrontEnd.Commons.Tokens;
 using System.Text;
-using FrontEnd.Commons.Tokens;
-using System.Net;
 
 namespace FrontEnd.Lexer;
 
-public class KukuLexer
+public class KukuLexer(string kukuLangSourceCode)
 {
     private int _inputStartPos;
     private int _inputEndPos;
-    private readonly string _kukuLangSourceCode;
-
-    public KukuLexer(string kukuLangSourceCode)
-    {
-        this._kukuLangSourceCode = kukuLangSourceCode;
-    }
+    private readonly string _kukuLangSourceCode = kukuLangSourceCode;
 
     private string Input()
     {
@@ -146,7 +138,7 @@ public class KukuLexer
             return new Token(TokenType.FloatLiteral, f, _inputStartPos);
         }
         //Check if its a string
-        else if (input[0] == '"' && input[input.Length - 1] == '"')
+        else if (input[0] == '"' && input[^1] == '"')
         {
             //Remove the starting and ending "
             return new Token(TokenType.TextLiteral, input[1..^1], _inputStartPos);

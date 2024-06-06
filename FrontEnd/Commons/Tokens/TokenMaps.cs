@@ -60,7 +60,7 @@ public class TokenMap
         {"'s", TokenType.Accessor},
 
         { "as_long_as", TokenType.AsLongAs },
-        { "until", TokenType.AsLongAs },
+        { "until", TokenType.Until },
 
 
         { "is", TokenType.Comparator },

@@ -1,7 +1,7 @@
-define Human with age(int), name(text).
-define Function returning nothing with num1(float){
+Define Human with age(int), name(text).
+Define Function returning nothing with num1(float){
 	~Function body do what you want~
-}
+}.
 
 set a to (12+8)*5.
 set a's name to "Kuku".
@@ -18,3 +18,10 @@ if age is 42 then {
 	~if body~
 }
 
+until age is 42 repeat{
+	~body~
+}
+
+as_long_as age is 42 repeat{
+	~body~
+}
