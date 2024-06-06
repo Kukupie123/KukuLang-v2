@@ -211,9 +211,6 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
                 */
                 Advance(); //Consume the infix
                 return new BinaryExp(leftExpression, token.Value.ToString(), Parse(GetPrecedence(token.Type)));
-            case TokenType.FullStop:
-                //If we meet a fullstop we terminate.
-                return leftExpression;
         }
         throw new Exception($"Can't process infix token {token}");
     }
