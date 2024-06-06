@@ -12,6 +12,7 @@ class Program
         Console.WriteLine(source);
         KukuLexer lexer = new(source);
         var tokens = lexer.Tokenize();
+        tokens.ForEach(token => Console.WriteLine(token));
         var parser = new RecursiveDescentParser(tokens);
         var ast = parser.Parse();
         Console.WriteLine(ast.ToString(0));

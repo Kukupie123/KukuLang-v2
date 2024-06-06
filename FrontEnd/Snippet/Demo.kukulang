@@ -1,6 +1,1 @@
-If a is b then {
-	Set b to 12.
-	If b is zen then {
-	Set c to asd.
-	}
-}
+set a to kuku's output with age(12), sum("idk").

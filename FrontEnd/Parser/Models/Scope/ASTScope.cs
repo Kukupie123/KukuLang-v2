@@ -7,8 +7,8 @@ namespace FrontEnd.Parser.Models.Scope
     public class ASTScope(string scopeName)
     {
         public string ScopeName = scopeName;
-        public Dictionary<string, CustomType.CustomType> CustomTypes { get; } = [];
-        public Dictionary<string, CustomTask.CustomTask> CustomTasks { get; } = [];
+        public Dictionary<string, CustomType.CustomTypeBase> CustomTypes { get; } = [];
+        public Dictionary<string, CustomTask.CustomTaskBase> CustomTasks { get; } = [];
         public List<Stmt.Stmt> Statements { get; } = [];
 
         public string ToString(int indentLevel = 0)

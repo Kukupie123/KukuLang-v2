@@ -31,11 +31,11 @@ public class TokenMap
 
     private static readonly Dictionary<string, TokenType> Map = new()
     {
-        { "Define", TokenType.Define},
+        { "define", TokenType.Define},
 
         { "with", TokenType.With},
 
-        { "If", TokenType.If},
+        { "if", TokenType.If},
 
         { "then", TokenType.Then},
 
@@ -47,7 +47,10 @@ public class TokenMap
 
         {"nothing", TokenType.Nothing},
 
-        { "Set", TokenType.Set},
+        {"repeat", TokenType.Repeat},
+
+
+        { "set", TokenType.Set},
 
         {"to", TokenType.To},
 
@@ -55,6 +58,10 @@ public class TokenMap
 
         {"'", TokenType.AccessorPRIVATE},
         {"'s", TokenType.Accessor},
+
+        { "as_long_as", TokenType.AsLongAs },
+        { "until", TokenType.AsLongAs },
+
 
         { "is", TokenType.Comparator },
         { "is_not", TokenType.Comparator },

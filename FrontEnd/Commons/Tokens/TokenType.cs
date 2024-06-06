@@ -8,7 +8,6 @@ public enum TokenType
     Identifier,
     FullStop,
     Comparator,
-    And,
     Mod,
     EOF,
     Define,
@@ -35,4 +34,7 @@ public enum TokenType
     Or,
     If,
     Then,
+    AsLongAs,
+    And,
+    Repeat,
 }

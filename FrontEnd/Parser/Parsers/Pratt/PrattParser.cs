@@ -1,6 +1,7 @@
 ﻿
 using FrontEnd.Commons.Tokens;
 using FrontEnd.Parser.Models.Expressions;
+using FrontEnd.Parser.Services;
 
 namespace FrontEnd.Parser.Parsers.Pratt;
 
@@ -106,25 +107,28 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
             return new ObjectExp(token.Type.ToString(),
             new()
                 {
-                    { "Value", token.Value }
+                        { "Value", token.Value }
                 }
             );
         }
         if (token.Type == TokenType.Accessor)
         {
             /*
-            If we are at 's then the next token has to be an identifier
+            If we are at 's then the next token has to be an identifier or an output if it's a function
             Eg :- Set kuku's name to "kuku".
             We are at 's and the next identifier is "name"
             */
-            if (CurrentToken.Type != TokenType.Identifier)
-                throw new Exception($"Expected identifier token after 's but got {CurrentToken}");
-            return ProcessPrimaryExpAndAdvance();
+
+            //It's a nested property access
+            if (CurrentToken.Type == TokenType.Identifier)
+                return ProcessPrimaryExpAndAdvance();
+            throw new Exception($"Expected identifier/Output token after 's but got {CurrentToken}");
         }
         if (token.Type == TokenType.Identifier)
         {
             //Eg:-Set a to 12.
             //Eg:-Set Kuku's name to "kuku".
+            //Eg:-Set kuku's name to someFunction's output with 12(param1), "GGEZ"(param2).
             /*
             Token = a/kuku
             CurrentToken = to/'s
@@ -132,8 +136,29 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
 
             if (CurrentToken.Type == TokenType.Accessor)
             {
-                return new VariableExp(token.Value, ProcessPrimaryExpAndAdvance() as VariableExp);
+                /*
+                 * After accessor the next token can be either an identifier which would mean it is accessing a nested property
+                 * If it's output token it is a function call
+                 */
 
+                if (Peek().Type == TokenType.Output)
+                {
+                    //If the token AFTER "'s"  is output it mean's its a function call
+                    Advance(); //Advance to output
+
+                    //Check if the function call has params
+                    if (Peek().Type == TokenType.With)
+                    {
+                        Advance(2); //Advance to with->firstArg
+                        var funcParams = TokenEvaluatorService.StoreArgs(this);
+                        TokenValidatorService.ValidateToken(TokenType.FullStop, CurrentToken);
+                        return new FuncCallExp(token.Value, funcParams);
+
+                    }
+                    return new FuncCallExp(token.Value, null);
+                }
+
+                return new VariableExp(token.Value, ProcessPrimaryExpAndAdvance() as VariableExp);
             }
             return new VariableExp(token.Value, null);
 
@@ -164,8 +189,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
     }
 
     /*
-    Example:
-    a + b (+ is an infix since it's between two operands)
+    Example: a + b (+ is an infix since it's between two operands)
     */
     private ExpressionStmt ProcessInfixAndAdvance(ExpressionStmt leftExpression)
     {
@@ -189,8 +213,6 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
                 - Since "*" has higher precedence than "+", the parser should treat "b * c" as a single unit.
                 - Therefore, Parse is called with the precedence of the "*" operator to ensure "b * c" is parsed first.
                 - This way, the parser correctly combines "a" with the result of "b * c" using the "+" operator, ensuring the correct order of operations.
-
-                The Parse call here is crucial to maintaining the proper precedence rules within the expression.
                 */
                 return new BinaryExp(leftExpression, token.Value.ToString(), Parse(GetPrecedence(token.Type)));
 

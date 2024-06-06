@@ -1,4 +1,5 @@
 ﻿using FrontEnd.Commons.Tokens;
+using System.Diagnostics;
 
 namespace FrontEnd.Parser.Parsers;
 
@@ -9,10 +10,10 @@ public abstract class ParserBase<ParserReturnType, ParserArgument>(List<Token> t
 
     public Token CurrentToken => Tokens[_Pos];
 
-    public Token ConsumeCurrentToken()
+    public Token ConsumeCurrentToken(int offset = 1)
     {
         Token current = CurrentToken;
-        _Pos++;
+        Advance(offset);
         if (_Pos >= Tokens.Count)
         {
             throw new Exception("Unexpected end of input");
@@ -20,7 +21,15 @@ public abstract class ParserBase<ParserReturnType, ParserArgument>(List<Token> t
         return current;
     }
 
-    public void Advance() => _Pos++;
+    public void Advance(int offset = 1) => _Pos += offset;
+
+    public Token Peek(int offset = 1)
+    {
+
+        var token = Tokens[_Pos + offset];
+        Debug.WriteLine($"Peeking {token}");
+        return token;
+    }
 
     public abstract ParserReturnType Parse(ParserArgument arg);
 }

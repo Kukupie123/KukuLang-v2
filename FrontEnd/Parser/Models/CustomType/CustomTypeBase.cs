@@ -3,7 +3,7 @@ using Microsoft.VisualBasic;
 
 namespace FrontEnd.Parser.Models.CustomType
 {
-    public class CustomType(string typeName, Dictionary<string, string> varNameVarTypePair) : Stmt.Stmt("Custom Type")
+    public class CustomTypeBase(string typeName, Dictionary<string, string> varNameVarTypePair) : Stmt.Stmt("Custom Type")
     {
         public string TypeName { get; } = typeName;
         public Dictionary<string, string> VarNameVarTypePair { get; } = varNameVarTypePair;
