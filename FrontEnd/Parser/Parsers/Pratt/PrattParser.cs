@@ -115,7 +115,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
             //It's a nested property access
             if (CurrentToken.Type == TokenType.Identifier)
                 return ProcessPrimaryExpAndAdvance();
-            throw new Exception($"Expected identifier/Output token after 's but got {CurrentToken}");
+            throw new Exception($"Expected identifier token after 's but got {CurrentToken}");
         }
         if (token.Type == TokenType.Identifier)
         {
@@ -129,32 +129,15 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
 
             if (CurrentToken.Type == TokenType.Accessor)
             {
-                /*
-                 * After accessor the next token can be either an identifier which would mean it is accessing a nested property
-                 * If it's output token it is a function call
-                 */
-
-                if (Peek().Type == TokenType.Output)
-                {
-                    //If the token AFTER "'s"  is output it mean's its a function call
-                    Advance(); //Advance to output
-
-                    //Check if the function call has params
-                    if (Peek().Type == TokenType.With)
-                    {
-                        Advance(2); //Advance to with->firstArg
-                        var funcParams = TokenEvaluatorService.StoreArgs(this);
-                        TokenValidatorService.ValidateToken(TokenType.FullStop, CurrentToken);
-                        return new FuncCallExp(token.Value, funcParams);
-
-                    }
-                    Advance(); //Advance to .
-                    return new FuncCallExp(token.Value, null);
-                }
-
-                return new VariableExp(token.Value, ProcessPrimaryExpAndAdvance() as VariableExp);
+                return new NestedPropertyExp(token.Value, ProcessPrimaryExpAndAdvance() as NestedPropertyExp);
             }
-            return new VariableExp(token.Value, null);
+            if (CurrentToken.Type == TokenType.With)
+            {
+                Advance();
+                var args = TokenEvaluatorService.StoreArgs(this);
+                return new FuncCallExp(token.Value, args);
+            }
+            return new NestedPropertyExp(token.Value, null); //This can also represent a function call. (set a to paramlessFunc.)
 
         }
         if (token.Type is TokenType.RoundBracketsOpening)

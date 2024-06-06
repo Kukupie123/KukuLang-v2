@@ -1,13 +1,14 @@
-﻿using FrontEnd.Parser.Models.Scope;
+﻿using FrontEnd.Parser.Models.Expressions;
+using FrontEnd.Parser.Models.Scope;
 using FrontEnd.Parser.Services;
 
 namespace FrontEnd.Parser.Models.CustomTask
 {
-    public class CustomTaskBase(string taskName, string taskReturnType, Dictionary<string, string> paramNameParamTypePair, ASTScope taskScope) : Stmt.Stmt(taskName)
+    public class CustomTaskBase(string taskName, string taskReturnType, Dictionary<string, ExpressionStmt> paramNameParamTypePair, ASTScope taskScope) : Stmt.Stmt(taskName)
     {
         public string TaskName { get; } = taskName;
         public string TaskReturnType { get; } = taskReturnType;
-        public Dictionary<string, string> ParamNameParamTypePair { get; } = paramNameParamTypePair;
+        public Dictionary<string, ExpressionStmt> ParamNameParamTypePair { get; } = paramNameParamTypePair;
 
         public ASTScope TaskScope = taskScope;
 
@@ -18,7 +19,7 @@ namespace FrontEnd.Parser.Models.CustomTask
             string parameters = IndentHelper.Indent("Params:", indentLevel + 2) + "\n";
             foreach (var kv in ParamNameParamTypePair)
             {
-                parameters += IndentHelper.Indent($"{kv.Key} : {kv.Value}", indentLevel + 4) + "\n";
+                parameters += IndentHelper.Indent($"{kv.Key} : {kv.Value.ToString(indentLevel)}", indentLevel + 4) + "\n";
             }
             parameters += "\n";
             string returnTypeStr = $"{IndentHelper.Indent("Returns : " + TaskReturnType, indentLevel)}\n";

@@ -5,9 +5,9 @@ namespace FrontEnd.Parser.Models.Expressions
     /// <summary>
     /// Represents a function call
     /// </summary>
-    public class FuncCallExp(string functionName, Dictionary<string, string>? paramAndValPair) : ExpressionStmt("Function Call Exp")
+    public class FuncCallExp(string functionName, Dictionary<string, ExpressionStmt>? paramAndValPair) : ExpressionStmt("Function Call Exp")
     {
-        public Dictionary<string, string>? ParamAndValPair { get; set; } = paramAndValPair;
+        public Dictionary<string, ExpressionStmt>? ParamAndValPair { get; set; } = paramAndValPair;
         public string FunctionName { get; set; } = functionName;
 
         public override string ToString(int indentLevel = 0)
@@ -35,9 +35,9 @@ namespace FrontEnd.Parser.Models.Expressions
             return result;
         }
 
-        private static string FormatParameter(KeyValuePair<string, string> param, int indentLevel)
+        private static string FormatParameter(KeyValuePair<string, ExpressionStmt> param, int indentLevel)
         {
-            return IndentHelper.Indent($"{param.Key}: {param.Value}", indentLevel) + "\n";
+            return IndentHelper.Indent($"{param.Key}: {param.Value.ToString(indentLevel)}", indentLevel) + "\n";
         }
     }
 }

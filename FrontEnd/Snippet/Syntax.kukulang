@@ -1,15 +1,21 @@
 Define Human with age(int), name(text).
-Define Function returning nothing with num1(float){
+Define Function returning List with num1(float){
 	~Function body do what you want~
 }.
+define Print returning nothing with input(text){
+	~body~
+}
+
+Print with input("hello").
 
 set a to (12+8)*5.
+set a to Human.
 set a's name to "Kuku".
 set a's age to 0.
 
 set b to Human.
-set c to Function's output with num1(21).
-~ no chaining support for function's output ~
+set c to Function with num1(21). ~Function call~
+~ no chaining support for function ~
 
 set d to a's name.
 set a's age to a's name. ~invalid btw. Just wanted to show we can use 's in two positions~

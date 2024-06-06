@@ -1,20 +1,4 @@
-define Human with age(int), name(text).
-define Function returning nothing with num1(float){
-	~Function body do what you want~
-}
-
-set a to (12+8)*5.
-set a's name to "Kuku".
-set a's age to 0.
-
-set b to Human.
-set c to Function's output with num1(21).
-~ no chaining support for function's output ~
-
-set d to a's name.
-set a's age to a's name. ~invalid btw. Just wanted to show we can use 's in two positions~
-
-if age is 42 then {
-	~if body~
-}
-
+set a to Human's cck's gg .
+set a's kuku to Print with content("Hello World").
+set a's kuku to Print with content(kuku's cock).
+Print with content("Hello"), index(23).

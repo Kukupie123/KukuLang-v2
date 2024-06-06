@@ -2,10 +2,16 @@
 
 namespace FrontEnd.Parser.Models.Expressions
 {
-    public class VariableExp(string currentVariable, VariableExp? nextNode) : ExpressionStmt("Nested Variable Exp")
+    /**
+     * <summary>
+     * Represents A property or multi level property variable such as
+     * kuku or kuku.name
+     * </summary>
+     */
+    public class NestedPropertyExp(string currentVariable, NestedPropertyExp? nextNode) : ExpressionStmt("Nested Variable Exp")
     {
         public string CurrentVariable { get; } = currentVariable;
-        public VariableExp? NextNode { get; } = nextNode;
+        public NestedPropertyExp? NextNode { get; } = nextNode;
 
         public override string ToString(int indentLevel = 0)
         {

@@ -2,9 +2,9 @@
 
 namespace FrontEnd.Parser.Models.Stmt
 {
-    public class SetToStmt(VariableExp variableName, ExpressionStmt valueExp) : Stmt("Set To")
+    public class SetToStmt(NestedPropertyExp variableName, ExpressionStmt valueExp) : Stmt("Set To")
     {
-        public VariableExp VariableName { get; } = variableName;
+        public NestedPropertyExp VariableName { get; } = variableName;
         public ExpressionStmt VariableValue { get; } = valueExp;
 
         public override string ToString(int indentLevel = 0)
