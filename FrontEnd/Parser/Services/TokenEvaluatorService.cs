@@ -88,7 +88,7 @@ namespace FrontEnd.Parser.Services
             if (parser.CurrentToken.Type == TokenType.With)
             {
                 parser.Advance(); // Advance to the first parameter
-                paramTypeVariables = StoreArgs(parser);
+                paramTypeVariables = StoreArgs<ParserReturnType, ParserArgument, ExpressionStmt>(parser);
             }
 
             // Parse the task block
@@ -111,7 +111,7 @@ namespace FrontEnd.Parser.Services
         {
             parser.Advance(); // Advance to the first property
             TokenValidatorService.ValidateToken(TokenType.Identifier, parser.CurrentToken);
-            Dictionary<string, ExpressionStmt>? typeVariables = StoreArgs(parser);
+            Dictionary<string, string>? typeVariables = StoreArgs<ParserReturnType, ParserArgument, string>(parser);
             if (typeVariables.Count <= 0) throw new NoPropertyException(parser.CurrentToken);
 
             // Create and store the custom type
@@ -181,9 +181,9 @@ namespace FrontEnd.Parser.Services
          * Eg name(kuku.name)
          * </summary>
          */
-        public static Dictionary<string, ExpressionStmt> StoreArgs<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser)
+        public static Dictionary<string, ValType> StoreArgs<ParserReturnType, ParserArgument, ValType>(ParserBase<ParserReturnType, ParserArgument> parser)
         {
-            var args = new Dictionary<string, ExpressionStmt>();
+            var args = new Dictionary<string, ValType>();
 
             // Keep iterating until we reach . or {
             while (parser.CurrentToken.Type != TokenType.FullStop && parser.CurrentToken.Type != TokenType.CurlyBracesOpening)
@@ -194,20 +194,35 @@ namespace FrontEnd.Parser.Services
                     parser.Advance();
                 }
 
-                // Validate and store the property name and type
-                TokenValidatorService.ValidateToken([TokenType.Identifier, TokenType.IntegerLiteral, TokenType.FloatLiteral, TokenType.TextLiteral], parser.CurrentToken);
+                // Validate and store the property name
+                TokenValidatorService.ValidateToken(
+                    [TokenType.Identifier, TokenType.IntegerLiteral, TokenType.FloatLiteral, TokenType.TextLiteral], parser.CurrentToken);
                 var propertyToken = parser.ConsumeCurrentToken(); // Store property name and advance to "("
-                TokenValidatorService.ValidateToken(TokenType.RoundBracketsOpening, parser.CurrentToken);
 
+                TokenValidatorService.ValidateToken(TokenType.RoundBracketsOpening, parser.CurrentToken);
                 parser.Advance(); // Advance to the property type
-                var pratt = new PrattParser(parser.Tokens, startingPosition: parser._Pos);
-                var paramType = pratt.Parse();
-                parser._Pos = pratt._Pos;
-                args.Add(propertyToken.Value, paramType);
+
+                // Validate and store the property type based on ValType
+                if (typeof(ValType) == typeof(string))
+                {
+                    string strVal = parser.CurrentToken.Value;
+                    args.Add(propertyToken.Value, (ValType)(object)strVal);
+                    parser.Advance(); // Consume the )
+
+                }
+                else if (typeof(ValType) == typeof(ExpressionStmt))
+                {
+                    var pratt = new PrattParser(parser.Tokens, startingPosition: parser._Pos);
+                    var paramType = pratt.Parse();
+                    parser._Pos = pratt._Pos;
+                    args.Add(propertyToken.Value, (ValType)(object)paramType);
+                }
+
                 parser.Advance(); // Advance past "," or "."
             }
 
             return args;
         }
+
     }
 }

@@ -12,11 +12,26 @@ namespace KukuLang.Interpreter.Interpreters.Main_Interpreter
         public void Interpret()
         {
             Dictionary<string, CustomTypeBase> scopeTypes = [];
-            ASTRootScope.CustomTypes.ForEach(type => { scopeTypes.Add(type.TypeName, type); });
+            //Add other root defined types
+            ASTRootScope.CustomTypes.ForEach(type =>
+            {
+                Console.WriteLine($"Defined Type {type.ToString(0)}");
+
+                scopeTypes.Add(type.TypeName, type);
+            });
+
+            //Create predefined tasks.
             Dictionary<string, CustomTaskBase> scopeTasks = [];
-            ASTRootScope.CustomTasks.ForEach(task => { scopeTasks.Add(task.TaskName, task); });
+            //Add defined tasks
+            ASTRootScope.CustomTasks.ForEach(task =>
+            {
+                Console.WriteLine($"Defined Task {task.ToString(0)}");
+                scopeTasks.Add(task.TaskName, task);
+            });
+
             var runtimeRootScope = new RuntimeScope(scopeTypes, scopeTasks, null);
-            ASTRootScope.Statements.ForEach(statement => { Handler.Handler.StatementHandler(statement, runtimeRootScope); });
+            ASTRootScope.Statements.ForEach(statement => { Handler.StatementHandler.HandleStatement(statement, runtimeRootScope); });
+            Console.Write("");
         }
     }
 }

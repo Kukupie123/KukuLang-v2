@@ -1,12 +1,16 @@
-﻿using FrontEnd.Parser.Models.Expressions;
-using FrontEnd.Parser.Services;
+﻿using FrontEnd.Parser.Services;
 
 namespace FrontEnd.Parser.Models.CustomType
 {
-    public class CustomTypeBase(string typeName, Dictionary<string, ExpressionStmt> varNameVarTypePair) : Stmt.Stmt("Custom Type")
+    /// <summary>
+    /// Represents data types. int, float and text will be present by default.
+    /// </summary>
+    /// <param name="typeName"></param>
+    /// <param name="varNameVarTypePair"></param>
+    public class CustomTypeBase(string typeName, Dictionary<string, string> varNameVarTypePair) : Stmt.Stmt($"CT:{typeName}")
     {
         public string TypeName { get; } = typeName;
-        public Dictionary<string, ExpressionStmt> VarNameVarTypePair { get; } = varNameVarTypePair;
+        public Dictionary<string, string> VarNameVarTypePair { get; } = varNameVarTypePair;
 
         public override string ToString(int indentLevel = 0)
         {
@@ -14,7 +18,7 @@ namespace FrontEnd.Parser.Models.CustomType
             string paramsStr = $"{IndentHelper.Indent("Params: ", indentLevel + 2)}\n";
             foreach (var kvp in VarNameVarTypePair)
             {
-                paramsStr += $"{IndentHelper.Indent($"{kvp.Key} : {kvp.Value.ToString(indentLevel)}", indentLevel + 4)}\n";
+                paramsStr += $"{IndentHelper.Indent($"{kvp.Key} : {kvp.Value}, ", indentLevel + 4)}\n";
             }
             var finalString = typeNamstr + paramsStr;
             return finalString + "\n";

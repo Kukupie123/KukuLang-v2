@@ -1,7 +1,6 @@
 ﻿
 using FrontEnd.Parser.Models.CustomTask;
 using FrontEnd.Parser.Models.CustomType;
-using FrontEnd.Parser.Models.Expressions;
 
 namespace KukuLang.Interpreter.Model.Scope
 {
@@ -10,14 +9,14 @@ namespace KukuLang.Interpreter.Model.Scope
     {
         public Dictionary<string, CustomTypeBase> DeclaredTypes = declaredTypes;
         public Dictionary<string, CustomTaskBase> DeclaredTasks = declaredTasks;
-        public Dictionary<string, ObjectExp> CreatedObjects = [];
+        public Dictionary<string, RuntimeObj.RuntimeObj> CreatedObjects = [];
         public RuntimeScope? ParentScope = parentScope;
 
         /// <summary>
         /// Attempts to update variable in current scope or parents scope.
         /// If none found creates a new one in this scope
         /// </summary>
-        public void updateScopeVariable(string varName, ObjectExp instance)
+        public void UpdateScopeVariable(string varName, RuntimeObj.RuntimeObj instance)
         {
             Stack<RuntimeScope> stack = [];
             stack.Push(this);
@@ -38,13 +37,26 @@ namespace KukuLang.Interpreter.Model.Scope
             //If we reach here it means we have not created this variable yet
             CreatedObjects.Add(varName, instance);
         }
-        public ObjectExp? GetVariable(string name)
+        public RuntimeObj.RuntimeObj? GetVariable(string name)
         {
             if (CreatedObjects.ContainsKey(name))
                 return CreatedObjects[name];
             if (ParentScope != null)
             {
                 return ParentScope.GetVariable(name);
+            }
+            return null;
+        }
+
+        public CustomTypeBase? GetCustomType(string typeName)
+        {
+            if (declaredTypes.ContainsKey(typeName))
+            {
+                return declaredTypes[typeName];
+            }
+            if (ParentScope != null)
+            {
+                return ParentScope.GetCustomType(typeName);
             }
             return null;
         }

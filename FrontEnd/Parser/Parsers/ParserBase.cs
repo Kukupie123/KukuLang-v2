@@ -27,7 +27,7 @@ public abstract class ParserBase<ParserReturnType, ParserArgument>(List<Token> t
 
     public void Advance(int offset = 1)
     {
-        Debug.WriteLine($"[{this.GetType()}]Advancing to {Tokens[_Pos + offset]}");
+        Console.WriteLine($"[{this.GetType()}]Advancing to {Tokens[_Pos + offset]}");
         _Pos += offset;
     }
 

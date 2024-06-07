@@ -1,1 +1,6 @@
-set a to 12.
+define Human with age(int), name(text).
+set a to Human.
+set a's age to 69.
+set a's name to "Kuku".
+set b to a's age.
+set c to 12.

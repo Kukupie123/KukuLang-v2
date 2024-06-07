@@ -2,6 +2,7 @@
 using FrontEnd.Commons.Tokens;
 using FrontEnd.Parser.Models.Expressions;
 using FrontEnd.Parser.Services;
+using KukuLang.Parser.Models.Expressions.Literals;
 
 namespace FrontEnd.Parser.Parsers.Pratt;
 
@@ -95,14 +96,14 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
     {
         var token = ConsumeCurrentToken();
 
-        if (token.Type is TokenType.FloatLiteral or TokenType.IntegerLiteral or TokenType.TextLiteral)
+        if (token.Type == TokenType.IntegerLiteral)
         {
-            return new ObjectExp(token.Type.ToString(),
-            new()
-                {
-                        { "Value", token.Value }
-                }
-            );
+            return new IntLiteral((int)token.Value);
+
+        }
+        if (token.Type == TokenType.TextLiteral)
+        {
+            return new TextLiteral((string)token.Value);
         }
         if (token.Type == TokenType.Accessor)
         {
@@ -134,7 +135,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
             if (CurrentToken.Type == TokenType.With)
             {
                 Advance();
-                var args = TokenEvaluatorService.StoreArgs(this);
+                var args = TokenEvaluatorService.StoreArgs<ExpressionStmt, int, ExpressionStmt>(this);
                 return new FuncCallExp(token.Value, args);
             }
             return new NestedVariableExp(token.Value, null); //This can also represent a function call. (set a to paramlessFunc.)
