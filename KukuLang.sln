@@ -1,8 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontEnd", "FrontEnd\FrontEnd.csproj", "{E04CE4FF-3190-49B1-BD3A-685DD5420F31}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KukuLang", "FrontEnd\KukuLang.csproj", "{E04CE4FF-3190-49B1-BD3A-685DD5420F31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontEnd.Tests", "FrontEnd.Tests\FrontEnd.Tests.csproj", "{2208CA15-2D3D-488F-A2E1-8ACBBD79C994}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontEnd.Tests", "FrontEnd.Tests\FrontEnd.Tests.csproj", "{2208CA15-2D3D-488F-A2E1-8ACBBD79C994}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +21,11 @@ Global
 		{2208CA15-2D3D-488F-A2E1-8ACBBD79C994}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2208CA15-2D3D-488F-A2E1-8ACBBD79C994}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2208CA15-2D3D-488F-A2E1-8ACBBD79C994}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B92DFB08-8B3B-4814-BFFA-498C8E2F7704}
 	EndGlobalSection
 EndGlobal

@@ -7,8 +7,8 @@ namespace FrontEnd.Parser.Models.Scope
     public class ASTScope(string scopeName)
     {
         public string ScopeName = scopeName;
-        public Dictionary<string, CustomType.CustomTypeBase> CustomTypes { get; } = [];
-        public Dictionary<string, CustomTask.CustomTaskBase> CustomTasks { get; } = [];
+        public List<CustomType.CustomTypeBase> CustomTypes { get; } = [];
+        public List<CustomTask.CustomTaskBase> CustomTasks { get; } = [];
         public List<Stmt.Stmt> Statements { get; } = [];
 
         public string ToString(int indentLevel = 0)
@@ -17,13 +17,13 @@ namespace FrontEnd.Parser.Models.Scope
             string typesStr = $"{IndentHelper.Indent("Types:", indentLevel + 2)}\n";
             foreach (var t in CustomTypes)
             {
-                typesStr += t.Value.ToString(indentLevel + 4);
+                typesStr += t.ToString(indentLevel + 4);
             }
             typesStr += "\n";
             string tasksStr = $"{IndentHelper.Indent("Tasks:", indentLevel + 2)}\n";
             foreach (var t in CustomTasks)
             {
-                tasksStr += t.Value.ToString(indentLevel + 4);
+                tasksStr += t.ToString(indentLevel + 4);
             }
             tasksStr += "\n";
             string stmtStr = $"{IndentHelper.Indent("Statements:", indentLevel + 2)}\n";

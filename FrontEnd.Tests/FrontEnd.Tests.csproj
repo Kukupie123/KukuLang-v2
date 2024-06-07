@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FrontEnd\FrontEnd.csproj" />
+    <ProjectReference Include="..\FrontEnd\KukuLang.csproj" />
   </ItemGroup>
   
 </Project>

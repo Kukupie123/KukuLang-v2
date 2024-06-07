@@ -129,7 +129,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
 
             if (CurrentToken.Type == TokenType.Accessor)
             {
-                return new NestedPropertyExp(token.Value, ProcessPrimaryExpAndAdvance() as NestedPropertyExp);
+                return new NestedVariableExp(token.Value, ProcessPrimaryExpAndAdvance() as NestedVariableExp);
             }
             if (CurrentToken.Type == TokenType.With)
             {
@@ -137,7 +137,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
                 var args = TokenEvaluatorService.StoreArgs(this);
                 return new FuncCallExp(token.Value, args);
             }
-            return new NestedPropertyExp(token.Value, null); //This can also represent a function call. (set a to paramlessFunc.)
+            return new NestedVariableExp(token.Value, null); //This can also represent a function call. (set a to paramlessFunc.)
 
         }
         if (token.Type is TokenType.RoundBracketsOpening)

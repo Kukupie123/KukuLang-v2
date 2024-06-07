@@ -1,4 +1,5 @@
 ﻿using FrontEnd.Lexer;
+using KukuLang.Interpreter.Interpreters.Main_Interpreter;
 
 namespace FrontEnd;
 
@@ -15,5 +16,8 @@ class Program
         var parser = new RecursiveDescentParser(tokens);
         var ast = parser.Parse();
         Console.WriteLine(ast.ToString(0));
+        MainInterpreter interpreter = new MainInterpreter(ast);
+        interpreter.Interpret();
+
     }
 }

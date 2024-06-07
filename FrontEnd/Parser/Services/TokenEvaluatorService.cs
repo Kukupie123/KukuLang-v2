@@ -102,7 +102,7 @@ namespace FrontEnd.Parser.Services
 
             // Create and store the custom task
             CustomTaskBase customTask = new(taskNameToken.Value, returnTypeToken.Value, paramTypeVariables, taskScope);
-            scope.CustomTasks.Add(taskNameToken.Value, customTask);
+            scope.CustomTasks.Add(customTask);
             parser.Advance(); // Consume the '}'
         }
 
@@ -117,7 +117,7 @@ namespace FrontEnd.Parser.Services
             // Create and store the custom type
             TokenValidatorService.ValidateToken(TokenType.FullStop, parser.CurrentToken);
             CustomTypeBase customType = new(taskNameToken.Value, typeVariables);
-            scope.CustomTypes.Add(taskNameToken.Value, customType);
+            scope.CustomTypes.Add(customType);
             parser.Advance(); // Consume the '.'
         }
 
@@ -129,7 +129,7 @@ namespace FrontEnd.Parser.Services
 
             var variableNameToken = parser.CurrentToken;
             var prattParser = new PrattParser(parser.Tokens, parser._Pos);
-            var variableExp = prattParser.Parse() as NestedPropertyExp
+            var variableExp = prattParser.Parse() as NestedVariableExp
                 ?? throw new Exception($"Variable Expression was evaluated to null for token {variableNameToken}");
 
             parser._Pos = prattParser._Pos; // Update the main parser's _pos

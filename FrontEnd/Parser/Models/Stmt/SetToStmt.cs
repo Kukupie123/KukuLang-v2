@@ -2,15 +2,15 @@
 
 namespace FrontEnd.Parser.Models.Stmt
 {
-    public class SetToStmt(NestedPropertyExp variableName, ExpressionStmt valueExp) : Stmt("Set To")
+    public class SetToStmt(NestedVariableExp variableName, ExpressionStmt valueExp) : Stmt("Set To")
     {
-        public NestedPropertyExp VariableName { get; } = variableName;
-        public ExpressionStmt VariableValue { get; } = valueExp;
+        public NestedVariableExp VariableToSet { get; } = variableName;
+        public ExpressionStmt VarVal { get; } = valueExp;
 
         public override string ToString(int indentLevel = 0)
         {
-            string variableNameStr = VariableName.ToString(indentLevel);
-            string variableValStr = VariableValue.ToString(indentLevel + 2);
+            string variableNameStr = VariableToSet.ToString(indentLevel);
+            string variableValStr = VarVal.ToString(indentLevel + 2);
 
             return $"{variableNameStr} :\n{variableValStr}";
         }
