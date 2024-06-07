@@ -26,6 +26,7 @@ namespace KukuLang.Interpreter.Model.Scope
                 if (currentScope.CreatedObjects.ContainsKey(varName))
                 {
                     currentScope.CreatedObjects[varName] = instance;
+                    Console.WriteLine($"Updating variable {varName} : {instance.Val} in {this}");
                     return;
                 }
                 if (ParentScope != null)
@@ -36,6 +37,7 @@ namespace KukuLang.Interpreter.Model.Scope
 
             //If we reach here it means we have not created this variable yet
             CreatedObjects.Add(varName, instance);
+            Console.WriteLine($"Creating variable {varName} : {instance.Val} in {this}");
         }
         public RuntimeObj.RuntimeObj? GetVariable(string name)
         {
