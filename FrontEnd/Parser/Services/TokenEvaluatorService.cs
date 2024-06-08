@@ -7,6 +7,7 @@ using FrontEnd.Parser.Models.Scope;
 using FrontEnd.Parser.Models.Stmt;
 using FrontEnd.Parser.Parsers;
 using FrontEnd.Parser.Parsers.Pratt;
+using KukuLang.Parser.Models.Expressions.Literals;
 using System.Data;
 
 namespace FrontEnd.Parser.Services
@@ -89,6 +90,20 @@ namespace FrontEnd.Parser.Services
             {
                 parser.Advance(); // Advance to the first parameter
                 paramTypeVariables = StoreArgs<ParserReturnType, ParserArgument, ExpressionStmt>(parser);
+            }
+
+            //Iterate paramTypeVariables and validate
+            foreach (var kv in paramTypeVariables)
+            {
+                //validate if its valid data type
+                if (kv.Value is not NestedVariableExp || kv.Value is not LiteralExp)
+                {
+                    throw new Exception($"Invalid param type({kv.Key},{kv.Value}) for function({taskNameToken.Value})");
+                }
+                if (kv.Value is NestedVariableExp n)
+                {
+                    if (n.NextNode != null) throw new Exception($"Invalid Nested Type as param {kv.Key}, {kv.Value} for function {taskNameToken.Value}");
+                }
             }
 
             // Parse the task block

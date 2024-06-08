@@ -1,5 +1,12 @@
 define Human with age(int), name(text).
 define Student with human(Human), standard(int).
+define Foo returning int with num(int){
+	set num to num+1.
+}
+define Bar returning nothing with num(int){
+	set num to num+1.
+}
+
 set stud to Student.
 
 ~ Showcase of composition and property chaining~
@@ -15,3 +22,7 @@ set bar to foo's standard. ~12~
 
 ~ accessing nested object ~
 set haa to foo's human's name. ~"kuchuk"~
+
+~ Function call example ~
+set funcRes to Foo with num(bar).
+Bar with num(12).

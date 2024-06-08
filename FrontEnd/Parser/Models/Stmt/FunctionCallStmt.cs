@@ -5,7 +5,7 @@ namespace FrontEnd.Parser.Models.Stmt
     public class FunctionCallStmt(string functionName, FuncCallExp functionExp) : Stmt("Function call stmt")
     {
         public string FunctionName { get; } = functionName;
-        readonly FuncCallExp FunctionExp = functionExp;
+        public readonly FuncCallExp FunctionExp = functionExp;
 
         public override string ToString(int indentLevel = 0)
         {

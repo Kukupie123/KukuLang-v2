@@ -70,6 +70,19 @@ namespace KukuLang.Interpreter.Model.Scope
             return null;
         }
 
+        public CustomTaskBase? GetCustomTask(string taskName)
+        {
+            if (DeclaredTasks.ContainsKey(taskName))
+            {
+                return DeclaredTasks[taskName];
+            }
+            if (ParentScope != null)
+            {
+                return ParentScope.GetCustomTask(taskName);
+            }
+            return null;
+        }
+
         public override string ToString()
         {
             var declaredTypesStr = string.Join(", ", DeclaredTypes.Select(kv => $"{kv.Key}: {kv.Value}"));

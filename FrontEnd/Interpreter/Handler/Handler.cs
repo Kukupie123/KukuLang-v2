@@ -93,9 +93,30 @@ namespace KukuLang.Interpreter.Handler
                 IntLiteral intLiteral => new RuntimeObj(RuntimeObjType.Integer, intLiteral.Val),
                 TextLiteral textLiteral => new RuntimeObj(RuntimeObjType.Text, textLiteral.Val),
                 NestedVariableExp nestedVar => ResolveNestedVariable(nestedVar, scope),
-                FuncCallExp or BinaryExp => throw new NotImplementedException("Function call and binary expressions are not yet implemented."),
+                FuncCallExp funcCallExp => ResolveFunctionCallExp(funcCallExp, scope),
+                BinaryExp => throw new Exception("Binary not implemented yet"),
                 _ => throw new NotSupportedException($"Unsupported expression type: {exp.GetType().Name}")
             };
+        }
+
+        private static RuntimeObj ResolveFunctionCallExp(FuncCallExp funcCallExp, RuntimeScope scope)
+        {
+            var task = scope.GetCustomTask(funcCallExp.FunctionName) ?? throw new Exception($"Function {funcCallExp.FunctionName} not found");
+
+            //Validate if all params exist and their types are valid, add them to dictionary too.
+            Dictionary<string, RuntimeObj> paramObj = [];
+            foreach (var kv in task.ParamNameParamTypePair)
+            {
+                string paramName = kv.Key;
+                if (!funcCallExp.ParamAndValPair.ContainsKey(paramName)) throw new Exception($"Function call {funcCallExp.FunctionName} Missing param {paramName}");
+                var runtimeObj = ConvertExpressionToRuntimeObject(funcCallExp.ParamAndValPair[paramName], scope);
+                paramObj.Add(paramName, runtimeObj);
+            }
+
+            //Store custom type and task for the function block
+            //Create the scope with the Custom type and tasks
+            //Add param as variables to the scope
+            //Run the function scope
         }
 
         private static RuntimeObj ResolveNestedVariable(NestedVariableExp nestedVar, RuntimeScope scope)
@@ -137,7 +158,13 @@ namespace KukuLang.Interpreter.Handler
 
         private static void ProcessFunctionCallStatement(FunctionCallStmt stmt, RuntimeScope scope)
         {
-            // Implementation for handling function call statements
+            //Check if function exists
+            var task = scope.GetCustomTask(stmt.FunctionName);
+            if (task == null)
+            {
+                throw new Exception($"Function {stmt.FunctionName} not found");
+            }
+            var functionExp = stmt.FunctionExp;
         }
     }
 }
