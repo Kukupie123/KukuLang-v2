@@ -17,10 +17,11 @@ namespace FrontEnd.Parser.Models.CustomTask
             string taskNamestr = $"{IndentHelper.Indent(TaskName, indentLevel)}\n";
 
             string parameters = IndentHelper.Indent("Params:", indentLevel + 2) + "\n";
-            foreach (var kv in ParamNameParamTypePair)
-            {
-                parameters += IndentHelper.Indent($"{kv.Key} : {kv.Value.ToString(indentLevel)}", indentLevel + 4) + "\n";
-            }
+            if (ParamNameParamTypePair != null)
+                foreach (var kv in ParamNameParamTypePair)
+                {
+                    parameters += IndentHelper.Indent($"{kv.Key} : {kv.Value.ToString(indentLevel)}", indentLevel + 4) + "\n";
+                }
             parameters += "\n";
             string returnTypeStr = $"{IndentHelper.Indent("Returns : " + TaskReturnType, indentLevel)}\n";
             string body = IndentHelper.Indent("Statements:", indentLevel + 2) + "\n";

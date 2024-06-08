@@ -138,7 +138,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
                 var args = TokenEvaluatorService.StoreArgs<ExpressionStmt, int, ExpressionStmt>(this);
                 return new FuncCallExp(token.Value, args);
             }
-            return new NestedVariableExp(token.Value, null); //This can also represent a function call. (set a to paramlessFunc.)
+            return new NestedVariableExp(token.Value, null); //This can also represent a function call.
 
         }
         if (token.Type is TokenType.RoundBracketsOpening)

@@ -44,6 +44,7 @@ public class TokenMap
         { ".", TokenType.FullStop},
 
         { "returning", TokenType.Returning},
+        { "return", TokenType.Return},
 
         {"nothing", TokenType.Nothing},
 

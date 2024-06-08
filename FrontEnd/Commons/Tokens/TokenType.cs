@@ -23,6 +23,7 @@ public enum TokenType
     Comma,
     Nothing,
     Returning,
+    Return,
     As,
     Accessor,
     To,

@@ -36,20 +36,57 @@ namespace FrontEnd.Parser.Services
                 case TokenType.If:
                     EvaluateIfToken(parser, scope);
                     break;
+                case TokenType.Return:
+                    EvaluateReturnToken(parser, scope);
+                    break;
                 default:
                     throw new UnknownTokenException(parser.CurrentToken);
             }
         }
 
+        private static void EvaluateReturnToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
+        {
+            parser.Advance(); //Advance to start of expression OR .
+            if (parser.CurrentToken.Type == TokenType.FullStop)
+            {
+                scope.Statements.Add(new ReturnStmt(null));
+                parser.Advance(); //Consume the .
+            }
+            else
+            {
+                var pratt = new PrattParser(parser.Tokens, parser._Pos);
+                var returnExp = pratt.Parse();
+                parser._Pos = pratt._Pos;
+                scope.Statements.Add(new ReturnStmt(returnExp));
+            }
+            parser.Advance(); //Consume the .
+        }
+
         private static void EvaluateFunctionCall<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
         {
             var functionNameToken = parser.CurrentToken;
-            var pratt = new PrattParser(parser.Tokens, parser._Pos);
-            var funcCallExp = pratt.Parse() as FuncCallExp;
-            parser._Pos = pratt._Pos;
+            FuncCallExp? funcCallExp = null;
+
+            //If it has with param pratt can handle it.
+            //TODO: Do not make pratt do it
+            if (parser.Peek().Type == TokenType.With)
+            {
+                parser.Advance(2); //step over with and to first param
+                var pratt = new PrattParser(parser.Tokens, parser._Pos);
+                funcCallExp = pratt.Parse() as FuncCallExp;
+                parser._Pos = pratt._Pos;
+
+            }
+            else if (parser.Peek().Type == TokenType.FullStop)
+            {
+                //No param so
+                parser.Advance(); //advance to .
+
+                funcCallExp = new FuncCallExp(functionNameToken.Value, null);
+            }
             var functionCallStmt = new FunctionCallStmt(functionNameToken.Value, funcCallExp);
             scope.Statements.Add(functionCallStmt);
-            parser.Advance();
+            parser.Advance(); //consume .
         }
 
         // Handles "define" tokens
@@ -81,7 +118,7 @@ namespace FrontEnd.Parser.Services
         private static void EvaluateDefineReturningToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope, Token taskNameToken)
         {
             parser.Advance(); // Advance to "nothing" or return type
-            var returnTypeToken = parser.ConsumeCurrentToken(); // Store return type and advance to "with" or "."
+            var returnTypeToken = parser.ConsumeCurrentToken(); // Store return type and advance to "with" or "{"
             TokenValidatorService.ValidateToken([TokenType.Identifier, TokenType.Nothing], returnTypeToken);
 
             // Check for parameters
@@ -93,18 +130,19 @@ namespace FrontEnd.Parser.Services
             }
 
             //Iterate paramTypeVariables and validate
-            foreach (var kv in paramTypeVariables)
-            {
-                //validate if its valid data type
-                if (kv.Value is not NestedVariableExp || kv.Value is not LiteralExp)
+            if (paramTypeVariables != null)
+                foreach (var kv in paramTypeVariables)
                 {
-                    throw new Exception($"Invalid param type({kv.Key},{kv.Value}) for function({taskNameToken.Value})");
+                    //validate if its valid data type
+                    if (kv.Value is not NestedVariableExp || kv.Value is not LiteralExp)
+                    {
+                        throw new Exception($"Invalid param type({kv.Key},{kv.Value}) for function({taskNameToken.Value})");
+                    }
+                    if (kv.Value is NestedVariableExp n)
+                    {
+                        if (n.NextNode != null) throw new Exception($"Invalid Nested Type as param {kv.Key}, {kv.Value} for function {taskNameToken.Value}");
+                    }
                 }
-                if (kv.Value is NestedVariableExp n)
-                {
-                    if (n.NextNode != null) throw new Exception($"Invalid Nested Type as param {kv.Key}, {kv.Value} for function {taskNameToken.Value}");
-                }
-            }
 
             // Parse the task block
             TokenValidatorService.ValidateToken(TokenType.CurlyBracesOpening, parser.CurrentToken);

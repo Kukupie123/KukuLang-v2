@@ -86,7 +86,7 @@ namespace KukuLang.Interpreter.Handler
         }
 
 
-        private static RuntimeObj ConvertExpressionToRuntimeObject(ExpressionStmt exp, RuntimeScope scope)
+        private static RuntimeObj? ConvertExpressionToRuntimeObject(ExpressionStmt exp, RuntimeScope scope)
         {
             return exp switch
             {
@@ -99,24 +99,39 @@ namespace KukuLang.Interpreter.Handler
             };
         }
 
-        private static RuntimeObj ResolveFunctionCallExp(FuncCallExp funcCallExp, RuntimeScope scope)
+        private static RuntimeObj? ResolveFunctionCallExp(FuncCallExp funcCallExp, RuntimeScope scope)
         {
             var task = scope.GetCustomTask(funcCallExp.FunctionName) ?? throw new Exception($"Function {funcCallExp.FunctionName} not found");
 
             //Validate if all params exist and their types are valid, add them to dictionary too.
             Dictionary<string, RuntimeObj> paramObj = [];
-            foreach (var kv in task.ParamNameParamTypePair)
+            if (task.ParamNameParamTypePair != null)
+                foreach (var kv in task.ParamNameParamTypePair)
+                {
+                    string paramName = kv.Key;
+                    if (!funcCallExp.ParamAndValPair.ContainsKey(paramName)) throw new Exception($"Function call {funcCallExp.FunctionName} Missing param {paramName}");
+                    var runtimeObj = ConvertExpressionToRuntimeObject(funcCallExp.ParamAndValPair[paramName], scope);
+                    paramObj.Add(paramName, runtimeObj);
+                }
+            var statements = task.TaskScope;
+            var funcScope = new RuntimeScope([], [], scope);
+            //Add param as variables to the funcScope
+            foreach (var item in paramObj)
             {
-                string paramName = kv.Key;
-                if (!funcCallExp.ParamAndValPair.ContainsKey(paramName)) throw new Exception($"Function call {funcCallExp.FunctionName} Missing param {paramName}");
-                var runtimeObj = ConvertExpressionToRuntimeObject(funcCallExp.ParamAndValPair[paramName], scope);
-                paramObj.Add(paramName, runtimeObj);
+                funcScope.CreatedObjects.Add(item.Key, item.Value);
             }
-
-            //Store custom type and task for the function block
-            //Create the scope with the Custom type and tasks
-            //Add param as variables to the scope
-            //Run the function scope
+            foreach (var s in statements.Statements)
+            {
+                if (s is ReturnStmt)
+                {
+                    return ConvertExpressionToRuntimeObject((s as ReturnStmt).Expression, funcScope);
+                }
+                else
+                {
+                    HandleStatement(s, funcScope);
+                }
+            }
+            return null;
         }
 
         private static RuntimeObj ResolveNestedVariable(NestedVariableExp nestedVar, RuntimeScope scope)
@@ -165,6 +180,7 @@ namespace KukuLang.Interpreter.Handler
                 throw new Exception($"Function {stmt.FunctionName} not found");
             }
             var functionExp = stmt.FunctionExp;
+            var functionReturnVal = ConvertExpressionToRuntimeObject(functionExp, scope);
         }
     }
 }
