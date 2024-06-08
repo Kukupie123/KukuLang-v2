@@ -5,8 +5,8 @@ set stud to Student.
 ~ Showcase of composition and property chaining~
 set stud's human's name to "Kuchuk".
 
-~ More example of chaining ~
-set foo to stud. ~foo now has a reference to stud. No copies are created~
+~foo now has a reference to stud. No copies are created~
+set foo to stud. 
 set foo's standard to 12.
 
 ~both stud and foo point to the same object~
