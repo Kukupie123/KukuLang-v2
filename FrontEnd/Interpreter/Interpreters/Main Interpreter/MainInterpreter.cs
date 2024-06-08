@@ -36,7 +36,7 @@ namespace KukuLang.Interpreter.Interpreters.Main_Interpreter
                 {
                     return;
                 }
-                Handler.StatementHandler.HandleStatement(statement, runtimeRootScope);
+                Handler.StatementProcessor.ProcessStatement(statement, runtimeRootScope);
             });
         }
     }

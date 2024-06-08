@@ -22,3 +22,4 @@ define pi returning int{
 set kuku to CreateHuman with age(24), name("Kuchuk borom debbarma").
 square with num(12).
 set pi to pi.
+set pi to "kuku".

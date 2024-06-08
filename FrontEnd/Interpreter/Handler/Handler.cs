@@ -7,9 +7,9 @@ using KukuLang.Parser.Models.Expressions.Literals;
 
 namespace KukuLang.Interpreter.Handler
 {
-    public static class StatementHandler
+    public static class StatementProcessor
     {
-        public static void HandleStatement(Stmt statement, RuntimeScope scope)
+        public static void ProcessStatement(Stmt statement, RuntimeScope scope)
         {
             switch (statement)
             {
@@ -31,11 +31,18 @@ namespace KukuLang.Interpreter.Handler
         {
             var variableToSet = stmt.VariableToSet;
             var valueToSet = stmt.VarVal;
-
+            /*
+             * If the variable we are setting has no next node then
+             * It is either a reference to an existing variable or creating a new variable
+             */
             if (variableToSet.NextNode == null)
             {
                 AssignSimpleVariable(variableToSet.VarName, valueToSet, scope);
             }
+            /*
+             * If it is nested then it is a sub variable or nested variable such as :-
+             * "set kuku's age to 12." which basically translates to "kuku.age = 12;" in c#
+             */
             else
             {
                 AssignNestedVariable(variableToSet, valueToSet, scope);
@@ -44,27 +51,29 @@ namespace KukuLang.Interpreter.Handler
 
         private static void AssignSimpleVariable(string variableName, ExpressionStmt value, RuntimeScope scope)
         {
-            var runtimeObject = ConvertExpressionToRuntimeObject(value, scope);
-            var isUpdate = scope.GetVariable(variableName) != null;
+            var runtimeObject = GenerateRuntimeObjectFromExpressionStmt(value, scope);
+            var isUpdate = scope.GetVariable(variableName) != null; //Boolean to determine if we are creating or updating an existing variable value
             scope.UpdateScopeVariable(variableName, runtimeObject);
             Console.WriteLine($"{(isUpdate ? "Updated" : "Created")} variable '{variableName}' with value '{runtimeObject}'");
         }
 
         private static void AssignNestedVariable(NestedVariableExp nestedVar, ExpressionStmt value, RuntimeScope scope)
         {
+            //Get the root variable first.
             var currentVar = scope.GetVariable(nestedVar.VarName)
                                   ?? throw new Exception($"Variable not found: {nestedVar.VarName}");
+            //parentVar is used to store the "currentVar" before updating "currentVar".
+            //This is necessary because for nested variable such as (student.human.age) currentVal will end up at age and parentVar will end up at human.
             RuntimeObj? parentVar = currentVar;
 
             // Build the full path dynamically
             var fullPath = nestedVar.VarName;
 
+            //Traverse the nestedNode and update variables
             while (nestedVar.NextNode != null)
             {
                 nestedVar = nestedVar.NextNode;
-                parentVar = currentVar;
                 var nestedVars = currentVar.Val as Dictionary<string, RuntimeObj>;
-
                 if (nestedVars == null)
                 {
                     throw new Exception($"Variable {currentVar.Val} is not type nested object");
@@ -74,24 +83,26 @@ namespace KukuLang.Interpreter.Handler
                     throw new Exception($"Nested variable not found: {nestedVar.VarName}");
 
                 }
-                currentVar = nestedVars[nestedVar.VarName];
+
+                parentVar = currentVar; //Store currentVar in parentVar
+                currentVar = nestedVars[nestedVar.VarName]; //Update currentVar by accessing dictionary
 
                 // Append to the path
                 fullPath += $".{nestedVar.VarName}";
             }
 
-            var updatedValue = ConvertExpressionToRuntimeObject(value, scope);
+            var updatedValue = GenerateRuntimeObjectFromExpressionStmt(value, scope);
             (parentVar.Val as Dictionary<string, RuntimeObj>)[nestedVar.VarName] = updatedValue;
             Console.WriteLine($"Updated nested variable '{fullPath}' with value '{updatedValue}'");
         }
 
 
-        private static RuntimeObj? ConvertExpressionToRuntimeObject(ExpressionStmt exp, RuntimeScope scope)
+        private static RuntimeObj? GenerateRuntimeObjectFromExpressionStmt(ExpressionStmt exp, RuntimeScope scope)
         {
             return exp switch
             {
-                IntLiteral intLiteral => new RuntimeObj(RuntimeObjType.Integer, intLiteral.Val),
-                TextLiteral textLiteral => new RuntimeObj(RuntimeObjType.Text, textLiteral.Val),
+                IntLiteral intLiteral => new RuntimeObj("int", intLiteral.Val),
+                TextLiteral textLiteral => new RuntimeObj("text", textLiteral.Val),
                 NestedVariableExp nestedVar => ResolveNestedVariable(nestedVar, scope),
                 FuncCallExp funcCallExp => ResolveFunctionCallExp(funcCallExp, scope),
                 BinaryExp binaryExp => ResolveBinaryExp(binaryExp, scope),
@@ -101,8 +112,8 @@ namespace KukuLang.Interpreter.Handler
 
         private static RuntimeObj? ResolveBinaryExp(BinaryExp binaryExp, RuntimeScope scope)
         {
-            RuntimeObj? leftObj = ConvertExpressionToRuntimeObject(binaryExp.Left, scope);
-            RuntimeObj? rightObj = ConvertExpressionToRuntimeObject(binaryExp.Right, scope);
+            RuntimeObj? leftObj = GenerateRuntimeObjectFromExpressionStmt(binaryExp.Left, scope);
+            RuntimeObj? rightObj = GenerateRuntimeObjectFromExpressionStmt(binaryExp.Right, scope);
 
             if (leftObj == null || rightObj == null)
             {
@@ -111,31 +122,31 @@ namespace KukuLang.Interpreter.Handler
             switch (binaryExp.Op)
             {
                 case "+":
-                    return new RuntimeObj(RuntimeObjType.Integer, leftObj.Val + rightObj.Val);
+                    return new RuntimeObj("int", leftObj.Val + rightObj.Val);
                 case "-":
-                    return new RuntimeObj(RuntimeObjType.Integer, leftObj.Val - rightObj.Val);
+                    return new RuntimeObj("int", leftObj.Val - rightObj.Val);
                 case "*":
-                    return new RuntimeObj(RuntimeObjType.Integer, leftObj.Val * rightObj.Val);
+                    return new RuntimeObj("int", leftObj.Val * rightObj.Val);
                 case "/":
-                    return new RuntimeObj(RuntimeObjType.Integer, leftObj.Val / rightObj.Val);
+                    return new RuntimeObj("int", leftObj.Val / rightObj.Val);
                 case "%":
-                    return new RuntimeObj(RuntimeObjType.Integer, leftObj.Val % rightObj.Val);
+                    return new RuntimeObj("int", leftObj.Val % rightObj.Val);
                 case "is":
-                    return new RuntimeObj(RuntimeObjType.Integer, leftObj.Val == rightObj.Val);
+                    return new RuntimeObj("int", leftObj.Val == rightObj.Val);
                 case "is_not":
-                    return new RuntimeObj(RuntimeObjType.Integer, leftObj.Val != rightObj.Val);
+                    return new RuntimeObj("int", leftObj.Val != rightObj.Val);
                 case "is_greater_than":
-                    return new RuntimeObj(RuntimeObjType.Integer, leftObj.Val > rightObj.Val);
+                    return new RuntimeObj("int", leftObj.Val > rightObj.Val);
                 case "is_greater_or_is":
-                    return new RuntimeObj(RuntimeObjType.Integer, leftObj.Val >= rightObj.Val);
+                    return new RuntimeObj("int", leftObj.Val >= rightObj.Val);
                 case "is_less_than":
-                    return new RuntimeObj(RuntimeObjType.Integer, leftObj.Val < rightObj.Val);
+                    return new RuntimeObj("int", leftObj.Val < rightObj.Val);
                 case "is_less_or_is":
-                    return new RuntimeObj(RuntimeObjType.Integer, leftObj.Val <= rightObj.Val);
+                    return new RuntimeObj("int", leftObj.Val <= rightObj.Val);
                 case "and":
-                    return new RuntimeObj(RuntimeObjType.Integer, leftObj.Val && rightObj.Val);
+                    return new RuntimeObj("int", leftObj.Val && rightObj.Val);
                 case "or":
-                    return new RuntimeObj(RuntimeObjType.Integer, leftObj.Val || rightObj.Val);
+                    return new RuntimeObj("int", leftObj.Val || rightObj.Val);
             }
             return null;
         }
@@ -151,7 +162,7 @@ namespace KukuLang.Interpreter.Handler
                 {
                     string paramName = kv.Key;
                     if (!funcCallExp.ParamAndValPair.ContainsKey(paramName)) throw new Exception($"Function call {funcCallExp.FunctionName} Missing param {paramName}");
-                    var runtimeObj = ConvertExpressionToRuntimeObject(funcCallExp.ParamAndValPair[paramName], scope);
+                    var runtimeObj = GenerateRuntimeObjectFromExpressionStmt(funcCallExp.ParamAndValPair[paramName], scope);
                     paramObj.Add(paramName, runtimeObj);
                 }
             var statements = task.TaskScope;
@@ -166,11 +177,11 @@ namespace KukuLang.Interpreter.Handler
             {
                 if (s is ReturnStmt)
                 {
-                    return ConvertExpressionToRuntimeObject((s as ReturnStmt).Expression, funcScope);
+                    return GenerateRuntimeObjectFromExpressionStmt((s as ReturnStmt).Expression, funcScope);
                 }
                 else
                 {
-                    HandleStatement(s, funcScope);
+                    ProcessStatement(s, funcScope);
                 }
             }
             return null;
@@ -242,7 +253,7 @@ namespace KukuLang.Interpreter.Handler
                 throw new Exception($"Function {stmt.FunctionName} not found");
             }
             var functionExp = stmt.FunctionExp;
-            var functionReturnVal = ConvertExpressionToRuntimeObject(functionExp, scope);
+            var functionReturnVal = GenerateRuntimeObjectFromExpressionStmt(functionExp, scope);
         }
     }
 }

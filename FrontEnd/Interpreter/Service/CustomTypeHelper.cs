@@ -14,9 +14,9 @@ namespace KukuLang.Interpreter.Service
             {
                 RuntimeObj runtimeObj = varType switch
                 {
-                    "int" => new RuntimeObj(RuntimeObjType.Integer, 0),
-                    "text" => new RuntimeObj(RuntimeObjType.Text, string.Empty),
-                    "list" => new RuntimeObj(RuntimeObjType.List, new List<dynamic>()),
+                    "int" => new RuntimeObj("int", 0),
+                    "text" => new RuntimeObj("text", string.Empty),
+                    "list" => new RuntimeObj("list", new List<dynamic>()),
                     _ => CreateObjectFromCustomType(scope.GetCustomType(varType), scope)
                 };
 
@@ -26,7 +26,7 @@ namespace KukuLang.Interpreter.Service
 
             Console.WriteLine($"Created custom object of type '{customType.TypeName}' with variables: {string.Join(", ", variables.Keys)}");
 
-            return new RuntimeObj(RuntimeObjType.CustomType, variables);
+            return new RuntimeObj(customType.TypeName, variables);
         }
     }
 }

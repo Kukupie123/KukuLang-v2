@@ -32,6 +32,10 @@ namespace KukuLang.Interpreter.Model.Scope
                 var currentScope = stack.Pop();
                 if (currentScope.CreatedObjects.ContainsKey(varName))
                 {
+                    if (currentScope.CreatedObjects[varName].RuntimeObjType != instance.RuntimeObjType)
+                    {
+                        throw new Exception($"{varName} is of type {currentScope.CreatedObjects[varName].RuntimeObjType} but attemped to assign type {instance.RuntimeObjType}");
+                    }
                     currentScope.CreatedObjects[varName] = instance;
                     Console.WriteLine($"Updating variable {varName} : {instance.Val}");
                     return;
