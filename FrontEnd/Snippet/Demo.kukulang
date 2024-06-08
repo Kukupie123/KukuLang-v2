@@ -1,12 +1,24 @@
+~define  human type~
 define Human with age(int), name(text).
-define Foo returning int {
-	return 5.
-}
-define Bar returning int with num(int){
-	return num*2.
+
+~Task to create human~
+define CreateHuman returning Human with age(int), name(text){
+	set hum to Human.
+	set hum's age to age.
+	set hum's name to name.
+	return hum.
 }
 
-set a to Foo.
-set b to Human.
-set b's age to Foo.
-set c to Bar with num(b's age).
+~Task with no return type~
+define square returning int with num(int){
+	set a to num.
+}
+
+~Task with no params~
+define pi returning int{
+	return 314.
+}
+
+set kuku to CreateHuman with age(24), name("Kuchuk borom debbarma").
+square with num(12).
+set pi to pi.

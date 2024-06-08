@@ -67,23 +67,10 @@ namespace FrontEnd.Parser.Services
             var functionNameToken = parser.CurrentToken;
             FuncCallExp? funcCallExp = null;
 
-            //If it has with param pratt can handle it.
-            //TODO: Do not make pratt do it
-            if (parser.Peek().Type == TokenType.With)
-            {
-                parser.Advance(2); //step over with and to first param
-                var pratt = new PrattParser(parser.Tokens, parser._Pos);
-                funcCallExp = pratt.Parse() as FuncCallExp;
-                parser._Pos = pratt._Pos;
-
-            }
-            else if (parser.Peek().Type == TokenType.FullStop)
-            {
-                //No param so
-                parser.Advance(); //advance to .
-
-                funcCallExp = new FuncCallExp(functionNameToken.Value, null);
-            }
+            //Pratt parser will handle taking in args if there is any
+            var pratt = new PrattParser(parser.Tokens, parser._Pos);
+            funcCallExp = pratt.Parse() as FuncCallExp;
+            parser._Pos = pratt._Pos;
             var functionCallStmt = new FunctionCallStmt(functionNameToken.Value, funcCallExp);
             scope.Statements.Add(functionCallStmt);
             parser.Advance(); //consume .

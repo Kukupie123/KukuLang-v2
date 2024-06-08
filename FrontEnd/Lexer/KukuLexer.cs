@@ -69,7 +69,8 @@ public class KukuLexer(string kukuLangSourceCode)
                     {
                         //If ~ is the last element of the source code then we can't set _inputStartPos to i+1 as it will exceed the range.
                         //Updating _inputStartPos instead of _inputEndPos as we are meant to ignore comments and start updatingEndPos after the comment.
-                        _inputStartPos = i + 1 < _kukuLangSourceCode.Length ? i + 1 : i;
+                        _inputStartPos = i == _kukuLangSourceCode.Length - 1 ? _kukuLangSourceCode.Length : i + 1;
+                        _inputEndPos = i == _kukuLangSourceCode.Length - 1 ? _kukuLangSourceCode.Length : i + 1;
                         //We do not return unlike the rest of the if branch as we are meant to ignore comments and process what's next.
                         UpdateEndPos();
                         return;
