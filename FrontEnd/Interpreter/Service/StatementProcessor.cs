@@ -2,10 +2,9 @@
 using FrontEnd.Parser.Models.Stmt;
 using KukuLang.Interpreter.Model.RuntimeObj;
 using KukuLang.Interpreter.Model.Scope;
-using KukuLang.Interpreter.Service;
 using KukuLang.Parser.Models.Expressions.Literals;
 
-namespace KukuLang.Interpreter.Handler
+namespace KukuLang.Interpreter.Service
 {
     public static class StatementProcessor
     {
@@ -51,10 +50,10 @@ namespace KukuLang.Interpreter.Handler
 
         private static void AssignSimpleVariable(string variableName, ExpressionStmt value, RuntimeScope scope)
         {
-            var runtimeObject = GenerateRuntimeObjectFromExpressionStmt(value, scope);
+            RuntimeObj? val = ProcessExpressionStmt(value, scope) ?? throw new Exception($"value of var {variableName} is null");
             var isUpdate = scope.GetVariable(variableName) != null; //Boolean to determine if we are creating or updating an existing variable value
-            scope.UpdateScopeVariable(variableName, runtimeObject);
-            Console.WriteLine($"{(isUpdate ? "Updated" : "Created")} variable '{variableName}' with value '{runtimeObject}'");
+            scope.UpdateScopeVariable(variableName, val);
+            Console.WriteLine($"{(isUpdate ? "Updated" : "Created")} variable '{variableName}' with value '{val}'");
         }
 
         private static void AssignNestedVariable(NestedVariableExp nestedVar, ExpressionStmt value, RuntimeScope scope)
@@ -73,8 +72,7 @@ namespace KukuLang.Interpreter.Handler
             while (nestedVar.NextNode != null)
             {
                 nestedVar = nestedVar.NextNode;
-                var nestedVars = currentVar.Val as Dictionary<string, RuntimeObj>;
-                if (nestedVars == null)
+                if (currentVar.Val is not Dictionary<string, RuntimeObj> nestedVars)
                 {
                     throw new Exception($"Variable {currentVar.Val} is not type nested object");
                 }
@@ -91,18 +89,25 @@ namespace KukuLang.Interpreter.Handler
                 fullPath += $".{nestedVar.VarName}";
             }
 
-            var updatedValue = GenerateRuntimeObjectFromExpressionStmt(value, scope);
+            var updatedValue = ProcessExpressionStmt(value, scope);
+            if (updatedValue == null) throw new Exception($"value of var {updatedValue} is null");
             (parentVar.Val as Dictionary<string, RuntimeObj>)[nestedVar.VarName] = updatedValue;
             Console.WriteLine($"Updated nested variable '{fullPath}' with value '{updatedValue}'");
         }
 
 
-        private static RuntimeObj? GenerateRuntimeObjectFromExpressionStmt(ExpressionStmt exp, RuntimeScope scope)
+        /// <summary>
+        /// Process expression statements which may or may not return an object.
+        /// Expressions such as function call will not return any Runtime Object if it doesn't.
+        /// </summary>
+        private static RuntimeObj? ProcessExpressionStmt(ExpressionStmt exp, RuntimeScope scope)
         {
             return exp switch
             {
-                IntLiteral intLiteral => new RuntimeObj("int", intLiteral.Val),
-                TextLiteral textLiteral => new RuntimeObj("text", textLiteral.Val),
+                IntLiteral intLiteral => new RuntimeObj((int)intLiteral.Val),
+                FloatLiteral floatLiteral => new RuntimeObj((float)floatLiteral.Val),
+                BoolLiteral boolLiteral => new RuntimeObj((bool)boolLiteral.Val),
+                TextLiteral textLiteral => new RuntimeObj(textLiteral.Val),
                 NestedVariableExp nestedVar => ResolveNestedVariable(nestedVar, scope),
                 FuncCallExp funcCallExp => ResolveFunctionCallExp(funcCallExp, scope),
                 BinaryExp binaryExp => ResolveBinaryExp(binaryExp, scope),
@@ -112,41 +117,42 @@ namespace KukuLang.Interpreter.Handler
 
         private static RuntimeObj? ResolveBinaryExp(BinaryExp binaryExp, RuntimeScope scope)
         {
-            RuntimeObj? leftObj = GenerateRuntimeObjectFromExpressionStmt(binaryExp.Left, scope);
-            RuntimeObj? rightObj = GenerateRuntimeObjectFromExpressionStmt(binaryExp.Right, scope);
+            RuntimeObj? leftObj = ProcessExpressionStmt(binaryExp.Left, scope);
+            RuntimeObj? rightObj = ProcessExpressionStmt(binaryExp.Right, scope);
 
             if (leftObj == null || rightObj == null)
             {
                 throw new NotSupportedException($"left and/or right binary exp is invalid {binaryExp}");
             }
+            //TODO: Update logic to calculate type dynamically
             switch (binaryExp.Op)
             {
                 case "+":
-                    return new RuntimeObj("int", leftObj.Val + rightObj.Val);
+                    return new RuntimeObj(leftObj.Val + rightObj.Val);
                 case "-":
-                    return new RuntimeObj("int", leftObj.Val - rightObj.Val);
+                    return new RuntimeObj(leftObj.Val - rightObj.Val);
                 case "*":
-                    return new RuntimeObj("int", leftObj.Val * rightObj.Val);
+                    return new RuntimeObj(leftObj.Val * rightObj.Val);
                 case "/":
-                    return new RuntimeObj("int", leftObj.Val / rightObj.Val);
+                    return new RuntimeObj(leftObj.Val / rightObj.Val);
                 case "%":
-                    return new RuntimeObj("int", leftObj.Val % rightObj.Val);
+                    return new RuntimeObj(leftObj.Val % rightObj.Val);
                 case "is":
-                    return new RuntimeObj("int", leftObj.Val == rightObj.Val);
+                    return new RuntimeObj(leftObj.Val == rightObj.Val);
                 case "is_not":
-                    return new RuntimeObj("int", leftObj.Val != rightObj.Val);
+                    return new RuntimeObj(leftObj.Val != rightObj.Val);
                 case "is_greater_than":
-                    return new RuntimeObj("int", leftObj.Val > rightObj.Val);
+                    return new RuntimeObj(leftObj.Val > rightObj.Val);
                 case "is_greater_or_is":
-                    return new RuntimeObj("int", leftObj.Val >= rightObj.Val);
+                    return new RuntimeObj(leftObj.Val >= rightObj.Val);
                 case "is_less_than":
-                    return new RuntimeObj("int", leftObj.Val < rightObj.Val);
+                    return new RuntimeObj(leftObj.Val < rightObj.Val);
                 case "is_less_or_is":
-                    return new RuntimeObj("int", leftObj.Val <= rightObj.Val);
+                    return new RuntimeObj(leftObj.Val <= rightObj.Val);
                 case "and":
-                    return new RuntimeObj("int", leftObj.Val && rightObj.Val);
+                    return new RuntimeObj(leftObj.Val && rightObj.Val);
                 case "or":
-                    return new RuntimeObj("int", leftObj.Val || rightObj.Val);
+                    return new RuntimeObj(leftObj.Val || rightObj.Val);
             }
             return null;
         }
@@ -161,8 +167,8 @@ namespace KukuLang.Interpreter.Handler
                 foreach (var kv in task.ParamNameParamTypePair)
                 {
                     string paramName = kv.Key;
-                    if (!funcCallExp.ParamAndValPair.ContainsKey(paramName)) throw new Exception($"Function call {funcCallExp.FunctionName} Missing param {paramName}");
-                    var runtimeObj = GenerateRuntimeObjectFromExpressionStmt(funcCallExp.ParamAndValPair[paramName], scope);
+                    if (!funcCallExp.ParamAndValPair.TryGetValue(paramName, out ExpressionStmt? value)) throw new Exception($"Function call {funcCallExp.FunctionName} Missing param {paramName}");
+                    var runtimeObj = ProcessExpressionStmt(value, scope);
                     paramObj.Add(paramName, runtimeObj);
                 }
             var statements = task.TaskScope;
@@ -175,9 +181,9 @@ namespace KukuLang.Interpreter.Handler
             Console.WriteLine($"Executing Task {funcCallExp.ToString(0)}");
             foreach (var s in statements.Statements)
             {
-                if (s is ReturnStmt)
+                if (s is ReturnStmt returnStmt)
                 {
-                    return GenerateRuntimeObjectFromExpressionStmt((s as ReturnStmt).Expression, funcScope);
+                    return ProcessExpressionStmt(returnStmt.Expression, funcScope);
                 }
                 else
                 {
@@ -187,49 +193,51 @@ namespace KukuLang.Interpreter.Handler
             return null;
         }
 
-        private static RuntimeObj ResolveNestedVariable(NestedVariableExp nestedVar, RuntimeScope scope)
+        /// <summary>
+        /// Process all sorts of identifiers and identifier chains
+        /// </summary>
+        /// <param name="nestedVar"></param>
+        /// <param name="scope"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private static RuntimeObj? ResolveNestedVariable(NestedVariableExp nestedVar, RuntimeScope scope)
         {
+            /*
+             * If nestedVar is null it is either an existing variable, creating new runtime object of that type or a function call
+             */
             if (nestedVar.NextNode == null)
             {
                 //Check if variable exist
                 RuntimeObj? varRef = scope.GetVariable(nestedVar.VarName);
-                if (varRef == null)
+                if (varRef != null)
                 {
-                    //if not var then try to see if its creation of new custom type
-                    var type = scope.GetCustomType(nestedVar.VarName);
-                    if (type == null)
-                    {
-                        //if not custom type check if its type paramless function call
-                        var task = scope.GetCustomTask(nestedVar.VarName);
-                        if (task == null)
-                        {
-                            throw new Exception($"{nestedVar.VarName} is not a var, its not a type its not a task.");
-                        }
-                        return ResolveFunctionCallExp(new FuncCallExp(nestedVar.VarName, null), scope);
-                    }
-                    else
-                    {
-                        return CustomTypeHelper.CreateObjectFromCustomType(scope.GetCustomType(nestedVar.VarName), scope);
-                    }
+                    return varRef ?? throw new Exception($"Custom type not found: {nestedVar.VarName}");
                 }
 
+                //if not existing var then try to see if its creation of new custom type
+                var type = scope.GetCustomType(nestedVar.VarName);
+                if (type != null)
+                {
+                    return CustomTypeHelper.CreateObjectFromCustomType(scope.GetCustomType(nestedVar.VarName), scope);
 
-                return varRef ?? throw new Exception($"Custom type not found: {nestedVar.VarName}");
+                }
+                //if not custom type check if its type paramless function call
+                var task = scope.GetCustomTask(nestedVar.VarName);
+                return task == null
+                    ? throw new Exception($"{nestedVar.VarName} is not a var, its not a type its not a task.")
+                    : ResolveFunctionCallExp(new FuncCallExp(nestedVar.VarName, null), scope);
             }
-
+            /*
+             * If it is nested then it has to be a reference to existing nested variable.
+             */
             var currentVar = scope.GetVariable(nestedVar.VarName)
                               ?? throw new Exception($"Variable not found: {nestedVar.VarName}");
 
+            //Traversing the nested variable
             while (nestedVar.NextNode != null)
             {
                 nestedVar = nestedVar.NextNode;
-                var nestedVars = currentVar.Val as Dictionary<string, RuntimeObj>;
-
-                if (nestedVars == null)
-                {
-                    throw new Exception($"Variable {currentVar.Val} is not type nested object");
-                }
-
+                var nestedVars = currentVar.Val as Dictionary<string, RuntimeObj> ?? throw new Exception($"Variable {currentVar.Val} is not type nested object");
                 if (!nestedVars.TryGetValue(nestedVar.VarName, out currentVar))
                 {
                     throw new Exception($"Nested variable not found: {nestedVar.VarName}");
@@ -244,16 +252,18 @@ namespace KukuLang.Interpreter.Handler
             // Implementation for handling If statements
         }
 
+        /// <summary>
+        /// Handles function call and disregards it's returned value if any.
+        /// </summary>
+        /// <param name="stmt"></param>
+        /// <param name="scope"></param>
+        /// <exception cref="Exception"></exception>
         private static void ProcessFunctionCallStatement(FunctionCallStmt stmt, RuntimeScope scope)
         {
             //Check if function exists
-            var task = scope.GetCustomTask(stmt.FunctionName);
-            if (task == null)
-            {
-                throw new Exception($"Function {stmt.FunctionName} not found");
-            }
+            var task = scope.GetCustomTask(stmt.FunctionName) ?? throw new Exception($"Function {stmt.FunctionName} not found");
             var functionExp = stmt.FunctionExp;
-            var functionReturnVal = GenerateRuntimeObjectFromExpressionStmt(functionExp, scope);
+            ProcessExpressionStmt(functionExp, scope); //Call the function.
         }
     }
 }

@@ -5,27 +5,33 @@
         public dynamic Val; // For primitive types such as int and text this will be the value. For custom types this will be Dictionary
         public string RuntimeObjType;
 
-        public RuntimeObj(string runtimeObjType, int val)
+        public RuntimeObj(int val)
         {
-            RuntimeObjType = runtimeObjType;
+            RuntimeObjType = "int";
             Val = val;
         }
 
-        public RuntimeObj(string runtimeObjType, float val)
+        public RuntimeObj(float val)
         {
-            RuntimeObjType = runtimeObjType;
+            RuntimeObjType = "float";
             Val = val;
         }
 
-        public RuntimeObj(string runtimeObjType, string val)
+        public RuntimeObj(string val)
         {
-            RuntimeObjType = runtimeObjType;
+            RuntimeObjType = "text";
             Val = val;
         }
 
-        public RuntimeObj(string runtimeObjType, List<dynamic> val)
+        public RuntimeObj(bool val)
         {
-            RuntimeObjType = runtimeObjType;
+            RuntimeObjType = "bool";
+            Val = val;
+        }
+
+        public RuntimeObj(List<dynamic> val)
+        {
+            RuntimeObjType = "list";
             Val = val;
         }
 

@@ -2,6 +2,7 @@
 using FrontEnd.Parser.Models.CustomType;
 using FrontEnd.Parser.Models.Scope;
 using KukuLang.Interpreter.Model.Scope;
+using KukuLang.Interpreter.Service;
 
 namespace KukuLang.Interpreter.Interpreters.Main_Interpreter
 {
@@ -36,7 +37,7 @@ namespace KukuLang.Interpreter.Interpreters.Main_Interpreter
                 {
                     return;
                 }
-                Handler.StatementProcessor.ProcessStatement(statement, runtimeRootScope);
+                StatementProcessor.ProcessStatement(statement, runtimeRootScope);
             });
         }
     }

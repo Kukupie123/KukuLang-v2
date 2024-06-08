@@ -47,7 +47,7 @@ namespace FrontEnd.Parser.Services
         private static void EvaluateReturnToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
         {
             parser.Advance(); //Advance to start of expression OR .
-            if (parser.CurrentToken.Type == TokenType.FullStop)
+            if (parser.CurrentToken.Type == TokenType.Semicolon)
             {
                 scope.Statements.Add(new ReturnStmt(null));
                 parser.Advance(); //Consume the .
@@ -155,7 +155,7 @@ namespace FrontEnd.Parser.Services
             if (typeVariables.Count <= 0) throw new NoPropertyException(parser.CurrentToken);
 
             // Create and store the custom type
-            TokenValidatorService.ValidateToken(TokenType.FullStop, parser.CurrentToken);
+            TokenValidatorService.ValidateToken(TokenType.Semicolon, parser.CurrentToken);
             CustomTypeBase customType = new(taskNameToken.Value, typeVariables);
             scope.CustomTypes.Add(customType);
             parser.Advance(); // Consume the '.'
@@ -226,7 +226,7 @@ namespace FrontEnd.Parser.Services
             var args = new Dictionary<string, ValType>();
 
             // Keep iterating until we reach . or {
-            while (parser.CurrentToken.Type != TokenType.FullStop && parser.CurrentToken.Type != TokenType.CurlyBracesOpening)
+            while (parser.CurrentToken.Type != TokenType.Semicolon && parser.CurrentToken.Type != TokenType.CurlyBracesOpening)
             {
                 // For params that come after the first, advance past the ","
                 if (parser.CurrentToken.Type == TokenType.Comma)

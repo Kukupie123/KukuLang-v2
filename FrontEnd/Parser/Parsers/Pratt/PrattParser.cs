@@ -101,6 +101,15 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
             return new IntLiteral((int)token.Value);
 
         }
+        if (token.Type == TokenType.FloatLiteral)
+        {
+            return new FloatLiteral((float)token.Value);
+        }
+        if (token.Type == TokenType.BoolLiteral)
+        {
+
+            return new BoolLiteral(token.Value == "False" ? false : true);
+        }
         if (token.Type == TokenType.TextLiteral)
         {
             return new TextLiteral((string)token.Value);

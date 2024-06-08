@@ -14,9 +14,11 @@ namespace KukuLang.Interpreter.Service
             {
                 RuntimeObj runtimeObj = varType switch
                 {
-                    "int" => new RuntimeObj("int", 0),
-                    "text" => new RuntimeObj("text", string.Empty),
-                    "list" => new RuntimeObj("list", new List<dynamic>()),
+                    "int" => new RuntimeObj(0),
+                    "float" => new RuntimeObj(0.0f),
+                    "bool" => new RuntimeObj(false),
+                    "text" => new RuntimeObj(string.Empty),
+                    "list" => new RuntimeObj(new List<dynamic>()),
                     _ => CreateObjectFromCustomType(scope.GetCustomType(varType), scope)
                 };
 

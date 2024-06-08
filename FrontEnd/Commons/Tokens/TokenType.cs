@@ -6,7 +6,7 @@ public enum TokenType
     IntegerLiteral,
     TextLiteral,
     Identifier,
-    FullStop,
+    Semicolon,
     Comparator,
     Mod,
     EOF,
@@ -39,4 +39,5 @@ public enum TokenType
     And,
     Repeat,
     Until,
+    BoolLiteral,
 }

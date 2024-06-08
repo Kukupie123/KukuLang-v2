@@ -22,7 +22,7 @@ public class PrattParserTest
             new (TokenType.Add,1,0),
             new (TokenType.IntegerLiteral,1,0),
             new (TokenType.RoundBracketsClosing,12,0),
-            new (TokenType.FullStop,".",0),
+            new (TokenType.Semicolon,".",0),
         ];
 
         var parser = new PrattParser(tokens, 0);

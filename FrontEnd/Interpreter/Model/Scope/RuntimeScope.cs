@@ -3,21 +3,13 @@ using FrontEnd.Parser.Models.CustomType;
 
 namespace KukuLang.Interpreter.Model.Scope
 {
-    public class RuntimeScope
+    public class RuntimeScope(Dictionary<string, CustomTypeBase> declaredTypes,
+        Dictionary<string, CustomTaskBase> declaredTasks, RuntimeScope? parentScope)
     {
-        public Dictionary<string, CustomTypeBase> DeclaredTypes { get; }
-        public Dictionary<string, CustomTaskBase> DeclaredTasks { get; }
-        public Dictionary<string, RuntimeObj.RuntimeObj> CreatedObjects { get; }
-        public RuntimeScope? ParentScope { get; }
-
-        public RuntimeScope(Dictionary<string, CustomTypeBase> declaredTypes,
-            Dictionary<string, CustomTaskBase> declaredTasks, RuntimeScope? parentScope)
-        {
-            DeclaredTypes = declaredTypes;
-            DeclaredTasks = declaredTasks;
-            CreatedObjects = new Dictionary<string, RuntimeObj.RuntimeObj>();
-            ParentScope = parentScope;
-        }
+        public Dictionary<string, CustomTypeBase> DeclaredTypes { get; } = declaredTypes;
+        public Dictionary<string, CustomTaskBase> DeclaredTasks { get; } = declaredTasks;
+        public Dictionary<string, RuntimeObj.RuntimeObj> CreatedObjects { get; } = [];
+        public RuntimeScope? ParentScope { get; } = parentScope;
 
         /// <summary>
         /// Attempts to update variable in current scope or parent's scope.
@@ -25,16 +17,16 @@ namespace KukuLang.Interpreter.Model.Scope
         /// </summary>
         public void UpdateScopeVariable(string varName, RuntimeObj.RuntimeObj instance)
         {
-            Stack<RuntimeScope> stack = new Stack<RuntimeScope>();
+            Stack<RuntimeScope> stack = new();
             stack.Push(this);
             while (stack.Count > 0)
             {
                 var currentScope = stack.Pop();
-                if (currentScope.CreatedObjects.ContainsKey(varName))
+                if (currentScope.CreatedObjects.TryGetValue(varName, out RuntimeObj.RuntimeObj? value))
                 {
-                    if (currentScope.CreatedObjects[varName].RuntimeObjType != instance.RuntimeObjType)
+                    if (value.RuntimeObjType != instance.RuntimeObjType)
                     {
-                        throw new Exception($"{varName} is of type {currentScope.CreatedObjects[varName].RuntimeObjType} but attemped to assign type {instance.RuntimeObjType}");
+                        throw new Exception($"{varName} is of type {value.RuntimeObjType} but attemped to assign type {instance.RuntimeObjType}");
                     }
                     currentScope.CreatedObjects[varName] = instance;
                     Console.WriteLine($"Updating variable {varName} : {instance.Val}");
@@ -52,8 +44,8 @@ namespace KukuLang.Interpreter.Model.Scope
 
         public RuntimeObj.RuntimeObj? GetVariable(string name)
         {
-            if (CreatedObjects.ContainsKey(name))
-                return CreatedObjects[name];
+            if (CreatedObjects.TryGetValue(name, out RuntimeObj.RuntimeObj? value))
+                return value;
             if (ParentScope != null)
             {
                 return ParentScope.GetVariable(name);
@@ -63,9 +55,9 @@ namespace KukuLang.Interpreter.Model.Scope
 
         public CustomTypeBase? GetCustomType(string typeName)
         {
-            if (DeclaredTypes.ContainsKey(typeName))
+            if (DeclaredTypes.TryGetValue(typeName, out CustomTypeBase? value))
             {
-                return DeclaredTypes[typeName];
+                return value;
             }
             if (ParentScope != null)
             {
@@ -76,9 +68,9 @@ namespace KukuLang.Interpreter.Model.Scope
 
         public CustomTaskBase? GetCustomTask(string taskName)
         {
-            if (DeclaredTasks.ContainsKey(taskName))
+            if (DeclaredTasks.TryGetValue(taskName, out CustomTaskBase? value))
             {
-                return DeclaredTasks[taskName];
+                return value;
             }
             if (ParentScope != null)
             {

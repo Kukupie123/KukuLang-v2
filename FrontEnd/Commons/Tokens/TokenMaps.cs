@@ -41,7 +41,7 @@ public class TokenMap
 
         { ",", TokenType.Comma},
 
-        { ".", TokenType.FullStop},
+        { ";", TokenType.Semicolon},
 
         { "returning", TokenType.Returning},
         { "return", TokenType.Return},
@@ -70,6 +70,9 @@ public class TokenMap
         { "is_greater_or_is", TokenType.Comparator },
         { "is_less_than", TokenType.Comparator },
         { "is_less_or_is", TokenType.Comparator },
+
+        { "True", TokenType.BoolLiteral },
+        { "False", TokenType.BoolLiteral },
 
         { "and", TokenType.And },
         { "or", TokenType.Or },
