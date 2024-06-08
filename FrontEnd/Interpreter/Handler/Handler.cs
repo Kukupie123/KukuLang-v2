@@ -9,9 +9,6 @@ namespace KukuLang.Interpreter.Handler
 {
     public static class StatementHandler
     {
-        /// <summary>
-        /// Handles the dispatch of different statement types to their respective handlers.
-        /// </summary>
         public static void HandleStatement(Stmt statement, RuntimeScope scope)
         {
             switch (statement)
@@ -30,9 +27,6 @@ namespace KukuLang.Interpreter.Handler
             }
         }
 
-        /// <summary>
-        /// Processes SetTo statements, deciding whether it's a simple or nested variable assignment.
-        /// </summary>
         private static void ProcessSetToStatement(SetToStmt stmt, RuntimeScope scope)
         {
             var variableToSet = stmt.VariableToSet;
@@ -48,54 +42,22 @@ namespace KukuLang.Interpreter.Handler
             }
         }
 
-        /// <summary>
-        /// Assigns a value to a simple variable (non-nested).
-        /// </summary>
         private static void AssignSimpleVariable(string variableName, ExpressionStmt value, RuntimeScope scope)
         {
             var runtimeObject = ConvertExpressionToRuntimeObject(value, scope);
+            var isUpdate = scope.GetVariable(variableName) != null;
             scope.UpdateScopeVariable(variableName, runtimeObject);
+            Console.WriteLine($"{(isUpdate ? "Updated" : "Created")} variable '{variableName}' with value '{runtimeObject}'");
         }
 
-        /// <summary>
-        /// Assigns a value to a nested variable.
-        /// </summary>
         private static void AssignNestedVariable(NestedVariableExp nestedVar, ExpressionStmt value, RuntimeScope scope)
         {
-            //Get root variable
             var currentVar = scope.GetVariable(nestedVar.VarName)
-                              ?? throw new Exception($"Variable not found: {nestedVar.VarName}");
+                                  ?? throw new Exception($"Variable not found: {nestedVar.VarName}");
             RuntimeObj? parentVar = currentVar;
-            while (nestedVar.NextNode != null)
-            {
-                nestedVar = nestedVar.NextNode;
-                parentVar = currentVar;
-                var nestedVars = currentVar.Val as Dictionary<string, RuntimeObj>;
 
-                // Check if the current variable is a valid nested dictionary
-                if (nestedVars == null)
-                {
-                    throw new Exception($"Variable {currentVar.Val} is not a nested object");
-                }
-
-                if (!nestedVars.TryGetValue(nestedVar.VarName, out currentVar))
-                {
-                    throw new Exception($"Nested variable not found: {nestedVar.VarName}");
-                }
-                currentVar = nestedVars[nestedVar.VarName];
-            }
-            (parentVar.Val as Dictionary<string, RuntimeObj>)[nestedVar.VarName] = ConvertExpressionToRuntimeObject(value, scope);
-        }
-
-        /// <summary>
-        /// Traverses to the last node in a nested variable expression.
-        /// </summary>
-        private static (RuntimeObj currentVar, RuntimeObj parentVar) TraverseToLastNode(NestedVariableExp nestedVar, RuntimeScope scope)
-        {
-            //Get root variable
-            var currentVar = scope.GetVariable(nestedVar.VarName)
-                              ?? throw new Exception($"Variable not found: {nestedVar.VarName}");
-            RuntimeObj? parentVar = currentVar;
+            // Build the full path dynamically
+            var fullPath = nestedVar.VarName;
 
             while (nestedVar.NextNode != null)
             {
@@ -103,25 +65,27 @@ namespace KukuLang.Interpreter.Handler
                 parentVar = currentVar;
                 var nestedVars = currentVar.Val as Dictionary<string, RuntimeObj>;
 
-                // Check if the current variable is a valid nested dictionary
                 if (nestedVars == null)
                 {
                     throw new Exception($"Variable {currentVar.Val} is not a nested object");
                 }
-
-                if (!nestedVars.TryGetValue(nestedVar.VarName, out currentVar))
+                if (!nestedVars.ContainsKey(nestedVar.VarName))
                 {
                     throw new Exception($"Nested variable not found: {nestedVar.VarName}");
+
                 }
                 currentVar = nestedVars[nestedVar.VarName];
+
+                // Append to the path
+                fullPath += $".{nestedVar.VarName}";
             }
 
-            return (currentVar, parentVar);
+            var updatedValue = ConvertExpressionToRuntimeObject(value, scope);
+            (parentVar.Val as Dictionary<string, RuntimeObj>)[nestedVar.VarName] = updatedValue;
+            Console.WriteLine($"Updated nested variable '{fullPath}' with value '{updatedValue}'");
         }
 
-        /// <summary>
-        /// Converts an expression statement to a runtime object.
-        /// </summary>
+
         private static RuntimeObj ConvertExpressionToRuntimeObject(ExpressionStmt exp, RuntimeScope scope)
         {
             return exp switch
@@ -134,12 +98,8 @@ namespace KukuLang.Interpreter.Handler
             };
         }
 
-        /// <summary>
-        /// Resolves a nested variable to its corresponding runtime object.
-        /// </summary>
         private static RuntimeObj ResolveNestedVariable(NestedVariableExp nestedVar, RuntimeScope scope)
         {
-            // Handle the case where there is no next node
             if (nestedVar.NextNode == null)
             {
                 var varRef = scope.GetVariable(nestedVar.VarName)
@@ -148,7 +108,6 @@ namespace KukuLang.Interpreter.Handler
                 return varRef ?? throw new Exception($"Custom type not found: {nestedVar.VarName}");
             }
 
-            // Traverse through the nested nodes
             var currentVar = scope.GetVariable(nestedVar.VarName)
                               ?? throw new Exception($"Variable not found: {nestedVar.VarName}");
 
@@ -157,13 +116,11 @@ namespace KukuLang.Interpreter.Handler
                 nestedVar = nestedVar.NextNode;
                 var nestedVars = currentVar.Val as Dictionary<string, RuntimeObj>;
 
-                // Check if the current variable is a valid nested dictionary
                 if (nestedVars == null)
                 {
                     throw new Exception($"Variable {currentVar.Val} is not a nested object");
                 }
 
-                // Move to the next level in the nested structure
                 if (!nestedVars.TryGetValue(nestedVar.VarName, out currentVar))
                 {
                     throw new Exception($"Nested variable not found: {nestedVar.VarName}");
@@ -173,13 +130,11 @@ namespace KukuLang.Interpreter.Handler
             return currentVar;
         }
 
-        // Placeholder for processing If statements
         private static void ProcessIfStatement(IfStmt stmt, RuntimeScope scope)
         {
             // Implementation for handling If statements
         }
 
-        // Placeholder for processing function call statements
         private static void ProcessFunctionCallStatement(FunctionCallStmt stmt, RuntimeScope scope)
         {
             // Implementation for handling function call statements

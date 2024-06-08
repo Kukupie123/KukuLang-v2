@@ -2,30 +2,40 @@
 {
     public class RuntimeObj
     {
-        public dynamic Val; //For primitive types such as int and text this will be the value. For custom types this will be Dictionary
+        public dynamic Val; // For primitive types such as int and text this will be the value. For custom types this will be Dictionary
         public RuntimeObjType RuntimeObjType;
-        public RuntimeObj(RuntimeObjType runtimeObjTypeint, int val)
+
+        public RuntimeObj(RuntimeObjType runtimeObjType, int val)
         {
-            RuntimeObjType = runtimeObjTypeint;
+            RuntimeObjType = runtimeObjType;
             Val = val;
         }
-        public RuntimeObj(RuntimeObjType runtimeObjTypeint, float val)
-        {
-            RuntimeObjType = runtimeObjTypeint;
 
+        public RuntimeObj(RuntimeObjType runtimeObjType, float val)
+        {
+            RuntimeObjType = runtimeObjType;
             Val = val;
         }
-        public RuntimeObj(RuntimeObjType runtimeObjTypeint, string val)
-        {
-            RuntimeObjType = runtimeObjTypeint;
 
+        public RuntimeObj(RuntimeObjType runtimeObjType, string val)
+        {
+            RuntimeObjType = runtimeObjType;
             Val = val;
         }
-        public RuntimeObj(RuntimeObjType runtimeObjTypeint, Dictionary<string, RuntimeObj> val)
-        {
-            RuntimeObjType = runtimeObjTypeint;
 
+        public RuntimeObj(RuntimeObjType runtimeObjType, Dictionary<string, RuntimeObj> val)
+        {
+            RuntimeObjType = runtimeObjType;
             Val = val;
+        }
+
+        public override string ToString()
+        {
+            return Val switch
+            {
+                Dictionary<string, RuntimeObj> dict => $"{{ {string.Join(", ", dict.Select(kvp => $"{kvp.Key}: {kvp.Value}"))} }}",
+                _ => Val.ToString()
+            };
         }
     }
 }

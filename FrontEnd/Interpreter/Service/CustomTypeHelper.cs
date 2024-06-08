@@ -12,13 +12,18 @@ namespace KukuLang.Interpreter.Service
 
             foreach (var (varName, varType) in customType.VarNameVarTypePair)
             {
-                variables[varName] = varType switch
+                RuntimeObj runtimeObj = varType switch
                 {
                     "int" => new RuntimeObj(RuntimeObjType.Integer, 0),
                     "text" => new RuntimeObj(RuntimeObjType.Text, string.Empty),
                     _ => CreateObjectFromCustomType(scope.GetCustomType(varType), scope)
                 };
+
+                variables[varName] = runtimeObj;
+                Console.WriteLine($"Creating variable object '{varName}' of type '{varType}' in custom type '{customType.TypeName}'");
             }
+
+            Console.WriteLine($"Created custom object of type '{customType.TypeName}' with variables: {string.Join(", ", variables.Keys)}");
 
             return new RuntimeObj(RuntimeObjType.CustomType, variables);
         }

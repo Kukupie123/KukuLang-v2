@@ -1,7 +1,12 @@
 define Human with age(int), name(text).
-set a to Human.
-set a's age to 69.
-set a's name to "Kuku".
-set b to a's name.
-set d to a's age.
-set c to 12.
+define Student with human(Human), standard(int).
+set stud to Student.
+
+~ Showcase of composition and property chaining~
+set stud's human's name to "Kuchuk".
+
+~ More example of chaining ~
+set foo to stud.
+set foo's standard to 12.
+set bar to stud's standard.
+set bar to foo's standard.

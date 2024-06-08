@@ -31,7 +31,6 @@ namespace KukuLang.Interpreter.Interpreters.Main_Interpreter
 
             var runtimeRootScope = new RuntimeScope(scopeTypes, scopeTasks, null);
             ASTRootScope.Statements.ForEach(statement => { Handler.StatementHandler.HandleStatement(statement, runtimeRootScope); });
-            Console.Write("");
         }
     }
 }
