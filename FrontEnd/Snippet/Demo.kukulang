@@ -6,7 +6,12 @@ set stud to Student.
 set stud's human's name to "Kuchuk".
 
 ~ More example of chaining ~
-set foo to stud.
+set foo to stud. ~foo now has a reference to stud. No copies are created~
 set foo's standard to 12.
-set bar to stud's standard.
-set bar to foo's standard.
+
+~both stud and foo point to the same object~
+set bar to stud's standard. ~12~
+set bar to foo's standard. ~12~
+
+~ accessing nested object ~
+set haa to foo's human's name. ~"kuchuk"~
