@@ -5,5 +5,6 @@
         Integer,
         Text,
         CustomType,
+        List,
     }
 }

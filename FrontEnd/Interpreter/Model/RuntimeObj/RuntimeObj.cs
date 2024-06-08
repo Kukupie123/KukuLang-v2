@@ -23,6 +23,12 @@
             Val = val;
         }
 
+        public RuntimeObj(RuntimeObjType runtimeObjType, List<dynamic> val)
+        {
+            RuntimeObjType = runtimeObjType;
+            Val = val;
+        }
+
         public RuntimeObj(RuntimeObjType runtimeObjType, Dictionary<string, RuntimeObj> val)
         {
             RuntimeObjType = runtimeObjType;

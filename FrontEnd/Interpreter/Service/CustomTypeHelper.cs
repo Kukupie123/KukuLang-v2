@@ -16,6 +16,7 @@ namespace KukuLang.Interpreter.Service
                 {
                     "int" => new RuntimeObj(RuntimeObjType.Integer, 0),
                     "text" => new RuntimeObj(RuntimeObjType.Text, string.Empty),
+                    "list" => new RuntimeObj(RuntimeObjType.List, new List<dynamic>()),
                     _ => CreateObjectFromCustomType(scope.GetCustomType(varType), scope)
                 };
 
