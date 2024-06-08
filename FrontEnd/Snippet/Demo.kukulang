@@ -1,2 +1,5 @@
-set a to 12 is 12;
-set a to False;
+define foo returning int with age(int){
+	return age;
+}
+
+foo;

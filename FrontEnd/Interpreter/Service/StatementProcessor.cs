@@ -159,16 +159,23 @@ namespace KukuLang.Interpreter.Service
 
         private static RuntimeObj? ResolveFunctionCallExp(FuncCallExp funcCallExp, RuntimeScope scope)
         {
-            var task = scope.GetCustomTask(funcCallExp.FunctionName) ?? throw new Exception($"Function {funcCallExp.FunctionName} not found");
+            //Get task in scope
+            var task = scope.GetCustomTask(funcCallExp.FunctionName) ?? throw new Exception($"Task {funcCallExp.FunctionName} not found");
 
             //Validate if all params exist and their types are valid, add them to dictionary too.
             Dictionary<string, RuntimeObj> paramObj = [];
+            if (task.ParamNameParamTypePair != null)
+            {
+                if (funcCallExp.ParamAndValPair == null) throw new Exception("Invalid Task parameters");
+            }
+            if (task.ParamNameParamTypePair != null && task.ParamNameParamTypePair.Count != funcCallExp.ParamAndValPair.Count) throw new Exception("Invalid Task parameters Count");
             if (task.ParamNameParamTypePair != null)
                 foreach (var kv in task.ParamNameParamTypePair)
                 {
                     string paramName = kv.Key;
                     if (!funcCallExp.ParamAndValPair.TryGetValue(paramName, out ExpressionStmt? value)) throw new Exception($"Function call {funcCallExp.FunctionName} Missing param {paramName}");
                     var runtimeObj = ProcessExpressionStmt(value, scope);
+                    //TODO: Param type check
                     paramObj.Add(paramName, runtimeObj);
                 }
             var statements = task.TaskScope;
@@ -183,7 +190,9 @@ namespace KukuLang.Interpreter.Service
             {
                 if (s is ReturnStmt returnStmt)
                 {
-                    return ProcessExpressionStmt(returnStmt.Expression, funcScope);
+                    var returnObject = ProcessExpressionStmt(returnStmt.Expression, funcScope);
+                    if (returnObject.RuntimeObjType != task.TaskReturnType) throw new Exception($"Function needs to return {task.TaskReturnType} but returned {returnObject.RuntimeObjType}");
+                    return returnObject;
                 }
                 else
                 {

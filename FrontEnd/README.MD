@@ -1,42 +1,36 @@
-# Structures
-Structures are a container that has a list of properties
-# Tasks
-Tasks are a container that executes all the instructions inside them. They can be called.
-# Syntax
+# KUKULANG
+A minimal programming language with natural syntax making it very easy for non programmers to Program and understand.
 
-## Define
-Define is used for defining structures and functions. <br/>
-These definitions are stored in the scope that they were defined.
-
-### Structures
+## Syntax
+### Comments
 ```
-Define Human with age (number), nickName (text, initialized to "Nameless").
-``````
-We define Properties (Eg :- age, nickName) and optionally set it's initial value (Eg :- we set nickName to "Nameless")
+~ This is a comment ~
 ```
-### Tasks
-
-Define Add with num1 (number), num2 (number, initialized to 0), returning float {
-    return num1 + num2.
-}
-Define Print with content (text) returning nothing {
-    ~interpreter will print the text in console~
-}
+### Setting simple Variable
 ```
-We define parameters with initial value(optional), we define the return type, we define the body.
+set var to 12;
+```
+### Defining custom data types
+```
+define Human with name(text), age(int);
+define Student with humanData(Human), class(int), rollNumber(int);
+```
+### Initializing object of custom data types
+```
+set sto to Student;
+```
+### Nested variable
+```
+~ Equivalent to sto.class = 69; ~
+set sto's class to 69;
 
-## Set
-Set is used to create/update variables.
-When you set a value its type is going to be parsed, unless type has been mentioned explicitly.
-Set attempts to find the variable in the current or parent scopes. If not found, it creates a new one in the current scope.
+~ Equalivalent to sto.humanData.name = "Jack Billdickson"; ~
+set sto's humanData's name to "Jack Billdickson";
 
-### Setting generic variables
-Set "num" to 12.
-Set "num" to 12 as a float.
-
-### Setting structure variables
-Set kuku to Human.
-Set kuku to Human with nickName "Kuku", age 24.
-
-### Setting variables within structure variables
-Set nickName of kuku to "kuku".
+~ Equivalent to sto.humanData.age = sto.rollNumber; ~
+set sto's humanData's age to sto's rollNumber;
+```
+### Defining Tasks
+```
+define 
+```
