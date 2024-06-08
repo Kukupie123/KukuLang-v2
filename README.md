@@ -7,6 +7,7 @@ A minimal programming language with natural syntax making it very easy for non p
 3. Structures
 4. Tasks
 5. Basic statements such as assignment, conditionals and loops.
+6. Chaining variable as seen in other languages such as var.foo.bar = 12;
 
 ## Syntax
 ### Comments
