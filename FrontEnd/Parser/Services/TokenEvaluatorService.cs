@@ -134,9 +134,9 @@ namespace FrontEnd.Parser.Services
                 foreach (var kv in paramTypeVariables)
                 {
                     //validate if its valid data type
-                    if (kv.Value is not NestedVariableExp || kv.Value is not LiteralExp)
+                    if (kv.Value is not NestedVariableExp && kv.Value is not IntLiteral && kv.Value is not TextLiteral)
                     {
-                        throw new Exception($"Invalid param type({kv.Key},{kv.Value}) for function({taskNameToken.Value})");
+                        throw new Exception($"Invalid param type -> {kv.Key}, {kv.Value} for function({taskNameToken.Value})");
                     }
                     if (kv.Value is NestedVariableExp n)
                     {

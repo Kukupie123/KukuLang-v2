@@ -1,5 +1,12 @@
+define Human with age(int), name(text).
 define Foo returning int {
-	return 12+4.
+	return 5.
+}
+define Bar returning int with num(int){
+	return num*2.
 }
 
-Foo.
+set a to Foo.
+set b to Human.
+set b's age to Foo.
+set c to Bar with num(b's age).
