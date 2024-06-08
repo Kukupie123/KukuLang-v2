@@ -161,6 +161,7 @@ namespace KukuLang.Interpreter.Handler
             {
                 funcScope.CreatedObjects.Add(item.Key, item.Value);
             }
+            Console.WriteLine($"Executing Task {funcCallExp.ToString(0)}");
             foreach (var s in statements.Statements)
             {
                 if (s is ReturnStmt)
