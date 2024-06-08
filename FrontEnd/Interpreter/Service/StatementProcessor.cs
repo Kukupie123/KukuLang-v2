@@ -176,6 +176,10 @@ namespace KukuLang.Interpreter.Service
                     if (!funcCallExp.ParamAndValPair.TryGetValue(paramName, out ExpressionStmt? value)) throw new Exception($"Function call {funcCallExp.FunctionName} Missing param {paramName}");
                     var runtimeObj = ProcessExpressionStmt(value, scope);
                     //TODO: Param type check
+                    if (runtimeObj.RuntimeObjType != kv.Value)
+                    {
+                        throw new Exception($"Param {kv.Key} requires type {kv.Value} but got {runtimeObj}");
+                    }
                     paramObj.Add(paramName, runtimeObj);
                 }
             var statements = task.TaskScope;

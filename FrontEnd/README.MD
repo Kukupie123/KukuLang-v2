@@ -32,5 +32,55 @@ set sto's humanData's age to sto's rollNumber;
 ```
 ### Defining Tasks
 ```
-define 
+define HumanCreator returning Human with age(int), name(text){
+	set tempHuman to Human; ~creating human object~
+	set tempHuman's age to age;
+	set tempHuman's age to name;
+	return tempHuman;
+}
+
+~function with no return type and no params~
+define Foo returning nothing {
+	set a to (12+6)*2;
+}
 ```
+### Executing Tasks
+```
+Foo;
+HumanCreator with age(24), name("kuku");
+```
+### Setting values to task execution output
+```
+set hum to HumanCreator with age(1), name("kuchuk");
+
+~Nested example~
+set hum to HumanCreator with age(1), name(sto's humanData's name);
+```
+
+### Conditionals
+```
+if <condition> then{
+	~do stuff~
+}
+```
+conditions :- <br>
+1. is
+1. is_not
+1. is_less_than
+1. is_less_than_or_is_
+1. is_greater_than
+1. is_greater_than_or_is
+
+### Loops
+```
+until <condition = false> repeat {}
+```
+in until the loop will continue as long as tthe condition is false and stop when it's true
+```
+as_long_as <condition = true> repeat {}
+```
+in as long as loop, the loop will continue as long as the condition is true and will stop when it's false.
+
+## Future plans
+Console Print and Input <br>
+List (Will not do it until I find interest back in this project) <br>

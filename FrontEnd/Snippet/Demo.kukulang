@@ -1,5 +1,30 @@
-define foo returning int with age(int){
-	return age;
+~define  human type~
+define Human with age(int), name(text);
+
+~Task to create human~
+define CreateHuman returning Human with age(int), name(text){
+	set hum to Human;
+	set hum's age to age;
+	set hum's name to name;
+	return hum;
 }
 
-foo;
+~Task with no return type~
+define square returning int with num(int){
+	set a to num;
+}
+
+~Task with no params~
+define pi returning int{
+	return 314;
+}
+
+set kuku to CreateHuman with age(24), name("Kuchuk borom debbarma");
+square with num(12);
+set pi to pi;
+set con to 1 is 2;
+set con to True;
+set dition to 1.4;
+~ calling function but not using value ~
+CreateHuman with age(1), name("sup"); 
+set asd to kuku's age;

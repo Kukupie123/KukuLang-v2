@@ -16,8 +16,9 @@ class Program
         var parser = new RecursiveDescentParser(tokens);
         var ast = parser.Parse();
         Console.WriteLine(ast.ToString(0));
-        MainInterpreter interpreter = new MainInterpreter(ast);
+        MainInterpreter interpreter = new(ast);
         interpreter.Interpret();
-
+        //TODO: Destroy runtime scope after it's done
+        //TODO: list
     }
 }

@@ -7,7 +7,6 @@ using FrontEnd.Parser.Models.Scope;
 using FrontEnd.Parser.Models.Stmt;
 using FrontEnd.Parser.Parsers;
 using FrontEnd.Parser.Parsers.Pratt;
-using KukuLang.Parser.Models.Expressions.Literals;
 using System.Data;
 
 namespace FrontEnd.Parser.Services
@@ -65,7 +64,7 @@ namespace FrontEnd.Parser.Services
         private static void EvaluateFunctionCall<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
         {
             var functionNameToken = parser.CurrentToken;
-            FuncCallExp? funcCallExp = null;
+            FuncCallExp? funcCallExp;
 
             //If it has argument then pratt parser can take care of it.
             if (parser.Peek().Type == TokenType.With)
@@ -79,7 +78,7 @@ namespace FrontEnd.Parser.Services
             else
             {
                 funcCallExp = new FuncCallExp(functionNameToken.Value, null);
-                parser.Advance(); //Advance to ;
+                parser.Advance();
             }
 
             var functionCallStmt = new FunctionCallStmt(functionNameToken.Value, funcCallExp);
@@ -97,7 +96,7 @@ namespace FrontEnd.Parser.Services
             switch (parser.CurrentToken.Type)
             {
                 case TokenType.Returning:
-                    EvaluateDefineReturningToken(parser, scope, taskNameToken);
+                    EvaluateDefineTaskToken(parser, scope, taskNameToken);
                     break;
 
                 case TokenType.With:
@@ -113,34 +112,20 @@ namespace FrontEnd.Parser.Services
         }
 
         // Handles "define ... returning" tokens
-        private static void EvaluateDefineReturningToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope, Token taskNameToken)
+        private static void EvaluateDefineTaskToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope, Token taskNameToken)
         {
             parser.Advance(); // Advance to "nothing" or return type
             var returnTypeToken = parser.ConsumeCurrentToken(); // Store return type and advance to "with" or "{"
             TokenValidatorService.ValidateToken([TokenType.Identifier, TokenType.Nothing], returnTypeToken);
 
             // Check for parameters
-            Dictionary<string, ExpressionStmt>? paramTypeVariables = null;
+            Dictionary<string, string>? paramTypeVariables = null;
             if (parser.CurrentToken.Type == TokenType.With)
             {
                 parser.Advance(); // Advance to the first parameter
-                paramTypeVariables = StoreArgs<ParserReturnType, ParserArgument, ExpressionStmt>(parser);
+                paramTypeVariables = StoreArgs<ParserReturnType, ParserArgument, string>(parser);
             }
 
-            //Iterate paramTypeVariables and validate
-            if (paramTypeVariables != null)
-                foreach (var kv in paramTypeVariables)
-                {
-                    //validate if its valid data type
-                    if (kv.Value is not NestedVariableExp && kv.Value is not IntLiteral && kv.Value is not TextLiteral)
-                    {
-                        throw new Exception($"Invalid param type -> {kv.Key}, {kv.Value} for function({taskNameToken.Value})");
-                    }
-                    if (kv.Value is NestedVariableExp n)
-                    {
-                        if (n.NextNode != null) throw new Exception($"Invalid Nested Type as param {kv.Key}, {kv.Value} for function {taskNameToken.Value}");
-                    }
-                }
 
             // Parse the task block
             TokenValidatorService.ValidateToken(TokenType.CurlyBracesOpening, parser.CurrentToken);

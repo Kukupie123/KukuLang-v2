@@ -1,7 +1,12 @@
-﻿using KukuLang.Parser.Models.Expressions.Literals;
-
-public class FloatLiteral(float val) : LiteralExp("Float Literal")
+﻿namespace KukuLang.Parser.Models.Expressions.Literals
 {
-    public float Val = val;
-}
+    public class FloatLiteral(float val) : LiteralExp("Float Literal")
+    {
+        public float Val = val;
 
+        public override string ToString()
+        {
+            return $"FloatLiteral: {Val}";
+        }
+    }
+}

@@ -37,7 +37,7 @@ namespace FrontEnd.Parser.Models.Expressions
 
         private static string FormatParameter(KeyValuePair<string, ExpressionStmt> param, int indentLevel)
         {
-            return IndentHelper.Indent($"{param.Key}: {param.Value.ToString(indentLevel)}", indentLevel) + "\n";
+            return IndentHelper.Indent($"{param.Key}: {param.Value}", indentLevel) + "\n";
         }
     }
 }
