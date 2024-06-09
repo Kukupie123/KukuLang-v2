@@ -40,4 +40,5 @@ public enum TokenType
     Repeat,
     Until,
     BoolLiteral,
+    Else,
 }

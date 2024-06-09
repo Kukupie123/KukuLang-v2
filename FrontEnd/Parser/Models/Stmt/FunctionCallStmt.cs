@@ -2,7 +2,7 @@
 
 namespace FrontEnd.Parser.Models.Stmt
 {
-    public class FunctionCallStmt(string functionName, FuncCallExp functionExp) : Stmt("Function call stmt")
+    public class FunctionCallStmt(string functionName, FuncCallExp functionExp) : StmtBase("Function call stmt")
     {
         public string FunctionName { get; } = functionName;
         public readonly FuncCallExp FunctionExp = functionExp;

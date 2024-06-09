@@ -34,3 +34,16 @@ set asd to kuku's age;
 if kuku's name is "kuku" then {
 set hfg to "ASDSAD";
 }
+else{
+	set pi to 30;
+}
+
+~ loops as long as condition is false ~
+until pi is 12 repeat {
+	set pi to 12;
+}
+
+~ loops as long as condition is true ~
+as_long_as pi is_not 69 repeat {
+	set pi to 69;
+}

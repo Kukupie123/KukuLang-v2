@@ -7,7 +7,7 @@ namespace FrontEnd.Parser.Models.CustomType
     /// </summary>
     /// <param name="typeName"></param>
     /// <param name="varNameVarTypePair"></param>
-    public class CustomTypeBase(string typeName, Dictionary<string, string> varNameVarTypePair) : Stmt.Stmt($"CT:{typeName}")
+    public class CustomTypeBase(string typeName, Dictionary<string, string> varNameVarTypePair) : Stmt.StmtBase($"CT:{typeName}")
     {
         public string TypeName { get; } = typeName;
         public Dictionary<string, string> VarNameVarTypePair { get; } = varNameVarTypePair;

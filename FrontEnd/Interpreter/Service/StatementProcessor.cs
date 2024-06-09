@@ -3,12 +3,13 @@ using FrontEnd.Parser.Models.Stmt;
 using KukuLang.Interpreter.Model.RuntimeObj;
 using KukuLang.Interpreter.Model.Scope;
 using KukuLang.Parser.Models.Expressions.Literals;
+using KukuLang.Parser.Models.Stmt;
 
 namespace KukuLang.Interpreter.Service
 {
     public static class StatementProcessor
     {
-        public static void ProcessStatement(Stmt statement, RuntimeScope scope)
+        public static void ProcessStatement(StmtBase statement, RuntimeScope scope)
         {
 
             switch (statement)
@@ -22,9 +23,35 @@ namespace KukuLang.Interpreter.Service
                 case FunctionCallStmt funcCallStmt:
                     ProcessFunctionCallStatement(funcCallStmt, scope);
                     break;
+                case LoopStmt loopStmt:
+                    ProcessLoopStatement(loopStmt, scope);
+                    break;
                 default:
                     throw new NotSupportedException($"Unsupported statement type: {statement.GetType().Name}");
             }
+
+        }
+
+        private static void ProcessLoopStatement(LoopStmt loopStmt, RuntimeScope scope)
+        {
+            var conditionObj = ProcessExpressionStmt(loopStmt.Condition, scope);
+            if (conditionObj == null || conditionObj.RuntimeObjType != "bool") throw new Exception("Invalid Conditional expression");
+            RuntimeScope loopScope = new RuntimeScope([], [], scope);
+            if (loopStmt.IsUntil)
+            {
+                conditionObj.Val = !conditionObj.Val;
+            }
+            using (loopScope) //Destroys the loopScope once this block is not used
+            {
+                while (loopStmt.IsUntil ? !ProcessExpressionStmt(loopStmt.Condition, scope).Val : ProcessExpressionStmt(loopStmt.Condition, scope).Val)
+                {
+                    foreach (var s in loopStmt.Scope.Statements)
+                    {
+                        ProcessStatement(s, loopScope);
+                    }
+                }
+            }
+
 
         }
 

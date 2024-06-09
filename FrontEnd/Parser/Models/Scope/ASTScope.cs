@@ -9,7 +9,7 @@ namespace FrontEnd.Parser.Models.Scope
         public string ScopeName = scopeName;
         public List<CustomType.CustomTypeBase> CustomTypes { get; } = [];
         public List<CustomTask.CustomTaskBase> CustomTasks { get; } = [];
-        public List<Stmt.Stmt> Statements { get; } = [];
+        public List<Stmt.StmtBase> Statements { get; } = [];
 
         public string ToString(int indentLevel = 0)
         {

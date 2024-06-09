@@ -18,9 +18,7 @@ class Program
         Console.WriteLine(ast.ToString(0));
         MainInterpreter interpreter = new(ast);
         interpreter.Interpret();
-        //TODO: Destroy runtime scope after it's done
         //TODO: list
-        //TODO: Loop
         //TODO: add else to if
     }
 }

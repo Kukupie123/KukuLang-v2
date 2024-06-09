@@ -2,7 +2,7 @@
 
 namespace FrontEnd.Parser.Models.Stmt
 {
-    public abstract class Stmt(string type)
+    public abstract class StmtBase(string type)
     {
         protected string Type = type;
 

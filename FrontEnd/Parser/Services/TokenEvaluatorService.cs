@@ -7,6 +7,7 @@ using FrontEnd.Parser.Models.Scope;
 using FrontEnd.Parser.Models.Stmt;
 using FrontEnd.Parser.Parsers;
 using FrontEnd.Parser.Parsers.Pratt;
+using KukuLang.Parser.Models.Stmt;
 using System.Data;
 
 namespace FrontEnd.Parser.Services
@@ -38,9 +39,39 @@ namespace FrontEnd.Parser.Services
                 case TokenType.Return:
                     EvaluateReturnToken(parser, scope);
                     break;
+                case TokenType.Until:
+                    EvaluateLoopToken(parser, scope);
+                    break;
+                case TokenType.AsLongAs:
+                    EvaluateLoopToken(parser, scope);
+                    break;
                 default:
                     throw new UnknownTokenException(parser.CurrentToken);
             }
+        }
+
+        private static void EvaluateLoopToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
+        {
+            bool isUntil = parser.CurrentToken.Type == TokenType.Until;
+            parser.Advance(); //advance to the start of condition expression
+            var pratt = new PrattParser(parser.Tokens, parser._Pos);
+            var condition = pratt.Parse();
+            parser._Pos = pratt._Pos;
+            //We are at repeat
+            TokenValidatorService.ValidateToken(TokenType.Repeat, parser.CurrentToken);
+            parser.Advance(); //Advance to the {
+            TokenValidatorService.ValidateToken(TokenType.CurlyBracesOpening, parser.CurrentToken);
+            parser.Advance(); //Advance to the first statement
+            var loopScope = new ASTScope(scope.ScopeName + "->LoopScope");
+
+            // Parse the if block
+            while (parser.CurrentToken.Type != TokenType.CurlyBracesClosing)
+            {
+                EvaluateToken(parser, loopScope);
+            }
+            scope.Statements.Add(new LoopStmt(condition, isUntil, loopScope));
+            parser.Advance(); // Consume the }
+
         }
 
         private static void EvaluateReturnToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
@@ -205,8 +236,28 @@ namespace FrontEnd.Parser.Services
 
             // Create and store the if statement
             var ifStmt = new IfStmt(condition, ifScope);
-            scope.Statements.Add(ifStmt);
             parser.Advance(); // Consume the "}"
+            scope.Statements.Add(ifStmt);
+
+            if (parser.CurrentToken.Type != TokenType.Else)
+            {
+                return;
+            }
+
+            //Else block exists
+            TokenValidatorService.ValidateToken(TokenType.Else, parser.CurrentToken);
+            parser.Advance(); //Advance to {
+            TokenValidatorService.ValidateToken(TokenType.CurlyBracesOpening, parser.CurrentToken);
+            var elseScope = new ASTScope($"{scope.ScopeName}->Conditional");
+            parser.Advance(); //advance to the start of the statement
+            while (parser.CurrentToken.Type != TokenType.CurlyBracesClosing)
+            {
+                EvaluateToken(parser, elseScope);
+            }
+            parser.Advance(); //consume the } of else block
+            ifStmt.ElseScope = elseScope;
+
+
         }
 
         /** <summary>

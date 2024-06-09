@@ -2,7 +2,7 @@
 
 namespace FrontEnd.Parser.Models.Stmt
 {
-    public class SetToStmt(NestedVariableExp variableName, ExpressionStmt valueExp) : Stmt("Set To")
+    public class SetToStmt(NestedVariableExp variableName, ExpressionStmt valueExp) : StmtBase("Set To")
     {
         public NestedVariableExp VariableToSet { get; } = variableName;
         public ExpressionStmt VarVal { get; } = valueExp;

@@ -36,6 +36,7 @@ public class TokenMap
         { "with", TokenType.With},
 
         { "if", TokenType.If},
+        { "else", TokenType.Else},
 
         { "then", TokenType.Then},
 

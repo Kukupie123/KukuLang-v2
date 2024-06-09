@@ -3,7 +3,7 @@ using FrontEnd.Parser.Services;
 
 namespace FrontEnd.Parser.Models.CustomTask
 {
-    public class CustomTaskBase(string taskName, string taskReturnType, Dictionary<string, string> paramNameParamTypePair, ASTScope taskScope) : Stmt.Stmt(taskName)
+    public class CustomTaskBase(string taskName, string taskReturnType, Dictionary<string, string> paramNameParamTypePair, ASTScope taskScope) : Stmt.StmtBase(taskName)
     {
         public string TaskName { get; } = taskName;
         public string TaskReturnType { get; } = taskReturnType;
