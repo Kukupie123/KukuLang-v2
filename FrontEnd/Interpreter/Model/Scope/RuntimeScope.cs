@@ -4,17 +4,13 @@ using FrontEnd.Parser.Models.CustomType;
 namespace KukuLang.Interpreter.Model.Scope
 {
     public class RuntimeScope(Dictionary<string, CustomTypeBase> declaredTypes,
-        Dictionary<string, CustomTaskBase> declaredTasks, RuntimeScope? parentScope)
+        Dictionary<string, CustomTaskBase> declaredTasks, RuntimeScope? parentScope) : IDisposable
     {
         public Dictionary<string, CustomTypeBase> DeclaredTypes { get; } = declaredTypes;
         public Dictionary<string, CustomTaskBase> DeclaredTasks { get; } = declaredTasks;
         public Dictionary<string, RuntimeObj.RuntimeObj> CreatedObjects { get; } = [];
         public RuntimeScope? ParentScope { get; } = parentScope;
 
-        /// <summary>
-        /// Attempts to update variable in current scope or parent's scope.
-        /// If none found, creates a new one in this scope.
-        /// </summary>
         public void UpdateScopeVariable(string varName, RuntimeObj.RuntimeObj instance)
         {
             Stack<RuntimeScope> stack = new();
@@ -38,7 +34,6 @@ namespace KukuLang.Interpreter.Model.Scope
                 }
             }
 
-            // If we reach here it means we have not created this variable yet
             CreatedObjects.Add(varName, instance);
         }
 
@@ -86,6 +81,21 @@ namespace KukuLang.Interpreter.Model.Scope
             var createdObjectsStr = string.Join(", ", CreatedObjects.Select(kv => $"{kv.Key}: {kv.Value}"));
 
             return $"RuntimeScope(DeclaredTypes: [{declaredTypesStr}], DeclaredTasks: [{declaredTasksStr}], CreatedObjects: [{createdObjectsStr}])";
+        }
+
+        public void Dispose()
+        {
+            Console.WriteLine($"Disposing scope {this}");
+            // Release managed resources here if needed
+            DeclaredTypes.Clear();
+            DeclaredTasks.Clear();
+            CreatedObjects.Clear();
+        }
+
+        ~RuntimeScope()
+        {
+            Console.WriteLine($"Destroying scope {this}");
+            ((IDisposable)this).Dispose();
         }
     }
 }

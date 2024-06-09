@@ -10,8 +10,10 @@ define CreateHuman returning Human with age(int), name(text){
 }
 
 ~Task with no return type~
-define square returning int with num(int){
-	set a to num;
+define square returning Human with num(int){
+	set myMan to CreateHuman with age(24), name("Kuchuk borom debbarma");
+	return myMan;
+
 }
 
 ~Task with no params~

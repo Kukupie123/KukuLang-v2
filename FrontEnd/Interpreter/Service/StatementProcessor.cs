@@ -10,6 +10,7 @@ namespace KukuLang.Interpreter.Service
     {
         public static void ProcessStatement(Stmt statement, RuntimeScope scope)
         {
+
             switch (statement)
             {
                 case SetToStmt setToStmt:
@@ -24,6 +25,7 @@ namespace KukuLang.Interpreter.Service
                 default:
                     throw new NotSupportedException($"Unsupported statement type: {statement.GetType().Name}");
             }
+
         }
 
         private static void ProcessSetToStatement(SetToStmt stmt, RuntimeScope scope)
@@ -190,19 +192,23 @@ namespace KukuLang.Interpreter.Service
                 funcScope.CreatedObjects.Add(item.Key, item.Value);
             }
             Console.WriteLine($"Executing Task {funcCallExp.ToString(0)}");
-            foreach (var s in statements.Statements)
+            using (funcScope) //Ensures that the scope is destroyed once used.
             {
-                if (s is ReturnStmt returnStmt)
+                foreach (var s in statements.Statements)
                 {
-                    var returnObject = ProcessExpressionStmt(returnStmt.Expression, funcScope);
-                    if (returnObject.RuntimeObjType != task.TaskReturnType) throw new Exception($"Function needs to return {task.TaskReturnType} but returned {returnObject.RuntimeObjType}");
-                    return returnObject;
-                }
-                else
-                {
-                    ProcessStatement(s, funcScope);
+                    if (s is ReturnStmt returnStmt)
+                    {
+                        var returnObject = ProcessExpressionStmt(returnStmt.Expression, funcScope);
+                        if (returnObject.RuntimeObjType != task.TaskReturnType) throw new Exception($"Function needs to return {task.TaskReturnType} but returned {returnObject.RuntimeObjType}");
+                        return returnObject;
+                    }
+                    else
+                    {
+                        ProcessStatement(s, funcScope);
+                    }
                 }
             }
+
             return null;
         }
 
@@ -270,15 +276,19 @@ namespace KukuLang.Interpreter.Service
             }
             if (condition.Val == true)
             {
-                RuntimeScope ifScope = new RuntimeScope([], [], scope);
-                foreach (var statement in stmt.Scope.Statements)
+                RuntimeScope ifScope = new([], [], scope);
+                using (ifScope) //Will destroy the scope once used
                 {
-                    if (statement is ReturnStmt)
+                    foreach (var statement in stmt.Scope.Statements)
                     {
-                        return;
+                        if (statement is ReturnStmt)
+                        {
+                            return;
+                        }
+                        ProcessStatement(statement, ifScope);
                     }
-                    ProcessStatement(statement, ifScope);
                 }
+
             }
         }
 
@@ -291,7 +301,7 @@ namespace KukuLang.Interpreter.Service
         private static void ProcessFunctionCallStatement(FunctionCallStmt stmt, RuntimeScope scope)
         {
             //Check if function exists
-            var task = scope.GetCustomTask(stmt.FunctionName) ?? throw new Exception($"Function {stmt.FunctionName} not found");
+            _ = scope.GetCustomTask(stmt.FunctionName) ?? throw new Exception($"Function {stmt.FunctionName} not found");
             var functionExp = stmt.FunctionExp;
             ProcessExpressionStmt(functionExp, scope); //Call the function.
         }
