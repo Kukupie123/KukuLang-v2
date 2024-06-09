@@ -28,3 +28,7 @@ set dition to 1.4;
 ~ calling function but not using value ~
 CreateHuman with age(1), name("sup"); 
 set asd to kuku's age;
+
+if 12 is 12 then {
+set hfg to "ASDSAD";
+}

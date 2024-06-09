@@ -20,5 +20,6 @@ class Program
         interpreter.Interpret();
         //TODO: Destroy runtime scope after it's done
         //TODO: list
+        //TODO: Loop
     }
 }

@@ -263,6 +263,23 @@ namespace KukuLang.Interpreter.Service
         private static void ProcessIfStatement(IfStmt stmt, RuntimeScope scope)
         {
             // Implementation for handling If statements
+            RuntimeObj? condition = ProcessExpressionStmt(stmt.Condition, scope);
+            if (condition == null || condition.RuntimeObjType != "bool")
+            {
+                throw new Exception($"Invalid condition for statement {stmt}");
+            }
+            if (condition.Val == true)
+            {
+                RuntimeScope ifScope = new RuntimeScope([], [], scope);
+                foreach (var statement in stmt.Scope.Statements)
+                {
+                    if (statement is ReturnStmt)
+                    {
+                        return;
+                    }
+                    ProcessStatement(statement, ifScope);
+                }
+            }
         }
 
         /// <summary>
