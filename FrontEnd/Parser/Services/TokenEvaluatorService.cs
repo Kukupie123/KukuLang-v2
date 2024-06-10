@@ -56,6 +56,7 @@ namespace FrontEnd.Parser.Services
         //print with <expression>
         private static void EvaluatePrint<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
         {
+            Console.WriteLine("Evaluating Print Token");
             parser.Advance(); //advance to with
             TokenValidatorService.ValidateToken(TokenType.With, parser.CurrentToken);
             parser.Advance(); //advance to the start of expression
@@ -68,6 +69,8 @@ namespace FrontEnd.Parser.Services
 
         private static void EvaluateLoopToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
         {
+            Console.WriteLine("Evaluating Loop statement");
+
             bool isUntil = parser.CurrentToken.Type == TokenType.Until;
             parser.Advance(); //advance to the start of condition expression
             var pratt = new PrattParser(parser.Tokens, parser._Pos);
@@ -92,11 +95,13 @@ namespace FrontEnd.Parser.Services
 
         private static void EvaluateReturnToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
         {
+            Console.WriteLine("Evaluating Return Statement");
             parser.Advance(); //Advance to start of expression OR .
             if (parser.CurrentToken.Type == TokenType.Semicolon)
             {
                 scope.Statements.Add(new ReturnStmt(null));
-                parser.Advance(); //Consume the .
+                parser.Advance(); //Consume the ;
+                return;
             }
             else
             {
@@ -105,11 +110,13 @@ namespace FrontEnd.Parser.Services
                 parser._Pos = pratt._Pos;
                 scope.Statements.Add(new ReturnStmt(returnExp));
             }
-            parser.Advance(); //Consume the .
+            parser.Advance(); //Consume the ;
         }
 
         private static void EvaluateFunctionCall<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
         {
+            Console.WriteLine("Evaluating Function call");
+
             var functionNameToken = parser.CurrentToken;
             FuncCallExp? funcCallExp;
 
@@ -136,6 +143,7 @@ namespace FrontEnd.Parser.Services
         // Handles "define" tokens
         private static void EvaluateDefineToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
         {
+            Console.WriteLine("Evaluating Define Statement");
             parser.Advance(); // Advance to the identifier token
             TokenValidatorService.ValidateToken(TokenType.Identifier, parser.CurrentToken);
             Token taskNameToken = parser.ConsumeCurrentToken(); // Store identifier and advance to "returning" or "with"
@@ -207,6 +215,7 @@ namespace FrontEnd.Parser.Services
         // Handles "set" tokens
         private static void EvaluateSetToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
         {
+            Console.WriteLine("Evaluating Set Statement");
             TokenValidatorService.ValidateToken(TokenType.Set, parser.CurrentToken);
             parser.Advance(); // Advance to the variable name
 
@@ -232,6 +241,8 @@ namespace FrontEnd.Parser.Services
         // Handles "if" token
         private static void EvaluateIfToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
         {
+            Console.WriteLine("Evaluating If Statement");
+
             parser.Advance(); // Advance to the conditional expression
 
             var prattParser = new PrattParser(parser.Tokens, parser._Pos);

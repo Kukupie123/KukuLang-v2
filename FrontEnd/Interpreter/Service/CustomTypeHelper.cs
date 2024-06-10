@@ -1,6 +1,7 @@
 ﻿using FrontEnd.Parser.Models.CustomType;
 using KukuLang.Interpreter.Model.RuntimeObj;
 using KukuLang.Interpreter.Model.Scope;
+using System.Diagnostics;
 
 namespace KukuLang.Interpreter.Service
 {
@@ -23,10 +24,10 @@ namespace KukuLang.Interpreter.Service
                 };
 
                 variables[varName] = runtimeObj;
-                Console.WriteLine($"Creating variable object '{varName}' of type '{varType}' in custom type '{customType.TypeName}'");
+                Debug.WriteLine($"Creating variable object '{varName}' of type '{varType}' in custom type '{customType.TypeName}'");
             }
 
-            Console.WriteLine($"Created custom object of type '{customType.TypeName}' with variables: {string.Join(", ", variables.Keys)}");
+            Debug.WriteLine($"Created custom object of type '{customType.TypeName}' with variables: {string.Join(", ", variables.Keys)}");
 
             return new RuntimeObj(customType.TypeName, variables);
         }

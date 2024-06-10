@@ -1,5 +1,6 @@
 ﻿using FrontEnd.Parser.Models.CustomTask;
 using FrontEnd.Parser.Models.CustomType;
+using System.Diagnostics;
 
 namespace KukuLang.Interpreter.Model.Scope
 {
@@ -85,7 +86,7 @@ namespace KukuLang.Interpreter.Model.Scope
 
         public void Dispose()
         {
-            Console.WriteLine($"Disposing scope {this}");
+            Debug.WriteLine($"Disposing scope {this}");
             // Release managed resources here if needed
             DeclaredTypes.Clear();
             DeclaredTasks.Clear();
@@ -94,7 +95,7 @@ namespace KukuLang.Interpreter.Model.Scope
 
         ~RuntimeScope()
         {
-            Console.WriteLine($"Destroying scope {this}");
+            Debug.WriteLine($"Destroying scope {this}");
             ((IDisposable)this).Dispose();
         }
     }

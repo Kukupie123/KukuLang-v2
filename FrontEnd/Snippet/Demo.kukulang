@@ -1,2 +1,46 @@
-set name to input;
-print with "Hello "+ name;
+print with "Input first number";
+set num1 to input;
+print with "Input second number";
+set num2 to input;
+
+
+define addition returning int with number1(int), number2(int){
+	return number1 + number2;
+}
+define subtraction returning int with number1(int), number2(int){
+	return number1 - number2;
+}
+define multiplication returning int with number1(int), number2(int){
+	return number1 * number2;
+}
+define division returning int with number1(int), number2(int){
+	return number1 / number2;
+}
+
+print with "1. Addition 2. Subtraction 3. Multiplication 4. Division";
+
+set choice to input;
+
+if choice is 1 then {
+	print with "Answer is " + addition with number1(num1), number2(num2);
+	return;
+}
+
+if choice is 2 then {
+	print with "Answer is "+ subtraction with number1(num1), number2(num2);
+	return;
+}
+
+if choice is 3 then {
+	print with "Answer is "+ multiplication with number1(num1), number2(num2);
+	return;
+}
+
+if choice is 4 then {
+	print with "Answer is" + division with number1(num1), number2(num2);
+	return;
+}
+else{
+	print with "Wrong choice : " + choice;
+}
+

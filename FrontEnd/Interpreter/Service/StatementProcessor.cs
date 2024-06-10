@@ -5,6 +5,7 @@ using KukuLang.Interpreter.Model.Scope;
 using KukuLang.Parser.Models.Expressions;
 using KukuLang.Parser.Models.Expressions.Literals;
 using KukuLang.Parser.Models.Stmt;
+using System.Diagnostics;
 
 namespace KukuLang.Interpreter.Service
 {
@@ -92,7 +93,7 @@ namespace KukuLang.Interpreter.Service
             RuntimeObj? val = ProcessExpressionStmt(value, scope) ?? throw new Exception($"value of var {variableName} is null");
             var isUpdate = scope.GetVariable(variableName) != null; //Boolean to determine if we are creating or updating an existing variable value
             scope.UpdateScopeVariable(variableName, val);
-            Console.WriteLine($"{(isUpdate ? "Updated" : "Created")} variable '{variableName}' with value '{val}'");
+            Debug.WriteLine($"{(isUpdate ? "Updated" : "Created")} variable '{variableName}' with value '{val}'");
         }
 
         private static void AssignNestedVariable(NestedVariableExp nestedVar, ExpressionStmt value, RuntimeScope scope)
@@ -131,7 +132,7 @@ namespace KukuLang.Interpreter.Service
             var updatedValue = ProcessExpressionStmt(value, scope);
             if (updatedValue == null) throw new Exception($"value of var {updatedValue} is null");
             (parentVar.Val as Dictionary<string, RuntimeObj>)[nestedVar.VarName] = updatedValue;
-            Console.WriteLine($"Updated nested variable '{fullPath}' with value '{updatedValue}'");
+            Debug.WriteLine($"Updated nested variable '{fullPath}' with value '{updatedValue}'");
         }
 
 
@@ -162,12 +163,17 @@ namespace KukuLang.Interpreter.Service
             //attempt to cast to a float
             if (float.TryParse(val, out float res))
             {
+                int i = (int)res;
+                if (i == res)
+                {
+                    return new RuntimeObj(i);
+                }
                 return new RuntimeObj((float)res);
             }
             //attempt to cast to an int
-            if (int.TryParse(val, out int i))
+            if (int.TryParse(val, out int j))
             {
-                return new RuntimeObj((int)i);
+                return new RuntimeObj(j);
             }
             if (bool.TryParse(val, out bool b))
             {
@@ -251,7 +257,7 @@ namespace KukuLang.Interpreter.Service
             {
                 funcScope.CreatedObjects.Add(item.Key, item.Value);
             }
-            Console.WriteLine($"Executing Task {funcCallExp.ToString(0)}");
+            Debug.WriteLine($"Executing Task {funcCallExp.ToString(0)}");
             using (funcScope) //Ensures that the scope is destroyed once used.
             {
                 foreach (var s in statements.Statements)
