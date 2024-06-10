@@ -1,168 +1,177 @@
 ﻿using FrontEnd.Commons.Tokens;
 using System.Text;
 
-namespace FrontEnd.Lexer;
-
-public class KukuLexer(string kukuLangSourceCode)
+namespace FrontEnd.Lexer
 {
-    private int _inputStartPos;
-    private int _inputEndPos;
-    private readonly string _kukuLangSourceCode = kukuLangSourceCode;
-
-    private string Input()
+    public class KukuLexer
     {
-        var sb = new StringBuilder();
-        for (int i = _inputStartPos; i <= _inputEndPos; i++)
+        private int _inputStartPos;
+        private int _inputEndPos;
+        private int _currentLine = 1;
+        private int _currentLinePosition = 0;
+        private readonly string _kukuLangSourceCode;
+
+        public KukuLexer(string kukuLangSourceCode)
         {
-            sb.Append(_kukuLangSourceCode[i]);
+            _kukuLangSourceCode = kukuLangSourceCode;
         }
 
-        return sb.ToString();
-    }
-
-    private void MoveInputPositionForward()
-    {
-        _inputStartPos = _inputEndPos + 1;
-        _inputEndPos = _inputStartPos;
-    }
-
-    private void UpdateEndPos()
-    {
-        /*
-        The logic is to increment _inputEndPos and then checking if the string is a token.
-        We stop when we meet a white space, ", ~
-        */
-
-        //Scoped function for ease of access
-        void setEndPos(int i)
+        private string Input()
         {
-            int updatedI = i < _inputStartPos ? _inputStartPos : i;
-            int lastIndex = _kukuLangSourceCode.Length - 1;
-            _inputEndPos = updatedI >= lastIndex ? lastIndex : updatedI;
-        }
-        bool HitDelimiter(string character)
-        {
-            return string.IsNullOrWhiteSpace(character) || TokenMap.IsValueAGenericToken(character);
-        }
-
-        string startChar = _kukuLangSourceCode[_inputEndPos].ToString();
-
-        //If we start off with a white space we need to move to the next valid character
-        while (string.IsNullOrWhiteSpace(startChar))
-        {
-            _inputStartPos++;
-            if (_inputStartPos >= _kukuLangSourceCode.Length)
-                return;
-            startChar = _kukuLangSourceCode[_inputStartPos].ToString();
-        }
-
-        //Handle if startChar is currently ' or " or ~ first
-        if (startChar is "~" or "'" or "\"")
-        {
-            if (startChar == "~")
+            var sb = new StringBuilder();
+            for (int i = _inputStartPos; i <= _inputEndPos; i++)
             {
-                bool throwException = true;
-                for (int i = _inputStartPos + 1; i < _kukuLangSourceCode.Length; i++)
+                sb.Append(_kukuLangSourceCode[i]);
+            }
+
+            return sb.ToString();
+        }
+
+        private void MoveInputPositionForward()
+        {
+            _inputStartPos = _inputEndPos + 1;
+            _inputEndPos = _inputStartPos;
+
+            // Update the line and line position when encountering a newline character
+            while (_inputStartPos < _kukuLangSourceCode.Length && (_kukuLangSourceCode[_inputStartPos] == '\n' || _kukuLangSourceCode[_inputStartPos] == '\r'))
+            {
+                if (_kukuLangSourceCode[_inputStartPos] == '\n')
                 {
-                    var endChar = _kukuLangSourceCode[i].ToString();
-                    if (endChar == "~")
+                    _currentLine++;
+                    _currentLinePosition = 0;
+                }
+                _inputStartPos++;
+                _inputEndPos = _inputStartPos;
+            }
+
+            if (_inputStartPos < _kukuLangSourceCode.Length && _kukuLangSourceCode[_inputStartPos] != '\n' && _kukuLangSourceCode[_inputStartPos] != '\r')
+            {
+                _currentLinePosition++;
+            }
+        }
+
+        private void UpdateEndPos()
+        {
+            void setEndPos(int i)
+            {
+                int updatedI = i < _inputStartPos ? _inputStartPos : i;
+                int lastIndex = _kukuLangSourceCode.Length - 1;
+                _inputEndPos = updatedI >= lastIndex ? lastIndex : updatedI;
+            }
+
+            bool HitDelimiter(string character)
+            {
+                return string.IsNullOrWhiteSpace(character) || TokenMap.IsValueAGenericToken(character);
+            }
+
+            string startChar = _kukuLangSourceCode[_inputEndPos].ToString();
+
+            while (string.IsNullOrWhiteSpace(startChar))
+            {
+                _inputStartPos++;
+                if (_inputStartPos >= _kukuLangSourceCode.Length)
+                    return;
+                startChar = _kukuLangSourceCode[_inputStartPos].ToString();
+            }
+
+            if (startChar is "~" or "'" or "\"")
+            {
+                if (startChar == "~")
+                {
+                    bool throwException = true;
+                    for (int i = _inputStartPos + 1; i < _kukuLangSourceCode.Length; i++)
                     {
-                        //If ~ is the last element of the source code then we can't set _inputStartPos to i+1 as it will exceed the range.
-                        //Updating _inputStartPos instead of _inputEndPos as we are meant to ignore comments and start updatingEndPos after the comment.
-                        _inputStartPos = i == _kukuLangSourceCode.Length - 1 ? _kukuLangSourceCode.Length : i + 1;
-                        _inputEndPos = i == _kukuLangSourceCode.Length - 1 ? _kukuLangSourceCode.Length : i + 1;
-                        //We do not return unlike the rest of the if branch as we are meant to ignore comments and process what's next.
-                        UpdateEndPos();
-                        return;
+                        var endChar = _kukuLangSourceCode[i].ToString();
+                        if (endChar == "~")
+                        {
+                            _inputStartPos = i == _kukuLangSourceCode.Length - 1 ? _kukuLangSourceCode.Length : i + 1;
+                            _inputEndPos = i == _kukuLangSourceCode.Length - 1 ? _kukuLangSourceCode.Length : i + 1;
+                            UpdateEndPos();
+                            return;
+                        }
                     }
+                    if (throwException)
+                        throw new Exception($"Comment opened in line {_currentLine} was never closed");
                 }
-                if (throwException)
-                    throw new Exception($"Comment opened in line {_inputStartPos} was never closed");
-            }
-            else if (startChar == "'")
-            {
-                if (_kukuLangSourceCode[_inputStartPos + 1] != 's')
+                else if (startChar == "'")
                 {
-                    throw new Exception($"Expected s after ' to create an accessor token ('s) at position {_inputStartPos}");
-                }
-                _inputEndPos = _inputStartPos + 1;
-                return;
-            }
-            else
-            {
-                for (int i = _inputStartPos + 1; i < _kukuLangSourceCode.Length; i++)
-                {
-                    var endChar = _kukuLangSourceCode[i].ToString();
-                    if (endChar == "\"")
+                    if (_kukuLangSourceCode[_inputStartPos + 1] != 's')
                     {
-                        //We reached the end of the string and can set it as the end position and return.
-                        _inputEndPos = i;
-                        return;
+                        throw new Exception($"Expected s after ' to create an accessor token ('s) at position {_inputStartPos}");
                     }
+                    _inputEndPos = _inputStartPos + 1;
+                    return;
                 }
-                throw new Exception($"String opened in line {_inputStartPos} was never closed");
+                else
+                {
+                    for (int i = _inputStartPos + 1; i < _kukuLangSourceCode.Length; i++)
+                    {
+                        var endChar = _kukuLangSourceCode[i].ToString();
+                        if (endChar == "\"")
+                        {
+                            _inputEndPos = i;
+                            return;
+                        }
+                    }
+                    throw new Exception($"String opened in line {_currentLine} was never closed");
+                }
             }
-        }
 
-
-        //Increment _inputEndPos upto source code length checking if the input is a string every iteration
-        for (int i = _inputStartPos; i < _kukuLangSourceCode.Length; i++)
-        {
-            var endChar = _kukuLangSourceCode[i].ToString();
-            //Delimiter check
-            if (HitDelimiter(endChar))
+            for (int i = _inputStartPos; i < _kukuLangSourceCode.Length; i++)
             {
-                setEndPos(i - 1);
-                return;
+                var endChar = _kukuLangSourceCode[i].ToString();
+                if (HitDelimiter(endChar))
+                {
+                    setEndPos(i - 1);
+                    return;
+                }
             }
         }
-    }
 
-    private Token GenerateToken()
-    {
-        var input = Input();
-        if (string.IsNullOrEmpty(input))
+        private Token GenerateToken()
         {
-            throw new Exception($"Input is empty with range {_inputStartPos}-{_inputEndPos}");
-        }
-        //Check if its in token map
-        if (TokenMap.IsValueAGenericToken(input))
-        {
-            return new Token(TokenMap.GetTypeByValue(input), input, _inputStartPos);
-        }
-        //Check if its number
-        if (float.TryParse(input, out var f))
-        {
-            int i = (int)f;
-            if (i == f)
-                return new Token(TokenType.IntegerLiteral, i, _inputStartPos);
-            return new Token(TokenType.FloatLiteral, f, _inputStartPos);
-        }
-        //Check if its a string
-        else if (input[0] == '"' && input[^1] == '"')
-        {
-            //Remove the starting and ending "
-            return new Token(TokenType.TextLiteral, input[1..^1], _inputStartPos);
-        }
-        //Add it as identifier
-        return new Token(TokenType.Identifier, input, _inputStartPos);
-    }
+            var input = Input();
+            if (string.IsNullOrEmpty(input))
+            {
+                throw new Exception($"Input is empty with range {_inputStartPos}-{_inputEndPos}");
+            }
 
+            if (TokenMap.IsValueAGenericToken(input))
+            {
+                return new Token(TokenMap.GetTypeByValue(input), input, _currentLinePosition, _currentLine);
+            }
 
-    public List<Token> Tokenize()
-    {
-        List<Token> tokens = [];
-        while (_inputStartPos < _kukuLangSourceCode.Length)
-        {
-            UpdateEndPos();
+            if (float.TryParse(input, out var f))
+            {
+                int i = (int)f;
+                if (i == f)
+                    return new Token(TokenType.IntegerLiteral, i, _currentLinePosition, _currentLine);
+                return new Token(TokenType.FloatLiteral, f, _currentLinePosition, _currentLine);
+            }
 
-            //Without this check the program will throw exception when you have comment as your last line becasue the UpdateEndPos() function moves the start pointer AFTER the comment but there is nothing after the comment causing it to crash at GenerateToken() function.
-            if (_inputStartPos >= _kukuLangSourceCode.Length) break;
+            else if (input[0] == '"' && input[^1] == '"')
+            {
+                return new Token(TokenType.TextLiteral, input[1..^1], _currentLinePosition, _currentLine);
+            }
 
-            tokens.Add(GenerateToken());
-            MoveInputPositionForward();
+            return new Token(TokenType.Identifier, input, _currentLinePosition, _currentLine);
         }
-        tokens.Add(new Token(TokenType.EOF, "EOF", _inputEndPos + 1));
-        return tokens;
+
+        public List<Token> Tokenize()
+        {
+            List<Token> tokens = new();
+            while (_inputStartPos < _kukuLangSourceCode.Length)
+            {
+                UpdateEndPos();
+
+                if (_inputStartPos >= _kukuLangSourceCode.Length) break;
+
+                tokens.Add(GenerateToken());
+                MoveInputPositionForward();
+                _currentLinePosition = _inputStartPos - _inputEndPos;
+            }
+            tokens.Add(new Token(TokenType.EOF, "EOF", _currentLinePosition, _currentLine));
+            return tokens;
+        }
     }
 }

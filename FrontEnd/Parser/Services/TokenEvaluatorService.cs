@@ -1,3 +1,5 @@
+
+
 using FrontEnd.Commons.Tokens;
 using FrontEnd.Parser.Models.CustomTask;
 using FrontEnd.Parser.Models.CustomType;
@@ -149,7 +151,7 @@ namespace FrontEnd.Parser.Services
 
                 default:
                     throw new UnexpectedTokenException(
-                        [new Token(TokenType.With, "with", -1), new Token(TokenType.Returning, "returning", -1)],
+                        [new Token(TokenType.With, "with", -1, -1), new Token(TokenType.Returning, "returning", -1, -1)],
                         parser.CurrentToken
                     );
             }

@@ -19,7 +19,7 @@ public static class TokenValidatorService
         if (tokenTypes.Contains(token.Type) == false)
         {
             List<Token> expectedTokens = [];
-            tokenTypes.ForEach(t => expectedTokens.Add(new Token(t, t.ToString(), -1)));
+            tokenTypes.ForEach(t => expectedTokens.Add(new Token(t, t.ToString(), -1, -1)));
             throw new UnexpectedTokenException(expectedTokens, token);
         }
     }

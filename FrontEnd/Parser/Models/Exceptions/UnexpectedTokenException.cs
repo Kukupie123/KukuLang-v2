@@ -1,5 +1,5 @@
-﻿using System.Text;
-using FrontEnd.Commons.Tokens;
+﻿using FrontEnd.Commons.Tokens;
+using System.Text;
 
 namespace FrontEnd.Parser.Models.Exceptions;
 
@@ -12,7 +12,7 @@ public class UnexpectedTokenException : Exception
     }
     public UnexpectedTokenException(TokenType expectedTokenType, dynamic expectedTokenVal, Token actualToken)
     {
-        Msg = $"Expected Token of type: {new Token(expectedTokenType, expectedTokenVal, -1)} but got token: {actualToken}";
+        Msg = $"Expected Token of type: {new Token(expectedTokenType, expectedTokenVal, -1, -1)} but got token: {actualToken}";
     }
     public UnexpectedTokenException(Token expectedToken, Token actualToken)
     {
