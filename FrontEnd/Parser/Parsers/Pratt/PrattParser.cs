@@ -146,13 +146,25 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
             {
                 return new NestedVariableExp(token.Value, ProcessPrimaryExpAndAdvance() as NestedVariableExp);
             }
+
             if (CurrentToken.Type == TokenType.With)
             {
-                Advance();
-                var args = TokenEvaluatorService.StoreArgs<ExpressionStmt, int, ExpressionStmt>(this);
+                Advance(); //advance to first param
+
+                //has no params
+                if (CurrentToken.Type == TokenType.Nothing)
+                {
+                    //paramless function
+                    Advance(); //advance to ;
+                    return new FuncCallExp(token.Value, null);
+                }
+
+                //Has params
+                Dictionary<string, ExpressionStmt> args = ProcessFunctionArgs();
                 return new FuncCallExp(token.Value, args);
             }
-            return new NestedVariableExp(token.Value, null); //This can also represent a function call.
+
+            return new NestedVariableExp(token.Value, null);
 
         }
         if (token.Type is TokenType.RoundBracketsOpening)
@@ -212,4 +224,35 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
         }
         throw new Exception($"Can't process infix token {token}");
     }
+
+
+    private Dictionary<string, ExpressionStmt> ProcessFunctionArgs()
+    {
+        var args = new Dictionary<string, ExpressionStmt>();
+
+        // Keep iterating until we reach ; or {
+        while (CurrentToken.Type is not TokenType.Semicolon or TokenType.CurlyBracesOpening)
+        {
+            // For params that come after the first, advance past the ","
+            if (CurrentToken.Type == TokenType.Comma)
+            {
+                Advance();
+            }
+            var propertyNameToken = ConsumeCurrentToken(); // Store property name and advance to "("
+
+            TokenValidatorService.ValidateToken(TokenType.RoundBracketsOpening, CurrentToken);
+            Advance(); // Advance to the arg value
+
+
+            var pratt = new PrattParser(Tokens, _Pos);
+            var paramType = pratt.Parse();
+            _Pos = pratt._Pos;
+            args.Add(propertyNameToken.Value, paramType);
+
+            Advance(); // Advance past "," or ";"
+        }
+
+        return args;
+    }
 }
+

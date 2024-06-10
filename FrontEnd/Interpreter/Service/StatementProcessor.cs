@@ -47,7 +47,7 @@ namespace KukuLang.Interpreter.Service
         {
             var conditionObj = ProcessExpressionStmt(loopStmt.Condition, scope);
             if (conditionObj == null || conditionObj.RuntimeObjType != "bool") throw new Exception("Invalid Conditional expression");
-            RuntimeScope loopScope = new RuntimeScope([], [], scope);
+            RuntimeScope loopScope = new([], [], scope);
             if (loopStmt.IsUntil)
             {
                 conditionObj.Val = !conditionObj.Val;
@@ -244,10 +244,11 @@ namespace KukuLang.Interpreter.Service
                     string paramName = kv.Key;
                     if (!funcCallExp.ParamAndValPair.TryGetValue(paramName, out ExpressionStmt? value)) throw new Exception($"Function call {funcCallExp.FunctionName} Missing param {paramName}");
                     var runtimeObj = ProcessExpressionStmt(value, scope);
-                    //TODO: Param type check
                     if (runtimeObj.RuntimeObjType != kv.Value)
                     {
-                        throw new Exception($"Param {kv.Key} requires type {kv.Value} but got {runtimeObj}");
+                        //if the type required is text we can cast the runtimObj.val
+                        throw new Exception($"Param {kv.Key} requires type {kv.Value} but got {runtimeObj.RuntimeObjType} val : {runtimeObj.Val}");
+
                     }
                     paramObj.Add(paramName, runtimeObj);
                 }
@@ -297,7 +298,7 @@ namespace KukuLang.Interpreter.Service
                 RuntimeObj? varRef = scope.GetVariable(nestedVar.VarName);
                 if (varRef != null)
                 {
-                    return varRef ?? throw new Exception($"Custom type not found: {nestedVar.VarName}");
+                    return varRef;
                 }
 
                 //if not existing var then try to see if its creation of new custom type
@@ -305,13 +306,8 @@ namespace KukuLang.Interpreter.Service
                 if (type != null)
                 {
                     return CustomTypeHelper.CreateObjectFromCustomType(scope.GetCustomType(nestedVar.VarName), scope);
-
                 }
-                //if not custom type check if its type paramless function call
-                var task = scope.GetCustomTask(nestedVar.VarName);
-                return task == null
-                    ? throw new Exception($"{nestedVar.VarName} is not a var, its not a type its not a task.")
-                    : ResolveFunctionCallExp(new FuncCallExp(nestedVar.VarName, null), scope);
+                throw new Exception(nestedVar.VarName + " is not an existing variable nor a custom type");
             }
             /*
              * If it is nested then it has to be a reference to existing nested variable.

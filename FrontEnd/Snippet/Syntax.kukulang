@@ -1,33 +1,50 @@
-Define Human with age(int), name(text).
-Define Function returning List with num1(float){
-	~Function body do what you want~
-}.
-define Print returning nothing with input(text){
-	~body~
+
+
+
+define addition returning int with number1(int), number2(int){
+	return number1 + number2;
+}
+define subtraction returning int with number1(int), number2(int){
+	return number1 - number2;
+}
+define multiplication returning int with number1(int), number2(int){
+	return number1 * number2;
+}
+define division returning int with number1(int), number2(int){
+	return number1 / number2;
 }
 
-Print with input("hello").
+as_long_as True repeat{
+	print with "1. Addition 2. Subtraction 3. Multiplication 4. Division";
 
-set a to (12+8)*5.
-set a to Human.
-set a's name to "Kuku".
-set a's age to 0.
+	set choice to input;
 
-set b to Human.
-set c to Function with num1(21). ~Function call~
-~ no chaining support for function ~
+	print with "Input first number";
+	set num1 to input;
+	print with "Input second number";
+	set num2 to input;
 
-set d to a's name.
-set a's age to a's name. ~invalid btw. Just wanted to show we can use 's in two positions~
+	if choice is 1 then {
+		print with "Answer is " + addition with number1(num1), number2(num2);
+		return;
+	}
 
-if age is 42 then {
-	~if body~
+	if choice is 2 then {
+		print with "Answer is "+ subtraction with number1(num1), number2(num2);
+		return;
+	}
+
+	if choice is 3 then {
+		print with "Answer is "+ multiplication with number1(num1), number2(num2);
+		return;
+	}
+
+	if choice is 4 then {
+		print with "Answer is" + division with number1(num1), number2(num2);
+		return;
+	}
+	else{
+		print with "Wrong choice : " + choice;
+	}
 }
 
-until age is 42 repeat{
-	~body~
-}
-
-as_long_as age is 42 repeat{
-	~body~
-}

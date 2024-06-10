@@ -14,6 +14,10 @@ define division returning int with number1(int), number2(int){
 	return number1 / number2;
 }
 
+define fancyPrint returning nothing with content(int){
+	print with "Answer is " + content;
+}
+
 as_long_as True repeat{
 	print with "1. Addition 2. Subtraction 3. Multiplication 4. Division";
 
@@ -25,22 +29,22 @@ as_long_as True repeat{
 	set num2 to input;
 
 	if choice is 1 then {
-		print with "Answer is " + addition with number1(num1), number2(num2);
+		fancyPrint with content(num1+num2);
 		return;
 	}
 
 	if choice is 2 then {
-		print with "Answer is "+ subtraction with number1(num1), number2(num2);
+		fancyPrint with content(num1-num2);
 		return;
 	}
 
 	if choice is 3 then {
-		print with "Answer is "+ multiplication with number1(num1), number2(num2);
+		fancyPrint with content(num1*num2);
 		return;
 	}
 
 	if choice is 4 then {
-		print with "Answer is" + division with number1(num1), number2(num2);
+		fancyPrint with content(num1/num2);
 		return;
 	}
 	else{

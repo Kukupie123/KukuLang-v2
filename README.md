@@ -98,6 +98,9 @@ as_long_as <condition = true> repeat {}
 ```
 in as long as loop, the loop will continue as long as the condition is true and will stop when it's false.
 
+## Additional Notes
+return keyword takes you out of the scope you are currently in. It doesn't work on function scope. It is localised to the current scope. <br>
+
 ## Future plans
 Make exception better and show more precisely whats wrong and where.
 DONE(Console Print and Input) <br>
