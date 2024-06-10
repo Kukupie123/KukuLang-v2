@@ -151,14 +151,15 @@ namespace KukuLang.Interpreter.Service
                 NestedVariableExp nestedVar => ResolveNestedVariable(nestedVar, scope),
                 FuncCallExp funcCallExp => ResolveFunctionCallExp(funcCallExp, scope),
                 BinaryExp binaryExp => ResolveBinaryExp(binaryExp, scope),
-                InputExp => ResolveInputExp(scope),
+                InputExp => ResolveInputExp(),
                 _ => throw new NotSupportedException($"Unsupported expression type: {exp.GetType().Name}")
             }; ;
         }
 
-        private static RuntimeObj? ResolveInputExp(RuntimeScope scope)
+        private static RuntimeObj? ResolveInputExp()
         {
-            dynamic val = Console.ReadLine();
+            dynamic? val = Console.ReadLine();
+            if (val == null) throw new Exception("Invalid input");
 
             //attempt to cast to a float
             if (float.TryParse(val, out float res))
@@ -177,7 +178,7 @@ namespace KukuLang.Interpreter.Service
             }
             if (bool.TryParse(val, out bool b))
             {
-                return new RuntimeObj((bool)val);
+                return new RuntimeObj(b);
             }
             return new RuntimeObj((string)val);
 

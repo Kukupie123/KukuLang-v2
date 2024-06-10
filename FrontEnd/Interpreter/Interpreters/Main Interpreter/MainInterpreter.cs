@@ -1,6 +1,7 @@
 ﻿using FrontEnd.Parser.Models.CustomTask;
 using FrontEnd.Parser.Models.CustomType;
 using FrontEnd.Parser.Models.Scope;
+using FrontEnd.Parser.Models.Stmt;
 using KukuLang.Interpreter.Model.Scope;
 using KukuLang.Interpreter.Service;
 

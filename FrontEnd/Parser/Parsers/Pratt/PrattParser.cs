@@ -97,19 +97,6 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
     {
         var token = ConsumeCurrentToken();
 
-        try
-        {
-            if (token.Value == " Wrong choice : ")
-            {
-                Console.WriteLine("");
-            }
-        }
-        catch (Exception e)
-        {
-
-        }
-
-
         if (token.Type == TokenType.IntegerLiteral)
         {
             return new IntLiteral((int)token.Value);

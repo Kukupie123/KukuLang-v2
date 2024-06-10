@@ -1,9 +1,17 @@
 ﻿using FrontEnd.Parser.Models.Expressions;
-using FrontEnd.Parser.Models.Stmt;
 
-
-public class ReturnStmt(ExpressionStmt? expression) : StmtBase("Return StmtBase")
+namespace FrontEnd.Parser.Models.Stmt
 {
-    public ExpressionStmt? Expression = expression;
-}
+    public class ReturnStmt(ExpressionStmt? expression) : StmtBase("Return StmtBase")
+    {
+        public ExpressionStmt? Expression { get; } = expression;
 
+        public override string ToString(int indentLevel = 0)
+        {
+            string indent = new(' ', indentLevel);
+            string expressionStr = Expression?.ToString(indentLevel + 2) ?? "null";
+
+            return $"{indent}Return:\n{expressionStr}";
+        }
+    }
+}

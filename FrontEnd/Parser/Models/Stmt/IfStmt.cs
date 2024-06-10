@@ -13,7 +13,6 @@ namespace FrontEnd.Parser.Models.Stmt
         {
             string indent = new(' ', indentLevel);
             string conditionIndent = new(' ', indentLevel + 2);
-            string scopeIndent = new(' ', indentLevel + 4);
 
             string conditionStr = Condition.ToString(indentLevel + 2);
             string scopeStr = Scope.ToString(indentLevel + 4);
