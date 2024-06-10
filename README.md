@@ -6,13 +6,22 @@ A minimal programming language with natural syntax making it very easy for non p
 2. static typing
 3. Structures
 4. Tasks
+1. Input and Print
 5. Basic statements such as assignment, conditionals and loops.
-6. Chaining variable as seen in other languages such as var.foo.bar = 12;
+6. Chaining nested variable as seen in other languages such as var.foo.bar = 12;
 
 ## Syntax
 ### Comments
 ```
 ~ This is a comment ~
+```
+### Printing
+```
+print with "Hello World";
+```
+### Taking input
+```
+set a to input;
 ```
 ### Setting simple Variable
 ```
@@ -75,9 +84,9 @@ conditions :- <br>
 1. is
 1. is_not
 1. is_less_than
-1. is_less_than_or_is_
+1. is_less_or_is
 1. is_greater_than
-1. is_greater_than_or_is
+1. is_greater_or_is
 
 ### Loops
 ```
@@ -90,5 +99,6 @@ as_long_as <condition = true> repeat {}
 in as long as loop, the loop will continue as long as the condition is true and will stop when it's false.
 
 ## Future plans
-Console Print and Input <br>
-List (Will not do it until I find interest back in this project) <br>
+DONE(Console Print and Input) <br>
+List (Will not do it until I gain back interest in this project) <br>
+Map (Will not do it until I gain back interest in this project) <br>
