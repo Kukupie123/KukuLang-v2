@@ -99,6 +99,7 @@ as_long_as <condition = true> repeat {}
 in as long as loop, the loop will continue as long as the condition is true and will stop when it's false.
 
 ## Future plans
+Make exception better and show more precisely whats wrong and where.
 DONE(Console Print and Input) <br>
 List (Will not do it until I gain back interest in this project) <br>
 Map (Will not do it until I gain back interest in this project) <br>
