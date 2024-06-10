@@ -45,9 +45,25 @@ namespace FrontEnd.Parser.Services
                 case TokenType.AsLongAs:
                     EvaluateLoopToken(parser, scope);
                     break;
+                case TokenType.Print:
+                    EvaluatePrint(parser, scope);
+                    break;
                 default:
                     throw new UnknownTokenException(parser.CurrentToken);
             }
+        }
+
+        //print with <expression>
+        private static void EvaluatePrint<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
+        {
+            parser.Advance(); //advance to with
+            TokenValidatorService.ValidateToken(TokenType.With, parser.CurrentToken);
+            parser.Advance(); //advance to the start of expression
+            var pratt = new PrattParser(parser.Tokens, parser._Pos);
+            var exp = pratt.Parse();
+            parser._Pos = pratt._Pos;
+            parser.Advance(); //consume the  ;
+            scope.Statements.Add(new PrintStmt(exp));
         }
 
         private static void EvaluateLoopToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)

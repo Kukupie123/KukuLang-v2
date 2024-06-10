@@ -26,10 +26,19 @@ namespace KukuLang.Interpreter.Service
                 case LoopStmt loopStmt:
                     ProcessLoopStatement(loopStmt, scope);
                     break;
+                case PrintStmt printStmt:
+                    ProcessPrintStatement(printStmt, scope);
+                    break;
                 default:
                     throw new NotSupportedException($"Unsupported statement type: {statement.GetType().Name}");
             }
 
+        }
+
+        private static void ProcessPrintStatement(PrintStmt printStmt, RuntimeScope scope)
+        {
+            var runtimeObj = ProcessExpressionStmt(printStmt.Expression, scope);
+            Console.WriteLine(runtimeObj.Val);
         }
 
         private static void ProcessLoopStatement(LoopStmt loopStmt, RuntimeScope scope)

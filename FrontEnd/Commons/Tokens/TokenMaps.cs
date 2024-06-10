@@ -90,5 +90,9 @@ public class TokenMap
         { "/", TokenType.Divide },
         { "*", TokenType.Multiply },
         { "%", TokenType.Mod },
+
+        { "input", TokenType.Input },
+        { "print", TokenType.Print },
+
     };
 }

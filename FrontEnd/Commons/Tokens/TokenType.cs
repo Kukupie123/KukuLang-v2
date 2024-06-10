@@ -41,4 +41,6 @@ public enum TokenType
     Until,
     BoolLiteral,
     Else,
+    Input,
+    Print
 }
