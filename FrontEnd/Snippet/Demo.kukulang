@@ -1,2 +1,2 @@
-set a to "Kuku";
-print with "Hello my name is "+ a;
+set name to input;
+print with "Hello "+ name;

@@ -2,6 +2,7 @@
 using FrontEnd.Parser.Models.Stmt;
 using KukuLang.Interpreter.Model.RuntimeObj;
 using KukuLang.Interpreter.Model.Scope;
+using KukuLang.Parser.Models.Expressions;
 using KukuLang.Parser.Models.Expressions.Literals;
 using KukuLang.Parser.Models.Stmt;
 
@@ -149,8 +150,31 @@ namespace KukuLang.Interpreter.Service
                 NestedVariableExp nestedVar => ResolveNestedVariable(nestedVar, scope),
                 FuncCallExp funcCallExp => ResolveFunctionCallExp(funcCallExp, scope),
                 BinaryExp binaryExp => ResolveBinaryExp(binaryExp, scope),
+                InputExp => ResolveInputExp(scope),
                 _ => throw new NotSupportedException($"Unsupported expression type: {exp.GetType().Name}")
-            };
+            }; ;
+        }
+
+        private static RuntimeObj? ResolveInputExp(RuntimeScope scope)
+        {
+            dynamic val = Console.ReadLine();
+
+            //attempt to cast to a float
+            if (float.TryParse(val, out float res))
+            {
+                return new RuntimeObj((float)res);
+            }
+            //attempt to cast to an int
+            if (int.TryParse(val, out int i))
+            {
+                return new RuntimeObj((int)i);
+            }
+            if (bool.TryParse(val, out bool b))
+            {
+                return new RuntimeObj((bool)val);
+            }
+            return new RuntimeObj((string)val);
+
         }
 
         private static RuntimeObj? ResolveBinaryExp(BinaryExp binaryExp, RuntimeScope scope)

@@ -2,6 +2,7 @@
 using FrontEnd.Commons.Tokens;
 using FrontEnd.Parser.Models.Expressions;
 using FrontEnd.Parser.Services;
+using KukuLang.Parser.Models.Expressions;
 using KukuLang.Parser.Models.Expressions.Literals;
 
 namespace FrontEnd.Parser.Parsers.Pratt;
@@ -113,6 +114,10 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
         if (token.Type == TokenType.TextLiteral)
         {
             return new TextLiteral((string)token.Value);
+        }
+        if (token.Type == TokenType.Input)
+        {
+            return new InputExp();
         }
         if (token.Type == TokenType.Accessor)
         {
