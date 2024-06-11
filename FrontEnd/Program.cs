@@ -19,6 +19,6 @@ class Program
         MainInterpreter interpreter = new(ast);
         interpreter.Interpret();
         //TODO: list
-        //TODO: add else to if
+        //TODO: execute else block
     }
 }
