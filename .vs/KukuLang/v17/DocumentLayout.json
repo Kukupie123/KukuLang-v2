@@ -3,24 +3,28 @@
   "WorkspaceRootPath": "C:\\Project\\KukuLang\\KukuLang\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|C:\\Project\\KukuLang\\KukuLang\\frontend\\lexer\\kukulexer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|solutionrelative:frontend\\lexer\\kukulexer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|c:\\project\\kukulang\\kukulang\\frontend\\snippet\\demo.kukulang||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|C:\\Project\\KukuLang\\KukuLang\\frontend\\snippet\\demo.kukulang||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|solutionrelative:frontend\\snippet\\demo.kukulang||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|C:\\Project\\KukuLang\\KukuLang\\frontend\\parser\\services\\tokenevaluatorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|solutionrelative:frontend\\parser\\services\\tokenevaluatorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|C:\\Project\\KukuLang\\KukuLang\\frontend\\interpreter\\service\\statementprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|solutionrelative:frontend\\interpreter\\service\\statementprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|C:\\Project\\KukuLang\\KukuLang\\frontend\\parser\\parsers\\pratt\\prattparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|solutionrelative:frontend\\parser\\parsers\\pratt\\prattparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|C:\\Project\\KukuLang\\KukuLang\\frontend\\parser\\services\\tokenvalidatorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|solutionrelative:frontend\\parser\\services\\tokenvalidatorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|C:\\Project\\KukuLang\\KukuLang\\frontend\\parser\\parsers\\pratt\\prattparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|solutionrelative:frontend\\parser\\parsers\\pratt\\prattparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|C:\\Project\\KukuLang\\KukuLang\\frontend\\parser\\services\\tokenevaluatorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|solutionrelative:frontend\\parser\\services\\tokenevaluatorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|c:\\project\\kukulang\\kukulang\\frontend\\lexer\\kukulexer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|solutionrelative:frontend\\lexer\\kukulexer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|C:\\Project\\KukuLang\\KukuLang\\frontend\\commons\\tokens\\token.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -29,10 +33,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|C:\\Project\\KukuLang\\KukuLang\\frontend\\parser\\models\\exceptions\\unexpectedtokenexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|solutionrelative:frontend\\parser\\models\\exceptions\\unexpectedtokenexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|C:\\Project\\KukuLang\\KukuLang\\frontend\\interpreter\\service\\statementprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|solutionrelative:frontend\\interpreter\\service\\statementprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E04CE4FF-3190-49B1-BD3A-685DD5420F31}|FrontEnd\\KukuLang.csproj|C:\\Project\\KukuLang\\KukuLang\\frontend\\snippet\\syntax.kukulang||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -110,46 +110,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 6,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "KukuLexer.cs",
-              "DocumentMoniker": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Lexer\\KukuLexer.cs",
-              "RelativeDocumentMoniker": "FrontEnd\\Lexer\\KukuLexer.cs",
-              "ToolTip": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Lexer\\KukuLexer.cs",
-              "RelativeToolTip": "FrontEnd\\Lexer\\KukuLexer.cs",
-              "ViewState": "AQIAAJcAAAAAAAAAAAAowLEAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T13:38:27.462Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Demo.kukulang",
-              "DocumentMoniker": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Snippet\\Demo.kukulang",
-              "RelativeDocumentMoniker": "FrontEnd\\Snippet\\Demo.kukulang",
-              "ToolTip": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Snippet\\Demo.kukulang",
-              "RelativeToolTip": "FrontEnd\\Snippet\\Demo.kukulang",
-              "ViewState": "AQIAAAcAAAAAAAAAAAAjwBEAAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-06-09T00:09:44.81Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "RuntimeScope.cs",
-              "DocumentMoniker": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Interpreter\\Model\\Scope\\RuntimeScope.cs",
-              "RelativeDocumentMoniker": "FrontEnd\\Interpreter\\Model\\Scope\\RuntimeScope.cs",
-              "ToolTip": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Interpreter\\Model\\Scope\\RuntimeScope.cs",
-              "RelativeToolTip": "FrontEnd\\Interpreter\\Model\\Scope\\RuntimeScope.cs",
-              "ViewState": "AQIAAEwAAAAAAAAAAAAewFwAAAAdAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-09T12:21:34.317Z"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 18,
@@ -176,7 +138,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "TokenEvaluatorService.cs",
               "DocumentMoniker": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Parser\\Services\\TokenEvaluatorService.cs",
               "RelativeDocumentMoniker": "FrontEnd\\Parser\\Services\\TokenEvaluatorService.cs",
@@ -201,19 +163,46 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 2,
+              "Title": "PrattParser.cs",
+              "DocumentMoniker": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Parser\\Parsers\\Pratt\\PrattParser.cs",
+              "RelativeDocumentMoniker": "FrontEnd\\Parser\\Parsers\\Pratt\\PrattParser.cs",
+              "ToolTip": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Parser\\Parsers\\Pratt\\PrattParser.cs",
+              "RelativeToolTip": "FrontEnd\\Parser\\Parsers\\Pratt\\PrattParser.cs",
+              "ViewState": "AQIAANwAAAAAAAAAAAAuwOUAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T06:13:39.346Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "KukuLexer.cs",
+              "DocumentMoniker": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Lexer\\KukuLexer.cs",
+              "RelativeDocumentMoniker": "FrontEnd\\Lexer\\KukuLexer.cs",
+              "ToolTip": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Lexer\\KukuLexer.cs",
+              "RelativeToolTip": "FrontEnd\\Lexer\\KukuLexer.cs",
+              "ViewState": "AQIAAB0AAAAAAAAAAAA9wCQAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T13:38:27.462Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "StatementProcessor.cs",
               "DocumentMoniker": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Interpreter\\Service\\StatementProcessor.cs",
               "RelativeDocumentMoniker": "FrontEnd\\Interpreter\\Service\\StatementProcessor.cs",
               "ToolTip": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Interpreter\\Service\\StatementProcessor.cs",
               "RelativeToolTip": "FrontEnd\\Interpreter\\Service\\StatementProcessor.cs",
-              "ViewState": "AQIAAI0AAAAAAAAAAAAuwJYAAAAvAAAA",
+              "ViewState": "AQIAANwAAAAAAAAAAAAuwOIAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T08:55:12.398Z"
+              "WhenOpened": "2024-06-10T08:55:12.398Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Token.cs",
               "DocumentMoniker": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Commons\\Tokens\\Token.cs",
               "RelativeDocumentMoniker": "FrontEnd\\Commons\\Tokens\\Token.cs",
@@ -221,8 +210,7 @@
               "RelativeToolTip": "FrontEnd\\Commons\\Tokens\\Token.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAYAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T06:48:15.026Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T06:48:15.026Z"
             },
             {
               "$type": "Document",
@@ -232,14 +220,14 @@
               "RelativeDocumentMoniker": "FrontEnd\\Parser\\Services\\TokenValidatorService.cs",
               "ToolTip": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Parser\\Services\\TokenValidatorService.cs",
               "RelativeToolTip": "FrontEnd\\Parser\\Services\\TokenValidatorService.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAYwBoAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAwAkAAAAlAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-10T13:41:19.492Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "UnexpectedTokenException.cs",
               "DocumentMoniker": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Parser\\Models\\Exceptions\\UnexpectedTokenException.cs",
               "RelativeDocumentMoniker": "FrontEnd\\Parser\\Models\\Exceptions\\UnexpectedTokenException.cs",
@@ -247,21 +235,19 @@
               "RelativeToolTip": "FrontEnd\\Parser\\Models\\Exceptions\\UnexpectedTokenException.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAYwA8AAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T13:40:53.052Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T13:40:53.052Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "PrattParser.cs",
-              "DocumentMoniker": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Parser\\Parsers\\Pratt\\PrattParser.cs",
-              "RelativeDocumentMoniker": "FrontEnd\\Parser\\Parsers\\Pratt\\PrattParser.cs",
-              "ToolTip": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Parser\\Parsers\\Pratt\\PrattParser.cs",
-              "RelativeToolTip": "FrontEnd\\Parser\\Parsers\\Pratt\\PrattParser.cs",
-              "ViewState": "AQIAAOgAAAAAAAAAAAAowAIBAAAAAAAA",
+              "DocumentIndex": 17,
+              "Title": "RuntimeScope.cs",
+              "DocumentMoniker": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Interpreter\\Model\\Scope\\RuntimeScope.cs",
+              "RelativeDocumentMoniker": "FrontEnd\\Interpreter\\Model\\Scope\\RuntimeScope.cs",
+              "ToolTip": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Interpreter\\Model\\Scope\\RuntimeScope.cs",
+              "RelativeToolTip": "FrontEnd\\Interpreter\\Model\\Scope\\RuntimeScope.cs",
+              "ViewState": "AQIAAEwAAAAAAAAAAAAewFwAAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T06:13:39.346Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-09T12:21:34.317Z"
             },
             {
               "$type": "Document",
@@ -418,6 +404,40 @@
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAiAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-09T12:57:54.517Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "1dd05794-763a-4250-b787-79b143808699",
+        "Display": 0,
+        "X": 19,
+        "Y": 239,
+        "Width": 1906,
+        "Height": 485,
+        "WindowState": 0
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Demo.kukulang",
+              "DocumentMoniker": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Snippet\\Demo.kukulang",
+              "RelativeDocumentMoniker": "FrontEnd\\Snippet\\Demo.kukulang",
+              "ToolTip": "C:\\Project\\KukuLang\\KukuLang\\FrontEnd\\Snippet\\Demo.kukulang",
+              "RelativeToolTip": "FrontEnd\\Snippet\\Demo.kukulang",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAACwAAAAiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-06-09T00:09:44.81Z",
+              "EditorCaption": ""
             }
           ]
         }

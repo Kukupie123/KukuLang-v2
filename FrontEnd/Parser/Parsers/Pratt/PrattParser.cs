@@ -231,7 +231,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
         var args = new Dictionary<string, ExpressionStmt>();
 
         // Keep iterating until we reach ; or {
-        while (CurrentToken.Type is not TokenType.Semicolon or TokenType.CurlyBracesOpening)
+        while (CurrentToken.Type != TokenType.Semicolon && CurrentToken.Type != TokenType.CurlyBracesOpening && CurrentToken.Type != TokenType.RoundBracketsClosing)
         {
             // For params that come after the first, advance past the ","
             if (CurrentToken.Type == TokenType.Comma)
@@ -249,7 +249,7 @@ public class PrattParser(List<Token> tokens, int startingPosition = 0) : ParserB
             _Pos = pratt._Pos;
             args.Add(propertyNameToken.Value, paramType);
 
-            Advance(); // Advance past "," or ";"
+            Advance(); // Advance past )
         }
 
         return args;
