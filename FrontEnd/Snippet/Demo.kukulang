@@ -1,54 +1,5 @@
-define addition returning int with number1(int), number2(int){
-	return number1 + number2;
+if False then {
 }
-define subtraction returning int with number1(int), number2(int){
-	return number1 - number2;
-}
-define multiplication returning int with number1(int), number2(int){
-	return number1 * number2;
-}
-define division returning int with number1(int), number2(int){
-	return number1 / number2;
-}
-define fancyPrint returning nothing with content(int){
-	print with "Answer is " + content;
-}
-
-
-as_long_as True repeat 
-{
-	print with "1. Addition 2. Subtraction 3. Multiplication 4. Division";
-
-	set choice to input;
-
-	print with "Input first number";
-	set num1 to input;
-	print with "Input second number";
-	set num2 to input;
-
-	if choice is 1 then {
-		~nested function call example~
-		fancyPrint with content(addition with number1(num1),number2(num2));
-		return;
-	}
-
-	if choice is 2 then {
-		~nested function call ~
-		fancyPrint with content(subtraction with number1(num1),number2(num2));
-		return;
-	}
-
-	if choice is 3 then {
-		fancyPrint with content(multiplication with number1(num1),number2(num2));
-		return;
-	}
-
-	if choice is 4 then {
-		fancyPrint with content(division with number1(num1),number2(num2));
-		return;
-	}
-	else {
-		print with "Wrong choice : " + choice;
-	}
-
+else {
+	print with "a";
 }

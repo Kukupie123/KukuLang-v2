@@ -337,21 +337,27 @@ namespace KukuLang.Interpreter.Service
             {
                 throw new Exception($"Invalid condition for statement {stmt}");
             }
+            List<StmtBase> scopeStmt = [];
             if (condition.Val == true)
             {
-                RuntimeScope ifScope = new([], [], scope);
-                using (ifScope) //Will destroy the scope once used
-                {
-                    foreach (var statement in stmt.Scope.Statements)
-                    {
-                        if (statement is ReturnStmt)
-                        {
-                            return;
-                        }
-                        ProcessStatement(statement, ifScope);
-                    }
-                }
+                scopeStmt = stmt.Scope.Statements;
+            }
+            else if (stmt.ElseScope != null)
+            {
+                scopeStmt = stmt.ElseScope.Statements;
+            }
 
+            RuntimeScope ifScope = new([], [], scope);
+            using (ifScope) //Will destroy the scope once used
+            {
+                foreach (var statement in scopeStmt)
+                {
+                    if (statement is ReturnStmt)
+                    {
+                        return;
+                    }
+                    ProcessStatement(statement, ifScope);
+                }
             }
         }
 
