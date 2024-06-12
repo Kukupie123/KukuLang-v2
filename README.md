@@ -1,6 +1,6 @@
 # KUKULANG
-A minimal programming language with natural syntax making it very easy for non programmers to Program and understand.
-
+A minimal but powerful programming language with natural syntax making it very easy for non programmers to Program and understand. <br>
+[Demonstration of Kukulang (12th July 2024)](https://www.youtube.com/watch?v=LJWrLUUPAKY) <br>
 ## Features
 1. Natural Spoken English Grammer based syntax
 2. static typing
