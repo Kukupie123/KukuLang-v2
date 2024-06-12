@@ -115,8 +115,8 @@ List (Will not do it until I gain back interest in this project) <br>
 Map (Will not do it until I gain back interest in this project) <br>
 
 ## Technical Overview
-### General phases of creating a compiler
-Creating a compiler is divided into two parts, frontend and backend. The frontend is where we break down the source code, validate the correctness of the code and then create a meaning full data structure out of the source code. The backend is a bit more complex, it is responsible for using the meaningful data produced by the frontend to generate machine code which can then be run by the machine. There are a lot of ways to go about this, such as using a tool such as LLVM to generate platform specific code, building a virtual machine and generating byte code that can be interpreted by the Virtual machine, interpreting the data produced by frontend directly using existing compiler and programming languages, etc. In our approach we decided to go forth with creating an interpreter in C# for the backend as it's probably the easiest to do and also because of my lack of knowledge about the low level world.
+### General phases of creating a compiler and Interpreter
+Creating a compiler is divided into two parts, frontend and backend. The frontend is where we break down the source code, validate the correctness of the code and then create a meaning full data structure out of the source code. The backend is a bit more complex, it is responsible for using the meaningful data produced by the frontend to generate machine code which can then be interpreted by the target machine. There are a lot of ways to go about this, such as using a tool such as LLVM to generate platform specific code and then interpret it, building a virtual machine and generating byte code that can be interpreted by the Virtual machine, interpreting the data produced by frontend directly using existing compiler and programming languages, etc. In our approach we decided to go forth with creating an interpreter in C# for the backend as it's probably the easiest to do and also because of my lack of knowledge about the low level world.
 
 ### Frontend
 #### Lexical Analysis
