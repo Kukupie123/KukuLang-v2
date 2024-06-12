@@ -3,12 +3,12 @@ A minimal but powerful programming language with natural syntax making it very e
 [Demonstration of Kukulang (12th July 2024)](https://www.youtube.com/watch?v=LJWrLUUPAKY) <br>
 ## Features
 1. Natural Spoken English Grammer based syntax
-2. static typing
+2. Static typing
 3. Structures
 4. Tasks
 1. Input and Print
-5. Basic statements such as assignment, conditionals and loops.
-6. Chaining nested variable as seen in other languages such as var.foo.bar = 12;
+5. Core statements such as assignment, conditionals and loops.
+6. Complex Chaining nested variable and tasks as seen in other languages such as var.foo.bar = sum(12,2);
 
 ## Syntax
 ### Comments
