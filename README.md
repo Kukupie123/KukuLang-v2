@@ -72,6 +72,12 @@ set hum to HumanCreator with age(1), name("kuchuk");
 
 ~Nested example~
 set hum to HumanCreator with age(1), name(sto's humanData's name);
+
+define Human with name(text);
+define Summ returning text{
+	return "Summ return text";
+}
+print with Summ with nothing;
 ```
 
 ### Conditionals
