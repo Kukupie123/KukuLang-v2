@@ -114,9 +114,13 @@ DONE(Console Print and Input) <br>
 List (Will not do it until I gain back interest in this project) <br>
 Map (Will not do it until I gain back interest in this project) <br>
 
-## Technical Overview
-### General phases of creating a compiler and Interpreter
-Creating a compiler is divided into two parts, frontend and backend. The frontend is where we break down the source code, validate the correctness of the code and then create a meaning full data structure out of the source code. The backend is a bit more complex, it is responsible for using the meaningful data produced by the frontend to generate machine code which can then be interpreted by the target machine. There are a lot of ways to go about this, such as using a tool such as LLVM to generate platform specific code and then interpret it, building a virtual machine and generating byte code that can be interpreted by the Virtual machine, interpreting the data produced by frontend directly using existing compiler and programming languages, etc. In our approach we decided to go forth with creating an interpreter in C# for the backend as it's probably the easiest to do and also because of my lack of knowledge about the low level world.
+## Compilers and Interpreters
+The source code that we write cannot be understood by a machine. We have to convert this high level representation of instructions and statements into something that can be understood by the machine.
+A compiler is responsible for converting a language into another language. In most cases, to machine code which can then be run by the target machine. <br>
+We also have Interpreters which can interpret the source code or Intermediate code or byte code generated ditectly.
+
+### Common phases of creating a compiler/Interpreter
+The Task is divided into two parts, frontend and backend. The frontend is where we break down the source code, validate the correctness of the code and then create a meaning full data structure out of the source code. The backend is a bit more complex, it is responsible for using the meaningful data produced by the frontend to generate machine code which can then be interpreted by the target machine. There are a lot of ways to go about this, such as using a tool such as LLVM to generate platform specific code and then interpret it, building a virtual machine and generating byte code that can be interpreted by the Virtual machine, interpreting the data produced by frontend directly using existing compiler and programming languages, etc. In our approach we decided to go forth with creating an interpreter in C# for the backend as it's probably the easiest to do and also because of my lack of knowledge about the low level world.
 
 ### Frontend
 #### Lexical Analysis
