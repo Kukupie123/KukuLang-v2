@@ -85,6 +85,7 @@ print with Summ with nothing;
 if <condition> then{
 	~do stuff~
 }
+else {}
 ```
 conditions :- <br>
 1. is
