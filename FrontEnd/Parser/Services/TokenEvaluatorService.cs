@@ -23,7 +23,7 @@ namespace FrontEnd.Parser.Services
     {
         public static void EvaluateToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
         {
-            // Each sub-evaluate method needs to consume the . or }
+            //Each sub-evaluate method needs to consume the . or }
             switch (parser.CurrentToken.Type)
             {
                 case TokenType.Define:
