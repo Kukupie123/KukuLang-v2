@@ -26,7 +26,7 @@ It also has functions to create/update variables in the current scope or parent 
 
 
 ## Parsing Algorithms
-There are several algorithms that have its own strength and weaknesses. One of the most common algorithm is probably going to be **Recursive Descent Parser (RDP)** which is quite simply to understand but it can get very dirty and confusing because of all the recursions. <br>
+There are several algorithms that have its own strength and weaknesses. One of the most common algorithm is probably going to be **Recursive Descent Parser (RDP)** which is quite simple to understand but it can get very dirty and confusing because of all the recursions. <br>
 I initially started off with RDP but noticed that my code was getting too complicated, especially when dealing with expressions. I researched a little bit and caught an algorithm in the wild known as **Pratt Parser Algorithm (PP)**. It took me some time to grasp the concept of Pratt Parser and I still sometimes feel like I do not know it well. But I have been able to write it from scratch based on my understanding and also extended it's functionality beyond mathematical expressions so I think I some what have decent idea. PP is an amazing algorithm which makes working with expressions very clean and easy. It uses Precedence (Priority) to determine arrangement of an expression. <br> <br>
 
 In the end I decided to create my own simple statement evaluator which takes some element of RDP for parsing statements, <br>
@@ -44,7 +44,7 @@ This evaluator reads the token and determines what kind of statemnt it is dealin
 ```c#
 public static void EvaluateToken<ParserReturnType, ParserArgument>(ParserBase<ParserReturnType, ParserArgument> parser, ASTScope scope)
         {
-            //Each sub-evaluate method needs to consume the . or }
+            //Each sub-evaluate method needs to process the whole statement upto its ending token such as "."
             switch (parser.CurrentToken.Type)
             {
                 case TokenType.Define:
