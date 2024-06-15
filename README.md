@@ -19,7 +19,7 @@ A minimal but powerful programming language with natural syntax making it very e
 ~ This is a comment ~
 ```
 
-### Printing
+### Displaying
 ```kuku
 print with "Hello World";
 ```
