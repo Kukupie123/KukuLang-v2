@@ -116,3 +116,36 @@ single/nestedVariable and expressionStatement are both handled by pratt parser.<
 Not gonna go into detail for the rest of the evaluator, look at the source code instead.
 
 ### Pratt Parser
+Pratt parser is a parsing algorithm that looks simple enough but it's working can be quite tricky to understand.
+The way it works is by defining Precedence levels for different operators such as 
+```
+private static readonly Dictionary<string, int> Precedence = new()
+    {
+        {"Lowest", 1},
+        {"Comparison", 2},
+        {"Sum", 3},
+        {"Product", 4},
+        {"BooleanOr", 5},
+        {"BooleanAnd", 6}
+    };
+```
+Next, we create a parse function that takes in precedent as its argument which is 1 by default. <br>
+This function calls ```var left = ProcessPrimaryExpAndAdvance();``` and then enters a while loop where it keeps updating the left variable by nesting it with higher value expressions until it meets an operator with same or lower precedence.
+```
+public override ExpressionStmt Parse(int precedence = 1)
+{
+        var left = ProcessPrimaryExpAndAdvance();
+        while (precedence < GetPrecedence(CurrentToken.Type))
+        {
+            // Intentionally doing it in two lines to make it easy for viewers to understand.
+            left = ProcessInfixAndAdvance(left);
+        }
+        return left;
+}
+```
+```ProcessPrimaryExpAndAdvance()``` Will process the current token we are at and determine it's precedence level using the "Precedence" dictionary we created earlier. <br>
+This function is a recursive function that calls parse function when it needs to parse the sub-expression such as in
+```a*(b+c)``` we need to first resolve ```b+c``` then we the ```a*...```. <br>
+There's a lot more to it. I recommend looking at the code to understand it better. I tried to comment it verbosely to help myself and other viewers who are visiting to check it out. <br>
+
+
