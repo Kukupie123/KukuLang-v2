@@ -1,58 +1,55 @@
-# KukuLang Lexer
-Lexers job is to break down the source code and then generate tokens out of it. These tokens help us to values to the words in our soure code. <br>
-There are severak ways we can create a lexer. One way is to use regular expressions, another way is to use Finite automata (Finite State Machine), etc. <br>
+# KukuLang Lexer 🔡
 
-My first approach was to design a FSM. I would treat every character as a state and next input as an input and use it to transition between states. I soon scrapped this idea and went for my own way of implementation. <br>
+The **Lexer** (or Scanner) is the first phase of the KukuLang compiler pipeline. Its responsibility is to convert the raw source code string into a sequence of structured **Tokens**.
 
 ## Overview
-## Scanning
-The overall idea is to scan every single character and join them as one single string until we hit a delimiter. Let's take the following code as example
-```
-set a to 2;
-```
-Here we would start scanning at "s". <br>
-We would keep on concating it as "s" -> "se" -> "set". <br>
-Once we hit a white space we are going to treat it as a delimiter. This would give us a string "set". <br>
-We then send this as an input to a function to generate token. <br>
-We woud then need to start scanning from "t" and repeat the whole process again.
-## Generate Token
-Generate token takes in a string as an input. It then checks if it's any pre defined token such as keyword, or maths symbols, logical symbol, etc. If its none then it simply generates an identifier
 
-## Implementation
-We keep two pointers to keep track of the string we are scanning. 
-```
-private int _inputStartPos;
-private int _inputEndPos;
-```
-In our KukuLang code snippet in Scanning section where we got "set" as our string. Our _inputStartPos would be 0 and _inputEndPos would be 2.
-<br>
+Lexical analysis gives "meaning" to the raw characters in a file. Instead of treating the code as a long string of text, the Lexer groups characters into meaningful units (Tokens) that the Parser can understand, such as Keywords, Identifiers, Operators, and Literals.
 
-UpdateEndPos is a function that does the scanning. It updates the position of _inputEndPos until it hits a delimiter. The exception is where the _inputStartPos is a string or a comment. In such cases it will stop when we encounter the closing string or comment symbol.
-```c#
-private void UpdateEndPos(){
-    //Skip white space if we are at white space
-    // return delimiter such as ; {}[]()
-    //if startChar is ~ or " keep scanning until we reach ~ or " again depding on what we got
-    //if not keep scanning until we hit a delimiter such as whitespace or ;
-}
-```
-Once updated we call the Generate Token function which will use the _inputStartPos and _inputEndPos to determine the string. It then decides if what kind of token it is. 
-```c#
-private Token GenerateToken(){
-    // if its predefined token return it.
-    // if its int or string or float or char or bool return it as its respective literal
-    // if its starts with and ends with ~ or " return it as comment or string literal
-    // if none of that happens it must be returned as an identifier
-}
-```
-This generated token will then be added to the tokens list. <br> The next step would be to move the _inputStartPos forward to _inputEndPos + 1.
-```c#
-private void MoveInputPositionForward()
-    {
-        _inputStartPos = _inputEndPos + 1;
-        _inputEndPos = _inputStartPos;
-        //Some other code to keep track of line number
-    }
-```
-This whole step is repeated until we reach the end of source code. At the very end we add a EOF token to let parser know where the token ends. 
-[Go To Parser](../Parser/README.MD)
+### The Scanning Strategy
+
+KukuLang uses a **custom scanning approach** rather than a traditional Finite State Machine (FSM) or Regex-based tokenizer. This was chosen for simplicity and manual control over the scanning position.
+
+The core algorithm is a "Search for Delimiter" loop:
+1.  **Start**: Initialize `StartPos` and `EndPos` pointers at the current character.
+2.  **Scan**: Advance `EndPos` character by character.
+3.  **Stop**: When a "Delimiter" (space, operator, newline, special symbol) is found, the scan stops.
+4.  **Extract**: The substring between `StartPos` and `EndPos` is extracted.
+5.  **Tokenize**: The extracted string is analyzed to determine its Token Type (see below).
+6.  **Repeat**: Move `StartPos` to the next unread character and repeat until EOF.
+
+#### Example Trace
+Source: `set a to 2;`
+
+| Step | Scanned String | Detected Type | Action |
+|------|----------------|---------------|--------|
+| 1 | `set` | Keyword | Emit Token `[SET]` |
+| 2 | `a` | Identifier | Emit Token `[IDENTIFIER: a]` |
+| 3 | `to` | Keyword | Emit Token `[TO]` |
+| 4 | `2` | IntLiteral | Emit Token `[INT: 2]` |
+| 5 | `;` | Delimiter | Emit Token `[SEMICOLON]` |
+
+## Implementation Details
+
+The Lexer maintains two key pointers to the source code string:
+- `_inputStartPos`: Typical start of the current word.
+- `_inputEndPos`: The generic probe exploring ahead.
+
+### 1. Scanning (`UpdateEndPos`)
+This method advances `_inputEndPos` until a break condition is met.
+- **Whitespace**: Skipped automatically.
+- **Strings**: If a quote `"` is seen, it scans until the closing quote.
+- **Comments**: If `~` is seen, it scans until the closing `~`.
+- **Standard**: Otherwise, it scans until a delimiter (whitespace, `;`, `(`, `)`, etc.) is hit.
+
+### 2. Token Generation (`GenerateToken`)
+Once a substring is isolated, this method classifies it:
+- **Keywords**: Checks against a dictionary of reserved words (`if`, `else`, `define`, `return`, etc.).
+- **Literals**: Checks if it's a number, string, boolean, or char.
+- **Identifiers**: If it's not a keyword or literal, it is treated as an Identifier (variable or function name).
+
+### 3. Advancing
+After a token is generated, `_inputStartPos` catches up to `_inputEndPos`, preparing for the next scan cycle.
+
+## Next Step
+Once the entire file is tokenized, the list of tokens is passed to the **[Parser](../Parser/README.MD)**.
